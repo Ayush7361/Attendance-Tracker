@@ -1,43 +1,25 @@
-let dummySchedule = { mon: 2, tue: 1, wed: 2, thu: 1, fri: 2, sat: 1 };
-
-let dummyMonths = {
-    January: { total: 20, attended: 17 },
-    February: { total: 15, attended: 10 }
-};
+import axios from "../utils/axiosInstance";
 
 export function getSchedule() {
-    return Promise.resolve({ data: dummySchedule });
+    return axios.get("/api/schedule");
 }
 
 export function saveSchedule(schedule) {
-    dummySchedule = schedule;
-    return Promise.resolve({ data: dummySchedule });
+    return axios.put("/api/schedule", schedule);
 }
 
 export function getMonths() {
-    const monthsArray = Object.keys(dummyMonths).map((month) => ({
-        month: month,
-        total: dummyMonths[month].total,
-        attended: dummyMonths[month].attended
-    }));
-    return Promise.resolve({ data: monthsArray });
+    return axios.get("/api/months");
 }
 
 export function addWeek(month, scheduled, attended) {
-    if (!dummyMonths[month]) {
-        dummyMonths[month] = { total: 0, attended: 0 };
-    }
-    dummyMonths[month].total += scheduled;
-    dummyMonths[month].attended += attended;
-    return Promise.resolve({ data: dummyMonths[month] });
+    return axios.post("/api/months/add-week", { month, scheduled, attended });
 }
 
 export function resetMonth(month) {
-    delete dummyMonths[month];
-    return Promise.resolve({ data: {} });
+    return axios.delete("/api/months/" + month);
 }
 
 export function resetAll() {
-    dummyMonths = {};
-    return Promise.resolve({ data: {} });
+    return axios.delete("/api/months");
 }

@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "./context/AuthContext";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import MonthSelector from "./components/MonthSelector";
 import SummaryCards from "./components/SummaryCards";
 import ProgressBar from "./components/ProgressBar";
@@ -7,11 +10,15 @@ import WeeklyAttendanceForm from "./components/WeeklyAttendanceForm";
 import ResetSection from "./components/ResetSection";
 import OverallSummary from "./components/OverallSummary";
 import { getSchedule, saveSchedule, getMonths, addWeek, resetMonth, resetAll } from "./api/attendanceApi";
+import { logoutUser } from "./api/authApi";
 import "./App.css";
 
 const days = ["mon", "tue", "wed", "thu", "fri", "sat"];
 
 function App() {
+    const { user, login, logout } = useAuth();
+    const [showRegister, setShowRegister] = useState(false);
+
     const [month, setMonth] = useState("January");
     const [schedule, setSchedule] = useState({ mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0 });
     const [weekAttendance, setWeekAttendance] = useState({ mon: "", tue: "", wed: "", thu: "", fri: "", sat: "" });
@@ -19,9 +26,11 @@ function App() {
     const [showOverall, setShowOverall] = useState(false);
 
     useEffect(() => {
-        loadSchedule();
-        loadMonths();
-    }, []);
+        if (user) {
+            loadSchedule();
+            loadMonths();
+        }
+    }, [user]);
 
     async function loadSchedule() {
         const res = await getSchedule();
@@ -96,11 +105,25 @@ function App() {
         loadMonths();
     }
 
+    async function handleLogout() {
+        await logoutUser();
+        logout();
+    }
+
+    if (!user) {
+        return showRegister ? (
+            <Register onSwitchToLogin={() => setShowRegister(false)} />
+        ) : (
+            <Login onSwitchToRegister={() => setShowRegister(true)} />
+        );
+    }
+
     const current = monthData[month] || { total: 0, attended: 0 };
     const percentage = current.total === 0 ? 0 : ((current.attended / current.total) * 100).toFixed(1);
 
     return (
         <div className="container">
+            <button onClick={handleLogout}>Logout</button>
             <MonthSelector month={month} onChange={setMonth} />
             <SummaryCards total={current.total} attended={current.attended} percentage={percentage} />
             <ProgressBar percentage={percentage} />
