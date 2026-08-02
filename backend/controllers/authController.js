@@ -2,6 +2,15 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+function getCookieOptions() {
+    return {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    };
+}
+
 async function register(req, res) {
     try {
         const { username, password } = req.body;
@@ -22,10 +31,7 @@ async function register(req, res) {
             expiresIn: "7d"
         });
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        });
+        res.cookie("token", token, getCookieOptions());
 
         res.status(201).json({ id: user._id, username: user.username });
     } catch (err) {
@@ -51,10 +57,7 @@ async function login(req, res) {
             expiresIn: "7d"
         });
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        });
+        res.cookie("token", token, getCookieOptions());
 
         res.status(200).json({ id: user._id, username: user.username });
     } catch (err) {
