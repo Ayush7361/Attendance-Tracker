@@ -18,8 +18,9 @@ app.get("/api/test", (req, res) => {
 
 app.use(express.json());
 app.use(cookieParser());
+
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://attendance-tracker-pi-blue.vercel.app"],
     credentials: true
 }));
 
