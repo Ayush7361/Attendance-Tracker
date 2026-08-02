@@ -1,7 +1,6 @@
 require("dotenv").config();
 
 const express = require("express");
-const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const connectDB = require("./config/db");
 
@@ -12,16 +11,10 @@ const monthRoutes = require("./routes/monthRoutes");
 const app = express();
 
 connectDB();
-app.get("/api/test", (req, res) => {
-    res.json({ message: "Server is reachable" });
-});
 
 app.use(express.json());
-app.use(cookieParser());
-
 app.use(cors({
-    origin: ["http://localhost:5173", "https://attendance-tracker-pi-blue.vercel.app"],
-    credentials: true
+    origin: ["http://localhost:5173", "https://attendance-tracker-pi-blue.vercel.app"]
 }));
 
 app.use("/api/auth", authRoutes);
