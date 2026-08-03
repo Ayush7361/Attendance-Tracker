@@ -14,14 +14,12 @@ function ScheduleForm({ schedule, onChange, onSave }) {
     const [activeDay, setActiveDay] = useState("mon");
     const [subjectInput, setSubjectInput] = useState("");
 
-    // Get subject list for day (handling array or number)
     function getDaySubjects(dayKey) {
         const val = schedule[dayKey];
         if (Array.isArray(val)) {
             return val;
         }
         if (typeof val === "number" && val > 0) {
-            // Convert fallback number to generic class names
             const list = [];
             for (let i = 1; i <= val; i++) {
                 list.push(`Class ${i}`);
@@ -51,10 +49,10 @@ function ScheduleForm({ schedule, onChange, onSave }) {
     const activeSubjects = getDaySubjects(activeDay);
 
     return (
-        <div className="schedule-card glass-panel">
+        <div className="schedule-card card-panel">
             <div className="schedule-header">
-                <h2>📚 Weekly Subject Timetable Builder</h2>
-                <p className="subtitle">Configure subjects for each day to automatically pre-fill your daily checklist.</p>
+                <h2>Weekly Subject Timetable</h2>
+                <p className="subtitle">Configure subjects for each day to pre-fill your daily checklist.</p>
             </div>
 
             {/* Day Selector Tabs */}
@@ -83,7 +81,7 @@ function ScheduleForm({ schedule, onChange, onSave }) {
                 <form onSubmit={handleAddSubject} className="add-subject-form">
                     <input
                         type="text"
-                        placeholder="e.g. Mathematics, Data Structures, Physics Lab..."
+                        placeholder="e.g. Mathematics, Data Structures, Physics..."
                         value={subjectInput}
                         onChange={(e) => setSubjectInput(e.target.value)}
                         className="subject-input"
@@ -95,7 +93,7 @@ function ScheduleForm({ schedule, onChange, onSave }) {
 
                 <div className="subject-list">
                     {activeSubjects.length === 0 ? (
-                        <p className="empty-subjects-text">No subjects added for this day yet. Add one above!</p>
+                        <p className="empty-subjects-text">No subjects added for this day yet.</p>
                     ) : (
                         activeSubjects.map((sub, index) => (
                             <div key={index} className="subject-tag">
@@ -116,7 +114,7 @@ function ScheduleForm({ schedule, onChange, onSave }) {
 
             <div className="schedule-footer">
                 <button onClick={onSave} className="save-schedule-btn">
-                    💾 Save Timetable
+                    Save Timetable
                 </button>
             </div>
         </div>

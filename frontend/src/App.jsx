@@ -94,9 +94,9 @@ function App() {
     async function handleSaveSchedule() {
         try {
             await saveSchedule(schedule);
-            alert("Weekly schedule saved successfully!");
+            alert("Weekly schedule saved!");
         } catch (err) {
-            alert("Failed to save weekly schedule.");
+            alert("Failed to save schedule.");
         }
     }
 
@@ -108,7 +108,7 @@ function App() {
     }
 
     async function handleResetMonth() {
-        const confirmed = confirm("Clear all attendance data for " + month + " " + year + "?");
+        const confirmed = confirm("Clear attendance data for " + month + " " + year + "?");
         if (!confirmed) return;
 
         const monthNumber = monthNameToNumber(month);
@@ -120,7 +120,7 @@ function App() {
     }
 
     async function handleResetAll() {
-        const confirmed = confirm("Delete ALL attendance records permanently?");
+        const confirmed = confirm("Delete ALL attendance records?");
         if (!confirmed) return;
         await resetAll();
         handleDaySaved();
@@ -148,19 +148,19 @@ function App() {
         <div className="app-layout">
             <header className="app-header">
                 <div className="header-brand">
-                    <div className="brand-logo">📊</div>
+                    <div className="brand-badge">AT</div>
                     <div>
                         <h1 className="app-title">Attendance Dashboard</h1>
-                        <p className="app-subtitle">Welcome back, <strong>{user.username}</strong></p>
+                        <p className="app-subtitle">Welcome back, {user.username}</p>
                     </div>
                 </div>
                 <button className="logout-btn" onClick={handleLogout}>
-                    🚪 Logout
+                    Logout
                 </button>
             </header>
 
             <main className="container">
-                <div className="month-picker-bar glass-panel">
+                <div className="month-picker-bar card-panel">
                     <MonthSelector month={month} onChange={setMonth} />
                 </div>
 
@@ -173,11 +173,11 @@ function App() {
 
                 <ResetSection onResetMonth={handleResetMonth} onResetAll={handleResetAll} />
 
-                <div className="overall-box glass-panel">
-                    <h2 className="overall-heading">Overall Attendance (All Months)</h2>
-                    <p className="overall-desc">Calculate aggregated attendance percentage across all logged days.</p>
+                <div className="overall-box card-panel">
+                    <h2 className="overall-heading">Overall Attendance</h2>
+                    <p className="overall-desc">Aggregated attendance percentage across all logged days.</p>
                     <button className="overall-btn" onClick={loadOverallSummary}>
-                        ⚡ Calculate Overall
+                        Calculate Overall
                     </button>
                     {showOverall && <OverallSummary total={overallData.total} attended={overallData.attended} />}
                 </div>
