@@ -17,7 +17,7 @@ function Login({ onSwitchToRegister }) {
             const res = await loginUser(username, password);
             login(res.data);
         } catch (err) {
-            setError("Invalid username or password");
+            setError(err.response?.data?.message || "Something went wrong");
         }
     }
 

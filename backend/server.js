@@ -6,7 +6,7 @@ const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
 const scheduleRoutes = require("./routes/scheduleRoutes");
-const monthRoutes = require("./routes/monthRoutes");
+const dayRoutes = require("./routes/dayRoutes");
 
 const app = express();
 
@@ -19,7 +19,7 @@ app.use(cors({
 
 app.use("/api/auth", authRoutes);
 app.use("/api/schedule", scheduleRoutes);
-app.use("/api/months", monthRoutes);
+app.use("/api/days", dayRoutes);
 
 const PORT = process.env.PORT || 5000;
 

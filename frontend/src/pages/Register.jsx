@@ -17,7 +17,7 @@ function Register({ onSwitchToLogin }) {
             const res = await registerUser(username, password);
             login(res.data);
         } catch (err) {
-            setError("Username already taken");
+            setError(err.response?.data?.message || "Something went wrong");
         }
     }
 
