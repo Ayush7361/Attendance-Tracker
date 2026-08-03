@@ -85,12 +85,12 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         if (Array.isArray(scheduledSubjects) && scheduledSubjects.length > 0) {
             setSubjectsList(scheduledSubjects.map((subName) => ({
                 name: subName,
-                attended: true
+                attended: false //  Default unlogged subjects to Not Attended so user explicitly chooses
             })));
         } else if (typeof scheduledSubjects === "number" && scheduledSubjects > 0) {
-            const list = [];
+            const list = [];            
             for (let i = 1; i <= scheduledSubjects; i++) {
-                list.push({ name: `Class ${i}`, attended: i <= (fallbackAttended || scheduledSubjects) });
+                list.push({ name: `Class ${i}`, attended: false });
             }
             setSubjectsList(list);
         } else if (fallbackTotal && fallbackTotal > 0) {
@@ -104,9 +104,9 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         }
     }
 
-    function toggleSubjectAttended(index) {
+    function setSubjectAttended(index, isAttended) {
         const updated = [...subjectsList];
-        updated[index] = { ...updated[index], attended: !updated[index].attended };
+        updated[index] = { ...updated[index], attended: isAttended };
         setSubjectsList(updated);
     }
 
@@ -196,25 +196,29 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                         <div className="subjects-checklist">
                             {subjectsList.map((sub, idx) => (
                                 <div key={idx} className="subject-row">
-                                    <label className="checkbox-label">
-                                        <input
-                                            type="checkbox"
-                                            checked={sub.attended}
-                                            onChange={() => toggleSubjectAttended(idx)}
-                                        />
-                                        <span className={sub.attended ? "status-attended" : "status-missed"}>
-                                            {sub.name}
-                                        </span>
-                                    </label>
+                                    <span className="subject-name">{sub.name}</span>
                                     <div className="row-controls">
-                                        <span className={`status-badge ${sub.attended ? "attended" : "missed"}`}>
-                                            {sub.attended ? "Attended" : "Missed"}
-                                        </span>
+                                        <div className="attendance-toggle-group">
+                                            <button
+                                                type="button"
+                                                className={`toggle-option attended ${sub.attended ? "active" : ""}`}
+                                                onClick={() => setSubjectAttended(idx, true)}
+                                            >
+                                                Attended
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className={`toggle-option missed ${!sub.attended ? "active" : ""}`}
+                                                onClick={() => setSubjectAttended(idx, false)}
+                                            >
+                                                Not Attended
+                                            </button>
+                                        </div>
                                         <button
                                             type="button"
                                             className="remove-row-btn"
                                             onClick={() => handleRemoveSubjectRow(idx)}
-                                            title="Remove"
+                                            title="Remove subject"
                                         >
                                             &times;
                                         </button>
