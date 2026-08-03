@@ -21,9 +21,8 @@ function parseServerDate(dateStr) {
 function AttendanceCalendar({ schedule, onDaySaved }) {
     const [visibleMonth, setVisibleMonth] = useState(new Date());
     const [records, setRecords] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(new Date());
 
-    // Simplified checklist state
     const [subjectsList, setSubjectsList] = useState([]);
     const [customSubjectInput, setCustomSubjectInput] = useState("");
     const [saving, setSaving] = useState(false);
@@ -31,6 +30,12 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
     useEffect(() => {
         loadMonthRecords();
     }, [visibleMonth]);
+
+    // Automatically load Today's date & timetable checklist on mount or schedule change
+    useEffect(() => {
+        const dateToLoad = selectedDate || new Date();
+        handleDayClick(dateToLoad);
+    }, [schedule]);
 
     async function loadMonthRecords() {
         try {
@@ -43,7 +48,6 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         }
     }
 
-    // Basic logged dates indicator
     function buildLoggedDates() {
         const logged = [];
         for (let i = 0; i < records.length; i++) {
@@ -118,7 +122,6 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         setSubjectsList(subjectsList.filter((_, idx) => idx !== index));
     }
 
-    // Dynamic counts
     const totalCount = subjectsList.length;
     const attendedCount = subjectsList.filter(s => s.attended).length;
 
@@ -159,16 +162,14 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
     }
 
     const loggedDates = buildLoggedDates();
+    const isTodaySelected = selectedDate && formatDateKey(selectedDate) === formatDateKey(new Date());
 
     return (
         <div className="attendance-calendar-card card-panel">
             <div className="calendar-header">
-                <div>
-                    <h2>Attendance Calendar</h2>
-                    <p className="subtitle">Click any date to log attendance.</p>
-                </div>
+                <h2>Attendance Calendar</h2>
                 <button className="log-today-btn" onClick={handleLogToday}>
-                    Log Today
+                    Today
                 </button>
             </div>
 
@@ -183,48 +184,45 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                     modifiersClassNames={{ logged: "day-logged" }}
                 />
 
-                {/* Simplified Checklist Panel */}
                 {selectedDate && (
                     <div className="day-checklist-panel">
                         <div className="checklist-header">
-                            <h3>{selectedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</h3>
+                            <h3>
+                                {selectedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
+                                {isTodaySelected && <span className="today-badge">Today</span>}
+                            </h3>
                         </div>
 
                         <div className="subjects-checklist">
-                            {subjectsList.length === 0 ? (
-                                <p className="no-subjects-text">No classes scheduled for this day.</p>
-                            ) : (
-                                subjectsList.map((sub, idx) => (
-                                    <div key={idx} className="subject-row">
-                                        <label className="checkbox-label">
-                                            <input
-                                                type="checkbox"
-                                                checked={sub.attended}
-                                                onChange={() => toggleSubjectAttended(idx)}
-                                            />
-                                            <span className={sub.attended ? "status-attended" : "status-missed"}>
-                                                {sub.name}
-                                            </span>
-                                        </label>
-                                        <div className="row-controls">
-                                            <span className={`status-badge ${sub.attended ? "attended" : "missed"}`}>
-                                                {sub.attended ? "Attended" : "Missed"}
-                                            </span>
-                                            <button
-                                                type="button"
-                                                className="remove-row-btn"
-                                                onClick={() => handleRemoveSubjectRow(idx)}
-                                                title="Remove"
-                                            >
-                                                &times;
-                                            </button>
-                                        </div>
+                            {subjectsList.map((sub, idx) => (
+                                <div key={idx} className="subject-row">
+                                    <label className="checkbox-label">
+                                        <input
+                                            type="checkbox"
+                                            checked={sub.attended}
+                                            onChange={() => toggleSubjectAttended(idx)}
+                                        />
+                                        <span className={sub.attended ? "status-attended" : "status-missed"}>
+                                            {sub.name}
+                                        </span>
+                                    </label>
+                                    <div className="row-controls">
+                                        <span className={`status-badge ${sub.attended ? "attended" : "missed"}`}>
+                                            {sub.attended ? "Attended" : "Missed"}
+                                        </span>
+                                        <button
+                                            type="button"
+                                            className="remove-row-btn"
+                                            onClick={() => handleRemoveSubjectRow(idx)}
+                                            title="Remove"
+                                        >
+                                            &times;
+                                        </button>
                                     </div>
-                                ))
-                            )}
+                                </div>
+                            ))}
                         </div>
 
-                        {/* Add extra class */}
                         <form onSubmit={handleAddCustomSubject} className="add-extra-subject-form">
                             <input
                                 type="text"
@@ -235,7 +233,6 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                             <button type="submit">+ Add</button>
                         </form>
 
-                        {/* Simple Summary */}
                         <div className="checklist-stats">
                             <span>Total: <strong>{totalCount}</strong></span>
                             <span>Attended: <strong>{attendedCount}</strong></span>

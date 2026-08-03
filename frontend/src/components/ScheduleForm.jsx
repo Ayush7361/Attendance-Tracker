@@ -52,7 +52,6 @@ function ScheduleForm({ schedule, onChange, onSave }) {
         <div className="schedule-card card-panel">
             <div className="schedule-header">
                 <h2>Weekly Subject Timetable</h2>
-                <p className="subtitle">Configure subjects for each day to pre-fill your daily checklist.</p>
             </div>
 
             {/* Day Selector Tabs */}
@@ -92,23 +91,19 @@ function ScheduleForm({ schedule, onChange, onSave }) {
                 </form>
 
                 <div className="subject-list">
-                    {activeSubjects.length === 0 ? (
-                        <p className="empty-subjects-text">No subjects added for this day yet.</p>
-                    ) : (
-                        activeSubjects.map((sub, index) => (
-                            <div key={index} className="subject-tag">
-                                <span>{sub}</span>
-                                <button
-                                    type="button"
-                                    className="remove-tag-btn"
-                                    onClick={() => handleRemoveSubject(index)}
-                                    title="Remove subject"
-                                >
-                                    &times;
-                                </button>
-                            </div>
-                        ))
-                    )}
+                    {activeSubjects.map((sub, index) => (
+                        <div key={index} className="subject-tag">
+                            <span>{sub}</span>
+                            <button
+                                type="button"
+                                className="remove-tag-btn"
+                                onClick={() => handleRemoveSubject(index)}
+                                title="Remove subject"
+                            >
+                                &times;
+                            </button>
+                        </div>
+                    ))}
                 </div>
             </div>
 
