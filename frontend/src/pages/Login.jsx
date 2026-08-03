@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { loginUser } from "../api/authApi";
 import { useAuth } from "../context/AuthContext";
+import "../styles/Auth.css";
 
 function Login({ onSwitchToRegister }) {
     const [username, setUsername] = useState("");
@@ -21,28 +22,36 @@ function Login({ onSwitchToRegister }) {
     }
 
     return (
-        <div className="auth-form">
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button type="submit">Login</button>
-            </form>
-            {error && <p className="error">{error}</p>}
-            <p>
-                Don't have an account?{" "}
-                <span className="link" onClick={onSwitchToRegister}>Register</span>
-            </p>
+        <div className="auth-page">
+            <div className="auth-brand">
+                <div className="auth-logo">Attendance Dashboard</div>
+                <h1 className="auth-headline">Track every class,<br />miss nothing.</h1>
+                <p className="auth-subtext">
+                    Log your weekly attendance and keep an eye on your percentage, all in one place.
+                </p>
+            </div>
+
+            <div className="auth-form-side">
+                <h2>Welcome back</h2>
+
+                <form onSubmit={handleSubmit}>
+                    <div className="auth-field">
+                        <label>Username</label>
+                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter your username" />
+                    </div>
+                    <div className="auth-field">
+                        <label>Password</label>
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" />
+                    </div>
+                    <button type="submit" className="auth-submit">Log In</button>
+                </form>
+
+                {error && <div className="auth-error">{error}</div>}
+
+                <div className="auth-switch">
+                    Don't have an account? <span className="link" onClick={onSwitchToRegister}>Register</span>
+                </div>
+            </div>
         </div>
     );
 }
