@@ -6,31 +6,51 @@ import MonthSelector from "./components/MonthSelector";
 import SummaryCards from "./components/SummaryCards";
 import ProgressBar from "./components/ProgressBar";
 import ScheduleForm from "./components/ScheduleForm";
-import WeeklyAttendanceForm from "./components/WeeklyAttendanceForm";
+import AttendanceCalendar from "./components/AttendanceCalendar";
 import ResetSection from "./components/ResetSection";
 import OverallSummary from "./components/OverallSummary";
-import { getSchedule, saveSchedule, getMonths, addWeek, resetMonth, resetAll } from "./api/attendanceApi";
+import {
+    getSchedule,
+    saveSchedule,
+    getMonthSummary,
+    getOverallSummary,
+    deleteDayRange,
+    resetAll
+} from "./api/attendanceApi";
 import { logoutUser } from "./api/authApi";
 import "./App.css";
 
-const days = ["mon", "tue", "wed", "thu", "fri", "sat"];
+const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
+
+function monthNameToNumber(name) {
+    return monthNames.indexOf(name) + 1;
+}
 
 function App() {
     const { user, login, logout } = useAuth();
     const [showRegister, setShowRegister] = useState(false);
 
     const [month, setMonth] = useState("January");
+    const [year, setYear] = useState(new Date().getFullYear());
     const [schedule, setSchedule] = useState({ mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0 });
-    const [weekAttendance, setWeekAttendance] = useState({ mon: "", tue: "", wed: "", thu: "", fri: "", sat: "" });
-    const [monthData, setMonthData] = useState({});
+    const [monthSummary, setMonthSummary] = useState({ total: 0, attended: 0 });
+    const [overallData, setOverallData] = useState({ total: 0, attended: 0 });
     const [showOverall, setShowOverall] = useState(false);
 
     useEffect(() => {
         if (user) {
             loadSchedule();
-            loadMonths();
         }
     }, [user]);
+
+    useEffect(() => {
+        if (user) {
+            loadMonthSummary();
+        }
+    }, [user, month, year]);
 
     async function loadSchedule() {
         const res = await getSchedule();
@@ -39,14 +59,16 @@ function App() {
         }
     }
 
-    async function loadMonths() {
-        const res = await getMonths();
-        const data = {};
-        for (let i = 0; i < res.data.length; i++) {
-            const m = res.data[i];
-            data[m.month] = { total: m.total, attended: m.attended };
-        }
-        setMonthData(data);
+    async function loadMonthSummary() {
+        const monthNumber = monthNameToNumber(month);
+        const res = await getMonthSummary(year, monthNumber);
+        setMonthSummary(res.data);
+    }
+
+    async function loadOverallSummary() {
+        const res = await getOverallSummary();
+        setOverallData(res.data);
+        setShowOverall(true);
     }
 
     function handleScheduleChange(day, value) {
@@ -58,51 +80,24 @@ function App() {
         alert("Weekly schedule saved!");
     }
 
-    function handleWeekChange(day, value) {
-        setWeekAttendance({ ...weekAttendance, [day]: value });
-    }
-
-    async function handleAddWeek() {
-        let scheduledTotal = 0;
-        let attendedTotal = 0;
-
-        for (let i = 0; i < days.length; i++) {
-            const day = days[i];
-            const scheduled = Number(schedule[day]) || 0;
-            const attended = Number(weekAttendance[day]) || 0;
-
-            if (attended > scheduled) {
-                alert("Cannot attend more (" + attended + ") than scheduled (" + scheduled + ") on " + day.toUpperCase() + "!");
-                return;
-            }
-
-            scheduledTotal += scheduled;
-            attendedTotal += attended;
-        }
-
-        if (scheduledTotal === 0) {
-            alert("Enter at least one scheduled class this week.");
-            return;
-        }
-
-        await addWeek(month, scheduledTotal, attendedTotal);
-        setWeekAttendance({ mon: "", tue: "", wed: "", thu: "", fri: "", sat: "" });
-        loadMonths();
-        alert("Week added for " + month + "!");
-    }
-
     async function handleResetMonth() {
         const confirmed = confirm("Clear all data for " + month + "?");
         if (!confirmed) return;
-        await resetMonth(month);
-        loadMonths();
+
+        const monthNumber = monthNameToNumber(month);
+        const start = new Date(year, monthNumber - 1, 1);
+        const end = new Date(year, monthNumber, 1);
+
+        await deleteDayRange(start, end);
+        loadMonthSummary();
     }
 
     async function handleResetAll() {
         const confirmed = confirm("Delete ALL data permanently?");
         if (!confirmed) return;
         await resetAll();
-        loadMonths();
+        loadMonthSummary();
+        setOverallData({ total: 0, attended: 0 });
     }
 
     async function handleLogout() {
@@ -118,31 +113,32 @@ function App() {
         );
     }
 
-    const current = monthData[month] || { total: 0, attended: 0 };
-    const percentage = current.total === 0 ? 0 : ((current.attended / current.total) * 100).toFixed(1);
+    const percentage = monthSummary.total === 0
+        ? 0
+        : ((monthSummary.attended / monthSummary.total) * 100).toFixed(1);
 
     return (
         <div className="container">
             <button onClick={handleLogout}>Logout</button>
             <MonthSelector month={month} onChange={setMonth} />
-            <SummaryCards total={current.total} attended={current.attended} percentage={percentage} />
+            <SummaryCards total={monthSummary.total} attended={monthSummary.attended} percentage={percentage} />
             <ProgressBar percentage={percentage} />
 
             <hr />
             <ScheduleForm schedule={schedule} onChange={handleScheduleChange} onSave={handleSaveSchedule} />
 
             <hr />
-            <WeeklyAttendanceForm weekAttendance={weekAttendance} onChange={handleWeekChange} onSubmit={handleAddWeek} />
+            <AttendanceCalendar schedule={schedule} />
 
             <hr />
             <ResetSection onResetMonth={handleResetMonth} onResetAll={handleResetAll} />
 
             <div className="overall-box">
                 <h2 className="overall-heading">Overall Attendance (All Months)</h2>
-                <button className="overall-btn" onClick={() => setShowOverall(true)}>
+                <button className="overall-btn" onClick={loadOverallSummary}>
                     Calculate Overall
                 </button>
-                {showOverall && <OverallSummary monthData={monthData} />}
+                {showOverall && <OverallSummary total={overallData.total} attended={overallData.attended} />}
             </div>
         </div>
     );

@@ -8,18 +8,30 @@ export function saveSchedule(schedule) {
     return axios.put("/api/schedule", schedule);
 }
 
-export function getMonths() {
-    return axios.get("/api/months");
+export function saveDay(date, totalClasses, attendedClasses) {
+    return axios.post("/api/days", { date, totalClasses, attendedClasses });
 }
 
-export function addWeek(month, scheduled, attended) {
-    return axios.post("/api/months/add-week", { month, scheduled, attended });
+export function getDay(date) {
+    return axios.get("/api/days", { params: { date } });
 }
 
-export function resetMonth(month) {
-    return axios.delete("/api/months/" + month);
+export function getMonthSummary(year, month) {
+    return axios.get("/api/days/summary/month", { params: { year, month } });
+}
+
+export function getOverallSummary() {
+    return axios.get("/api/days/summary/overall");
+}
+
+export function getMonthRecords(year, month) {
+    return axios.get("/api/days/month-records", { params: { year, month } });
+}
+
+export function deleteDayRange(start, end) {
+    return axios.delete("/api/days", { data: { start, end } });
 }
 
 export function resetAll() {
-    return axios.delete("/api/months");
+    return axios.delete("/api/days", { data: { all: true } });
 }
