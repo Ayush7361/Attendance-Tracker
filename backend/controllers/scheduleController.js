@@ -5,7 +5,7 @@ async function getSchedule(req, res) {
         let schedule = await Schedule.findOne({ userId: req.userId });
 
         if (!schedule) {
-            schedule = { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0 };
+            schedule = { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] };
         }
 
         res.status(200).json(schedule);
@@ -16,11 +16,19 @@ async function getSchedule(req, res) {
 
 async function saveSchedule(req, res) {
     try {
-        const { mon, tue, wed, thu, fri, sat } = req.body;
+        const { mon, tue, wed, thu, fri, sat, sun } = req.body;
 
         const schedule = await Schedule.findOneAndUpdate(
             { userId: req.userId },
-            { mon, tue, wed, thu, fri, sat },
+            {
+                mon: mon || [],
+                tue: tue || [],
+                wed: wed || [],
+                thu: thu || [],
+                fri: fri || [],
+                sat: sat || [],
+                sun: sun || []
+            },
             { new: true, upsert: true }
         );
 

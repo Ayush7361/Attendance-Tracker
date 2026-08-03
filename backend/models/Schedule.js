@@ -7,12 +7,13 @@ const scheduleSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    mon: { type: Number, default: 0 },
-    tue: { type: Number, default: 0 },
-    wed: { type: Number, default: 0 },
-    thu: { type: Number, default: 0 },
-    fri: { type: Number, default: 0 },
-    sat: { type: Number, default: 0 }
+    mon: { type: mongoose.Schema.Types.Mixed, default: [] },
+    tue: { type: mongoose.Schema.Types.Mixed, default: [] },
+    wed: { type: mongoose.Schema.Types.Mixed, default: [] },
+    thu: { type: mongoose.Schema.Types.Mixed, default: [] },
+    fri: { type: mongoose.Schema.Types.Mixed, default: [] },
+    sat: { type: mongoose.Schema.Types.Mixed, default: [] },
+    sun: { type: mongoose.Schema.Types.Mixed, default: [] }
 });
 
 module.exports = mongoose.model("Schedule", scheduleSchema);

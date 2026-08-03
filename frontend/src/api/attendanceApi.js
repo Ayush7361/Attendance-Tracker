@@ -8,8 +8,11 @@ export function saveSchedule(schedule) {
     return axios.put("/api/schedule", schedule);
 }
 
-export function saveDay(date, totalClasses, attendedClasses) {
-    return axios.post("/api/days", { date, totalClasses, attendedClasses });
+export function saveDay(dateOrData, totalClasses, attendedClasses) {
+    if (typeof dateOrData === "object" && dateOrData !== null && dateOrData.date) {
+        return axios.post("/api/days", dateOrData);
+    }
+    return axios.post("/api/days", { date: dateOrData, totalClasses, attendedClasses });
 }
 
 export function getDay(date) {

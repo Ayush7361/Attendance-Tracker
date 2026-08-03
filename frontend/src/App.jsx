@@ -33,9 +33,10 @@ function App() {
     const { user, login, logout } = useAuth();
     const [showRegister, setShowRegister] = useState(false);
 
-    const [month, setMonth] = useState("January");
+    const currentMonthName = monthNames[new Date().getMonth()];
+    const [month, setMonth] = useState(currentMonthName);
     const [year, setYear] = useState(new Date().getFullYear());
-    const [schedule, setSchedule] = useState({ mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0 });
+    const [schedule, setSchedule] = useState({ mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] });
     const [monthSummary, setMonthSummary] = useState({ total: 0, attended: 0 });
     const [overallData, setOverallData] = useState({ total: 0, attended: 0 });
     const [showOverall, setShowOverall] = useState(false);
@@ -49,26 +50,41 @@ function App() {
     useEffect(() => {
         if (user) {
             loadMonthSummary();
+            if (showOverall) {
+                loadOverallSummary();
+            }
         }
     }, [user, month, year]);
 
     async function loadSchedule() {
-        const res = await getSchedule();
-        if (res.data) {
-            setSchedule(res.data);
+        try {
+            const res = await getSchedule();
+            if (res.data) {
+                setSchedule(res.data);
+            }
+        } catch (err) {
+            console.error("Failed to load schedule", err);
         }
     }
 
     async function loadMonthSummary() {
-        const monthNumber = monthNameToNumber(month);
-        const res = await getMonthSummary(year, monthNumber);
-        setMonthSummary(res.data);
+        try {
+            const monthNumber = monthNameToNumber(month);
+            const res = await getMonthSummary(year, monthNumber);
+            setMonthSummary(res.data || { total: 0, attended: 0 });
+        } catch (err) {
+            console.error("Failed to load month summary", err);
+        }
     }
 
     async function loadOverallSummary() {
-        const res = await getOverallSummary();
-        setOverallData(res.data);
-        setShowOverall(true);
+        try {
+            const res = await getOverallSummary();
+            setOverallData(res.data || { total: 0, attended: 0 });
+            setShowOverall(true);
+        } catch (err) {
+            console.error("Failed to load overall summary", err);
+        }
     }
 
     function handleScheduleChange(day, value) {
@@ -76,12 +92,23 @@ function App() {
     }
 
     async function handleSaveSchedule() {
-        await saveSchedule(schedule);
-        alert("Weekly schedule saved!");
+        try {
+            await saveSchedule(schedule);
+            alert("Weekly schedule saved successfully!");
+        } catch (err) {
+            alert("Failed to save weekly schedule.");
+        }
+    }
+
+    function handleDaySaved() {
+        loadMonthSummary();
+        if (showOverall) {
+            loadOverallSummary();
+        }
     }
 
     async function handleResetMonth() {
-        const confirmed = confirm("Clear all data for " + month + "?");
+        const confirmed = confirm("Clear all attendance data for " + month + " " + year + "?");
         if (!confirmed) return;
 
         const monthNumber = monthNameToNumber(month);
@@ -89,14 +116,14 @@ function App() {
         const end = new Date(year, monthNumber, 1);
 
         await deleteDayRange(start, end);
-        loadMonthSummary();
+        handleDaySaved();
     }
 
     async function handleResetAll() {
-        const confirmed = confirm("Delete ALL data permanently?");
+        const confirmed = confirm("Delete ALL attendance records permanently?");
         if (!confirmed) return;
         await resetAll();
-        loadMonthSummary();
+        handleDaySaved();
         setOverallData({ total: 0, attended: 0 });
     }
 
@@ -118,28 +145,43 @@ function App() {
         : ((monthSummary.attended / monthSummary.total) * 100).toFixed(1);
 
     return (
-        <div className="container">
-            <button onClick={handleLogout}>Logout</button>
-            <MonthSelector month={month} onChange={setMonth} />
-            <SummaryCards total={monthSummary.total} attended={monthSummary.attended} percentage={percentage} />
-            <ProgressBar percentage={percentage} />
-
-            <hr />
-            <ScheduleForm schedule={schedule} onChange={handleScheduleChange} onSave={handleSaveSchedule} />
-
-            <hr />
-            <AttendanceCalendar schedule={schedule} onDaySaved={loadMonthSummary} />
-
-            <hr />
-            <ResetSection onResetMonth={handleResetMonth} onResetAll={handleResetAll} />
-
-            <div className="overall-box">
-                <h2 className="overall-heading">Overall Attendance (All Months)</h2>
-                <button className="overall-btn" onClick={loadOverallSummary}>
-                    Calculate Overall
+        <div className="app-layout">
+            <header className="app-header">
+                <div className="header-brand">
+                    <div className="brand-logo">📊</div>
+                    <div>
+                        <h1 className="app-title">Attendance Dashboard</h1>
+                        <p className="app-subtitle">Welcome back, <strong>{user.username}</strong></p>
+                    </div>
+                </div>
+                <button className="logout-btn" onClick={handleLogout}>
+                    🚪 Logout
                 </button>
-                {showOverall && <OverallSummary total={overallData.total} attended={overallData.attended} />}
-            </div>
+            </header>
+
+            <main className="container">
+                <div className="month-picker-bar glass-panel">
+                    <MonthSelector month={month} onChange={setMonth} />
+                </div>
+
+                <SummaryCards total={monthSummary.total} attended={monthSummary.attended} percentage={percentage} />
+                <ProgressBar percentage={percentage} />
+
+                <ScheduleForm schedule={schedule} onChange={handleScheduleChange} onSave={handleSaveSchedule} />
+
+                <AttendanceCalendar schedule={schedule} onDaySaved={handleDaySaved} />
+
+                <ResetSection onResetMonth={handleResetMonth} onResetAll={handleResetAll} />
+
+                <div className="overall-box glass-panel">
+                    <h2 className="overall-heading">Overall Attendance (All Months)</h2>
+                    <p className="overall-desc">Calculate aggregated attendance percentage across all logged days.</p>
+                    <button className="overall-btn" onClick={loadOverallSummary}>
+                        ⚡ Calculate Overall
+                    </button>
+                    {showOverall && <OverallSummary total={overallData.total} attended={overallData.attended} />}
+                </div>
+            </main>
         </div>
     );
 }

@@ -3,12 +3,38 @@ const DayRecord = require("../models/DayRecord");
 
 async function saveDay(req, res) {
     try {
-        const { date, totalClasses, attendedClasses } = req.body;
+        const { date, totalClasses, attendedClasses, isHoliday, subjects } = req.body;
         const parsedDate = new Date(date);
+
+        let finalTotal = Number(totalClasses) || 0;
+        let finalAttended = Number(attendedClasses) || 0;
+
+        if (isHoliday) {
+            finalTotal = 0;
+            finalAttended = 0;
+        } else if (Array.isArray(subjects) && subjects.length > 0) {
+            let tot = 0;
+            let att = 0;
+            for (let s of subjects) {
+                if (s.status !== "cancelled") {
+                    tot++;
+                    if (s.status === "attended") {
+                        att++;
+                    }
+                }
+            }
+            finalTotal = tot;
+            finalAttended = att;
+        }
 
         const record = await DayRecord.findOneAndUpdate(
             { userId: req.userId, date: parsedDate },
-            { totalClasses, attendedClasses },
+            {
+                totalClasses: finalTotal,
+                attendedClasses: finalAttended,
+                isHoliday: Boolean(isHoliday),
+                subjects: Array.isArray(subjects) ? subjects : []
+            },
             { new: true, upsert: true }
         );
         res.status(200).json(record);
