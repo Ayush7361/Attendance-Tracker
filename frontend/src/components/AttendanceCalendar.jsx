@@ -20,7 +20,7 @@ function formatDateKey(date) {
     return year + "-" + month + "-" + day;
 }
 
-function AttendanceCalendar({ schedule }) {
+function AttendanceCalendar({ schedule, onDaySaved}) {
     const [visibleMonth, setVisibleMonth] = useState(new Date());
     const [records, setRecords] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);
@@ -31,6 +31,7 @@ function AttendanceCalendar({ schedule }) {
         loadMonthRecords();
     }, [visibleMonth]);
 
+    
     async function loadMonthRecords() {
         const year = visibleMonth.getFullYear();
         const month = visibleMonth.getMonth() + 1;
@@ -85,6 +86,10 @@ function AttendanceCalendar({ schedule }) {
         const dateKey = formatDateKey(selectedDate);
         await saveDay(dateKey, formTotal, formAttended);
         await loadMonthRecords();
+
+        if (onDaySaved) {
+            onDaySaved();
+        }
     }
 
     const loggedDates = buildLoggedDates();

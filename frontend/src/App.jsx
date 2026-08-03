@@ -128,7 +128,7 @@ function App() {
             <ScheduleForm schedule={schedule} onChange={handleScheduleChange} onSave={handleSaveSchedule} />
 
             <hr />
-            <AttendanceCalendar schedule={schedule} />
+            <AttendanceCalendar schedule={schedule} onDaySaved={loadMonthSummary} />
 
             <hr />
             <ResetSection onResetMonth={handleResetMonth} onResetAll={handleResetAll} />
