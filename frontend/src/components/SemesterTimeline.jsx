@@ -51,7 +51,7 @@ function SemesterTimeline({ events, onRefresh }) {
 
     return (
         <div className="dl-semester">
-            <h3>Semester Timeline</h3>
+            <h3>Academic Timeline</h3>
 
             {timelineBar}
 
@@ -59,7 +59,7 @@ function SemesterTimeline({ events, onRefresh }) {
                 <input
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Event title (e.g. Mid Sem Exams)"
+                    placeholder="Event title (e.g. Final Exams)"
                 />
                 <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
                 <select value={type} onChange={(e) => setType(e.target.value)}>
@@ -73,7 +73,7 @@ function SemesterTimeline({ events, onRefresh }) {
 
             <div className="dl-semester-list">
                 {sorted.length === 0 && (
-                    <p className="dl-empty" style={{ padding: "12px" }}>No semester events yet. Add mid-sem, end-sem, breaks, etc.</p>
+                    <p className="dl-empty" style={{ padding: "12px" }}>No events yet. Add exams, breaks, or other key dates.</p>
                 )}
                 {sorted.map((ev) => (
                     <div className="dl-semester-item" key={ev._id}>

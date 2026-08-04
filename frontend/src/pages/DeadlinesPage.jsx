@@ -81,17 +81,17 @@ function DeadlinesPage({ user, onLogout }) {
         if (tab === "overview") {
             loadAnalytics();
         }
-        if (tab === "smart") {
-            loadSmartData();
+        if (tab === "calendar") {
+            loadCalendarData();
         }
     }, [tab]);
 
-    async function loadSmartData() {
+    async function loadCalendarData() {
         try {
             const eventsRes = await getSemesterEvents();
             setSemesterEvents(eventsRes.data);
         } catch (err) {
-            console.error("Failed to load smart data", err);
+            console.error("Failed to load calendar data", err);
         }
     }
 
@@ -159,10 +159,10 @@ function DeadlinesPage({ user, onLogout }) {
                         Overview
                     </button>
                     <button
-                        className={"dl-tab" + (tab === "smart" ? " active" : "")}
-                        onClick={() => setTab("smart")}
+                        className={"dl-tab" + (tab === "calendar" ? " active" : "")}
+                        onClick={() => setTab("calendar")}
                     >
-                        Smart
+                        Academic Calendar
                     </button>
                 </div>
 
@@ -234,9 +234,9 @@ function DeadlinesPage({ user, onLogout }) {
 
                 {tab === "overview" && <OverviewTab analytics={analytics} />}
 
-                {tab === "smart" && (
-                    <div className="dl-smart-tab">
-                        <SemesterTimeline events={semesterEvents} onRefresh={loadSmartData} />
+                {tab === "calendar" && (
+                    <div className="dl-calendar-tab">
+                        <SemesterTimeline events={semesterEvents} onRefresh={loadCalendarData} />
                     </div>
                 )}
             </main>

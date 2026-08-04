@@ -372,9 +372,9 @@
     }
 }
 
-/* Smart tab */
+/* Academic Calendar tab */
 
-.dl-smart-tab {
+.dl-calendar-tab {
     display: flex;
     flex-direction: column;
     gap: 20px;
