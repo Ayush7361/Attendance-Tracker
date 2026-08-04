@@ -24,10 +24,10 @@ function Login({ onSwitchToRegister }) {
     return (
         <div className="auth-page">
             <div className="auth-brand">
-                <div className="auth-logo">Attendance Dashboard</div>
-                <h1 className="auth-headline">Track every class,<br />miss nothing.</h1>
+                <div className="auth-logo">Study Dashboard</div>
+                <h1 className="auth-headline">Classes, deadlines,<br />and dates — handled.</h1>
                 <p className="auth-subtext">
-                    Log your weekly attendance and keep an eye on your percentage, all in one place.
+                    Track attendance, manage deadlines, and keep your academic calendar in one place.
                 </p>
             </div>
 

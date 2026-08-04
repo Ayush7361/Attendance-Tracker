@@ -8,7 +8,7 @@ function Hub({ user, onLogout }) {
                 <div className="header-brand">
                     <div className="brand-badge">AT</div>
                     <div>
-                        <h1 className="app-title">Student Dashboard</h1>
+                        <h1 className="app-title">Study Dashboard</h1>
                         <p className="app-subtitle">Welcome back, {user.username}</p>
                     </div>
                 </div>
@@ -25,7 +25,7 @@ function Hub({ user, onLogout }) {
                     </Link>
                     <Link to="/deadlines" className="hub-card">
                         <h2>Deadlines</h2>
-                        <p>Manage tasks, subtasks, filters, and progress overview.</p>
+                        <p>Manage tasks, subtasks, filters, and your academic calendar.</p>
                     </Link>
                 </div>
             </main>

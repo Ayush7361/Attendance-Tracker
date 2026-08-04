@@ -24,10 +24,10 @@ function Register({ onSwitchToLogin }) {
     return (
         <div className="auth-page">
             <div className="auth-brand">
-                <div className="auth-logo">Attendance Dashboard</div>
-                <h1 className="auth-headline">Your attendance,<br />finally organized.</h1>
+                <div className="auth-logo">Study Dashboard</div>
+                <h1 className="auth-headline">Everything you need<br />to stay on track.</h1>
                 <p className="auth-subtext">
-                    Set your weekly schedule once, log attendance as you go, and get a running percentage for every month.
+                    Create an account to organize deadlines, log attendance, and plan important dates from one dashboard.
                 </p>
             </div>
 
