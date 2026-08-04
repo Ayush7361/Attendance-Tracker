@@ -1,117 +1,184 @@
-/* Basic CSS for Deadlines module */
+/* Deadlines module — polished layout */
 
 .deadlines-page {
     font-family: 'Inter', sans-serif;
+    background: linear-gradient(165deg, #eef2ff 0%, #f1f5f9 45%, #f8fafc 100%);
+    position: relative;
 }
+
+.deadlines-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(99, 102, 241, 0.08) 0%, transparent 42%),
+        radial-gradient(circle at 88% 72%, rgba(14, 165, 233, 0.06) 0%, transparent 38%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.deadlines-page > * {
+    position: relative;
+    z-index: 1;
+}
+
+.deadlines-page .app-header {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: 0 1px 12px rgba(15, 23, 42, 0.04);
+}
+
+.deadlines-page .brand-badge {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+}
+
+.deadlines-page .container {
+    gap: 18px;
+}
+
+/* Toolbar & filters */
 
 .dl-toolbar {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
-    margin-bottom: 16px;
-    padding: 12px 14px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    background: #fff;
+    margin-bottom: 0;
+    padding: 14px 16px;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
 }
 
 .dl-btn {
-    padding: 6px 14px;
+    padding: 7px 15px;
     border: 1px solid #cbd5e1;
-    border-radius: 6px;
+    border-radius: 8px;
     background: #fff;
     cursor: pointer;
     font-size: 13px;
-    color: #334155;
-    transition: background 0.15s ease;
+    font-weight: 500;
+    color: #475569;
+    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .dl-btn:hover {
-    background: #f1f5f9;
+    background: #f8fafc;
+    border-color: #94a3b8;
 }
 
 .dl-btn.active {
-    background: #334155;
-    border-color: #334155;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    border-color: #4f46e5;
     color: #fff;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.28);
 }
 
 .dl-btn-primary {
-    background: #334155;
-    border-color: #334155;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    border-color: #4f46e5;
     color: #fff;
+    box-shadow: 0 2px 10px rgba(79, 70, 229, 0.25);
 }
 
 .dl-btn-primary:hover {
-    background: #475569;
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.32);
 }
 
 .dl-btn-danger {
-    border-color: #fca5a5;
+    border-color: #fecaca;
     color: #dc2626;
-}
-
-.dl-select {
-    padding: 6px 10px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    font-size: 13px;
     background: #fff;
 }
 
+.dl-btn-danger:hover {
+    background: #fef2f2;
+    border-color: #fca5a5;
+}
+
+.dl-select {
+    padding: 7px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 13px;
+    background: #fff;
+    color: #334155;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dl-select:focus {
+    outline: none;
+    border-color: #818cf8;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Tabs */
+
 .dl-tabs {
     display: flex;
-    gap: 4px;
-    margin-bottom: 16px;
-    border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 0;
+    gap: 6px;
+    margin-bottom: 4px;
+    padding: 6px;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
 }
 
 .dl-tab {
-    padding: 8px 16px;
-    border: 1px solid transparent;
-    border-bottom: none;
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
     background: transparent;
     cursor: pointer;
     font-size: 14px;
+    font-weight: 500;
     color: #64748b;
-    border-radius: 6px 6px 0 0;
+    border-radius: 8px;
+    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .dl-tab:hover {
     color: #334155;
-    background: #f8fafc;
+    background: rgba(241, 245, 249, 0.9);
 }
 
 .dl-tab.active {
     background: #fff;
-    color: #334155;
+    color: #4338ca;
     font-weight: 600;
-    border-color: #e2e8f0;
-    border-bottom: 1px solid #fff;
-    margin-bottom: -1px;
+    box-shadow: 0 1px 6px rgba(15, 23, 42, 0.08);
 }
+
+/* List */
 
 .dl-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
 }
 
 .dl-row {
     display: block;
-    padding: 14px 16px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    background: #fff;
+    padding: 16px 18px;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.92);
     text-decoration: none;
     color: inherit;
-    transition: box-shadow 0.15s ease;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+    transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
 }
 
 .dl-row:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+    transform: translateY(-1px);
+    border-color: #c7d2fe;
 }
 
 .dl-row.completed {
@@ -130,21 +197,21 @@
 .dl-row-title {
     font-weight: 600;
     font-size: 15px;
-    color: #1e293b;
+    color: #0f172a;
 }
 
 .dl-row-meta {
     font-size: 12px;
     color: #64748b;
-    margin-top: 4px;
+    margin-top: 6px;
 }
 
 .dl-badge {
     display: inline-block;
-    padding: 2px 8px;
+    padding: 3px 9px;
     font-size: 11px;
     font-weight: 600;
-    border-radius: 4px;
+    border-radius: 999px;
     border: 1px solid;
 }
 
@@ -157,114 +224,142 @@
 .dl-progress-tag {
     font-size: 12px;
     border: 1px solid #e2e8f0;
-    border-radius: 4px;
-    padding: 1px 6px;
+    border-radius: 999px;
+    padding: 2px 8px;
     background: #f8fafc;
     color: #475569;
 }
 
 .dl-empty {
-    padding: 32px;
+    padding: 36px 24px;
     border: 1px dashed #cbd5e1;
-    border-radius: 8px;
+    border-radius: 12px;
     text-align: center;
     color: #64748b;
-    background: #f8fafc;
+    background: rgba(255, 255, 255, 0.7);
 }
+
+/* Overview stats */
 
 .dl-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
     margin-bottom: 20px;
 }
 
 .dl-stat-box {
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 14px;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 12px;
+    padding: 18px 16px;
     text-align: center;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.dl-stat-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
+}
+
+.dl-stat-box:nth-child(1) { border-top: 3px solid #6366f1; }
+.dl-stat-box:nth-child(2) { border-top: 3px solid #22c55e; }
+.dl-stat-box:nth-child(3) { border-top: 3px solid #f59e0b; }
+.dl-stat-box:nth-child(4) { border-top: 3px solid #0ea5e9; }
+
 .dl-stat-box h4 {
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
-    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
     color: #64748b;
 }
 
 .dl-stat-box p {
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 700;
-    color: #1e293b;
+    color: #0f172a;
 }
 
 .dl-status-bars {
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 16px;
-    background: #fff;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 12px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
 }
 
 .dl-status-bars h3 {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
-    margin-bottom: 14px;
-    color: #334155;
+    margin-bottom: 16px;
+    color: #1e293b;
 }
 
 .dl-bar-row {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 12px;
+    margin-bottom: 12px;
     font-size: 13px;
+}
+
+.dl-bar-row:last-child {
+    margin-bottom: 0;
 }
 
 .dl-bar-label {
     width: 90px;
     flex-shrink: 0;
     color: #475569;
+    font-weight: 500;
 }
 
 .dl-bar-track {
     flex: 1;
-    height: 16px;
-    border-radius: 4px;
-    border: 1px solid #e2e8f0;
-    background: #f1f5f9;
+    height: 18px;
+    border-radius: 999px;
+    border: none;
+    background: #e2e8f0;
     overflow: hidden;
 }
 
 .dl-bar-fill {
     height: 100%;
+    border-radius: 999px;
     background: #64748b;
-    border-radius: 3px;
+    transition: width 0.4s ease;
 }
+
+.dl-bar-row:nth-child(2) .dl-bar-fill { background: linear-gradient(90deg, #f87171, #ef4444); }
+.dl-bar-row:nth-child(3) .dl-bar-fill { background: linear-gradient(90deg, #fdba74, #f97316); }
+.dl-bar-row:nth-child(4) .dl-bar-fill { background: linear-gradient(90deg, #fde047, #eab308); }
 
 .dl-bar-count {
     width: 30px;
     text-align: right;
-    font-weight: 600;
+    font-weight: 700;
     color: #334155;
 }
 
+/* Forms & detail */
+
 .dl-form {
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 20px;
-    background: #fff;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 14px;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
 }
 
 .dl-form label {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     font-size: 13px;
     font-weight: 600;
     color: #334155;
@@ -273,22 +368,32 @@
 .dl-form input,
 .dl-form select,
 .dl-form textarea {
-    padding: 8px 10px;
+    padding: 10px 12px;
     border: 1px solid #cbd5e1;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 14px;
     font-family: 'Inter', sans-serif;
+    background: #fff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dl-form input:focus,
+.dl-form select:focus,
+.dl-form textarea:focus {
+    outline: none;
+    border-color: #818cf8;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
 }
 
 .dl-form textarea {
-    min-height: 80px;
+    min-height: 88px;
     resize: vertical;
 }
 
 .dl-form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
+    gap: 16px;
 }
 
 .dl-subtask-input-row {
@@ -299,36 +404,37 @@
 .dl-subtask-list {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
 }
 
 .dl-subtask-item {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 10px;
+    padding: 10px 12px;
     border: 1px solid #e2e8f0;
-    border-radius: 6px;
+    border-radius: 8px;
     background: #f8fafc;
 }
 
 .dl-detail {
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 20px;
-    background: #fff;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 14px;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
 }
 
 .dl-detail-header {
     border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 14px;
-    margin-bottom: 14px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
 }
 
 .dl-detail-header h2 {
-    font-size: 20px;
-    margin-bottom: 8px;
-    color: #1e293b;
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #0f172a;
 }
 
 .dl-detail-meta {
@@ -342,20 +448,20 @@
 .dl-detail-actions {
     display: flex;
     gap: 8px;
-    margin-top: 16px;
+    margin-top: 18px;
     flex-wrap: wrap;
 }
 
 .dl-section {
-    margin-top: 16px;
+    margin-top: 18px;
 }
 
 .dl-section h3 {
     font-size: 14px;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 6px;
+    padding-bottom: 8px;
     color: #334155;
 }
 
@@ -370,6 +476,14 @@
     .dl-form-row {
         grid-template-columns: 1fr;
     }
+
+    .dl-tabs {
+        flex-direction: column;
+    }
+
+    .dl-tab.active {
+        box-shadow: none;
+    }
 }
 
 /* Academic Calendar tab */
@@ -381,49 +495,69 @@
 }
 
 .dl-semester {
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 16px;
-    background: #fff;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 14px;
+    padding: 22px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
 }
 
 .dl-semester h3 {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
-    margin-bottom: 10px;
-    color: #334155;
+    margin-bottom: 14px;
+    color: #1e293b;
 }
 
 .dl-semester-form {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 12px;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding: 14px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
 }
 
 .dl-semester-form input,
 .dl-semester-form select {
-    padding: 6px 10px;
+    padding: 8px 12px;
     border: 1px solid #cbd5e1;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 13px;
+    background: #fff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dl-semester-form input:focus,
+.dl-semester-form select:focus {
+    outline: none;
+    border-color: #818cf8;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
 }
 
 .dl-semester-list {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
 }
 
 .dl-semester-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 12px;
+    padding: 12px 14px;
     border: 1px solid #e2e8f0;
-    border-radius: 6px;
+    border-radius: 10px;
     font-size: 13px;
-    background: #f8fafc;
+    background: #fff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dl-semester-item:hover {
+    border-color: #c7d2fe;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
 }
 
 .dl-semester-meta {
@@ -433,11 +567,12 @@
 
 .dl-timeline-bar {
     position: relative;
-    height: 50px;
+    height: 56px;
     border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    background: #f1f5f9;
-    margin-bottom: 16px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #eef2ff, #f0f9ff, #f8fafc);
+    margin-bottom: 18px;
+    box-shadow: inset 0 1px 4px rgba(15, 23, 42, 0.04);
 }
 
 .dl-timeline-marker {
@@ -450,18 +585,21 @@
 
 .dl-timeline-dot {
     display: block;
-    width: 10px;
-    height: 10px;
-    background: #475569;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    border: 2px solid #fff;
     border-radius: 50%;
     margin: 0 auto 4px;
+    box-shadow: 0 2px 6px rgba(79, 70, 229, 0.35);
 }
 
 .dl-timeline-marker-label {
     display: block;
-    max-width: 70px;
+    max-width: 72px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: #64748b;
+    color: #475569;
+    font-weight: 500;
 }
