@@ -15,7 +15,7 @@ const deadlineSchema = new mongoose.Schema({
     subject: { type: String, required: true },
     type: {
         type: String,
-        enum: ["Assignment", "Exam", "Project", "Quiz", "Lab"],
+        enum: ["Assignment", "Exam", "Project"],
         required: true
     },
     dueDate: { type: Date, required: true },

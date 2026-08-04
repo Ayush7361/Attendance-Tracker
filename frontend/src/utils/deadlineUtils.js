@@ -1,4 +1,4 @@
-export const DEADLINE_TYPES = ["All", "Assignment", "Exam", "Project", "Quiz", "Lab"];
+export const DEADLINE_TYPES = ["All", "Assignment", "Exam", "Project"];
 
 export function startOfDay(date) {
     const d = new Date(date);

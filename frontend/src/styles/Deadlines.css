@@ -1,7 +1,7 @@
-/* Rough basic CSS for Deadlines module */
+/* Basic CSS for Deadlines module */
 
 .deadlines-page {
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 .dl-toolbar {
@@ -10,68 +10,87 @@
     gap: 10px;
     align-items: center;
     margin-bottom: 16px;
-    padding: 12px;
-    border: 1px solid #999;
-    background: #f5f5f5;
+    padding: 12px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #fff;
 }
 
 .dl-btn {
-    padding: 6px 12px;
-    border: 1px solid #333;
+    padding: 6px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
     background: #fff;
     cursor: pointer;
     font-size: 13px;
+    color: #334155;
+    transition: background 0.15s ease;
 }
 
 .dl-btn:hover {
-    background: #eee;
+    background: #f1f5f9;
 }
 
 .dl-btn.active {
-    background: #333;
+    background: #334155;
+    border-color: #334155;
     color: #fff;
 }
 
 .dl-btn-primary {
-    background: #333;
+    background: #334155;
+    border-color: #334155;
     color: #fff;
 }
 
 .dl-btn-primary:hover {
-    background: #555;
+    background: #475569;
 }
 
 .dl-btn-danger {
-    border-color: #c00;
-    color: #c00;
+    border-color: #fca5a5;
+    color: #dc2626;
 }
 
 .dl-select {
-    padding: 6px 8px;
-    border: 1px solid #333;
+    padding: 6px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
     font-size: 13px;
+    background: #fff;
 }
 
 .dl-tabs {
     display: flex;
-    gap: 0;
+    gap: 4px;
     margin-bottom: 16px;
-    border-bottom: 2px solid #333;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0;
 }
 
 .dl-tab {
     padding: 8px 16px;
-    border: 1px solid #333;
+    border: 1px solid transparent;
     border-bottom: none;
-    background: #ddd;
+    background: transparent;
     cursor: pointer;
     font-size: 14px;
-    margin-right: 4px;
+    color: #64748b;
+    border-radius: 6px 6px 0 0;
+}
+
+.dl-tab:hover {
+    color: #334155;
+    background: #f8fafc;
 }
 
 .dl-tab.active {
     background: #fff;
-    font-weight: bold;
+    color: #334155;
+    font-weight: 600;
+    border-color: #e2e8f0;
+    border-bottom: 1px solid #fff;
+    margin-bottom: -1px;
 }
 
 .dl-list {
@@ -82,19 +101,21 @@
 
 .dl-row {
     display: block;
-    padding: 12px;
-    border: 1px solid #666;
+    padding: 14px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
     background: #fff;
     text-decoration: none;
     color: inherit;
+    transition: box-shadow 0.15s ease;
 }
 
 .dl-row:hover {
-    background: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .dl-row.completed {
-    opacity: 0.6;
+    opacity: 0.55;
     text-decoration: line-through;
 }
 
@@ -107,13 +128,14 @@
 }
 
 .dl-row-title {
-    font-weight: bold;
+    font-weight: 600;
     font-size: 15px;
+    color: #1e293b;
 }
 
 .dl-row-meta {
     font-size: 12px;
-    color: #555;
+    color: #64748b;
     margin-top: 4px;
 }
 
@@ -121,40 +143,46 @@
     display: inline-block;
     padding: 2px 8px;
     font-size: 11px;
-    font-weight: bold;
+    font-weight: 600;
+    border-radius: 4px;
     border: 1px solid;
 }
 
-.dl-badge.overdue { background: #fcc; border-color: #c00; color: #900; }
-.dl-badge.dueToday { background: #fec; border-color: #c60; color: #840; }
-.dl-badge.thisWeek { background: #ffc; border-color: #990; color: #660; }
-.dl-badge.upcoming { background: #cfc; border-color: #060; color: #060; }
-.dl-badge.completed { background: #ddd; border-color: #666; color: #333; }
+.dl-badge.overdue { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
+.dl-badge.dueToday { background: #fff7ed; border-color: #fed7aa; color: #c2410c; }
+.dl-badge.thisWeek { background: #fefce8; border-color: #fde047; color: #a16207; }
+.dl-badge.upcoming { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
+.dl-badge.completed { background: #f1f5f9; border-color: #cbd5e1; color: #64748b; }
 
 .dl-progress-tag {
     font-size: 12px;
-    border: 1px solid #333;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
     padding: 1px 6px;
-    background: #eee;
+    background: #f8fafc;
+    color: #475569;
 }
 
 .dl-empty {
-    padding: 24px;
-    border: 1px dashed #999;
+    padding: 32px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
     text-align: center;
-    color: #666;
+    color: #64748b;
+    background: #f8fafc;
 }
 
 .dl-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 10px;
+    gap: 12px;
     margin-bottom: 20px;
 }
 
 .dl-stat-box {
-    border: 1px solid #333;
-    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14px;
     text-align: center;
     background: #fff;
 }
@@ -162,63 +190,75 @@
 .dl-stat-box h4 {
     font-size: 12px;
     text-transform: uppercase;
+    letter-spacing: 0.03em;
     margin-bottom: 6px;
-    color: #555;
+    color: #64748b;
 }
 
 .dl-stat-box p {
     font-size: 22px;
-    font-weight: bold;
+    font-weight: 700;
+    color: #1e293b;
 }
 
 .dl-status-bars {
-    border: 1px solid #333;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
     padding: 16px;
     background: #fff;
 }
 
 .dl-status-bars h3 {
     font-size: 14px;
-    margin-bottom: 12px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: #334155;
 }
 
 .dl-bar-row {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-size: 13px;
 }
 
 .dl-bar-label {
     width: 90px;
     flex-shrink: 0;
+    color: #475569;
 }
 
 .dl-bar-track {
     flex: 1;
-    height: 18px;
-    border: 1px solid #333;
-    background: #eee;
+    height: 16px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+    background: #f1f5f9;
+    overflow: hidden;
 }
 
 .dl-bar-fill {
     height: 100%;
-    background: #666;
+    background: #64748b;
+    border-radius: 3px;
 }
 
 .dl-bar-count {
     width: 30px;
     text-align: right;
+    font-weight: 600;
+    color: #334155;
 }
 
 .dl-form {
-    border: 1px solid #333;
-    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
     background: #fff;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
 }
 
 .dl-form label {
@@ -226,16 +266,18 @@
     flex-direction: column;
     gap: 4px;
     font-size: 13px;
-    font-weight: bold;
+    font-weight: 600;
+    color: #334155;
 }
 
 .dl-form input,
 .dl-form select,
 .dl-form textarea {
-    padding: 6px 8px;
-    border: 1px solid #333;
+    padding: 8px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
     font-size: 14px;
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 .dl-form textarea {
@@ -246,7 +288,7 @@
 .dl-form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 14px;
 }
 
 .dl-subtask-input-row {
@@ -264,26 +306,29 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 6px;
-    border: 1px solid #ccc;
-    background: #fafafa;
+    padding: 8px 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #f8fafc;
 }
 
 .dl-detail {
-    border: 1px solid #333;
-    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
     background: #fff;
 }
 
 .dl-detail-header {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 12px;
-    margin-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
 }
 
 .dl-detail-header h2 {
     font-size: 20px;
     margin-bottom: 8px;
+    color: #1e293b;
 }
 
 .dl-detail-meta {
@@ -291,7 +336,7 @@
     flex-wrap: wrap;
     gap: 12px;
     font-size: 13px;
-    color: #444;
+    color: #64748b;
 }
 
 .dl-detail-actions {
@@ -307,15 +352,18 @@
 
 .dl-section h3 {
     font-size: 14px;
+    font-weight: 600;
     margin-bottom: 8px;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 4px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 6px;
+    color: #334155;
 }
 
 .dl-progress-text {
     font-size: 14px;
     margin-top: 8px;
-    font-weight: bold;
+    font-weight: 600;
+    color: #475569;
 }
 
 @media (max-width: 600px) {
@@ -324,7 +372,7 @@
     }
 }
 
-/* Phase 3 (50%) — Smart tab */
+/* Smart tab */
 
 .dl-smart-tab {
     display: flex;
@@ -332,118 +380,18 @@
     gap: 20px;
 }
 
-.dl-forecast,
-.dl-semester,
-.dl-insights,
-.dl-recovery {
-    border: 1px solid #333;
+.dl-semester {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
     padding: 16px;
     background: #fff;
 }
 
-.dl-forecast h3,
-.dl-semester h3,
-.dl-insights h3,
-.dl-recovery h3 {
+.dl-semester h3 {
     font-size: 14px;
+    font-weight: 600;
     margin-bottom: 10px;
-}
-
-.dl-forecast-total {
-    font-size: 13px;
-    margin-bottom: 12px;
-    font-weight: bold;
-}
-
-.dl-forecast-chart {
-    display: flex;
-    gap: 8px;
-    align-items: flex-end;
-    height: 140px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    background: #fafafa;
-}
-
-.dl-forecast-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    font-size: 11px;
-}
-
-.dl-forecast-bar-wrap {
-    flex: 1;
-    width: 100%;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-}
-
-.dl-forecast-bar {
-    width: 70%;
-    min-height: 2px;
-    background: #666;
-    border: 1px solid #333;
-}
-
-.dl-forecast-hours {
-    font-weight: bold;
-    margin-top: 4px;
-}
-
-.dl-forecast-label {
-    text-align: center;
-    color: #555;
-    font-size: 10px;
-    margin-top: 2px;
-}
-
-.dl-forecast-note {
-    font-size: 11px;
-    color: #666;
-    margin-top: 8px;
-}
-
-.dl-insight-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.dl-insight {
-    padding: 10px;
-    border: 1px solid #333;
-    font-size: 13px;
-}
-
-.dl-insight-warning { background: #fcc; }
-.dl-insight-heavy { background: #fec; }
-.dl-insight-busy { background: #ffc; }
-.dl-insight-positive { background: #cfc; }
-.dl-insight-neutral { background: #eee; }
-
-.dl-recovery {
-    margin-top: 12px;
-}
-
-.dl-recovery-desc {
-    font-size: 12px;
-    color: #555;
-    margin-bottom: 10px;
-}
-
-.dl-recovery-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    margin-bottom: 6px;
-    font-size: 13px;
+    color: #334155;
 }
 
 .dl-semester-form {
@@ -455,8 +403,9 @@
 
 .dl-semester-form input,
 .dl-semester-form select {
-    padding: 6px 8px;
-    border: 1px solid #333;
+    padding: 6px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
     font-size: 13px;
 }
 
@@ -470,21 +419,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px;
-    border: 1px solid #ccc;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
     font-size: 13px;
+    background: #f8fafc;
 }
 
 .dl-semester-meta {
-    color: #555;
+    color: #64748b;
     font-size: 12px;
 }
 
 .dl-timeline-bar {
     position: relative;
     height: 50px;
-    border: 1px solid #333;
-    background: #eee;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #f1f5f9;
     margin-bottom: 16px;
 }
 
@@ -500,7 +452,7 @@
     display: block;
     width: 10px;
     height: 10px;
-    background: #333;
+    background: #475569;
     border-radius: 50%;
     margin: 0 auto 4px;
 }
@@ -511,4 +463,5 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: #64748b;
 }

@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { getDeadline, createDeadline, updateDeadline } from "../api/deadlinesApi";
 import "../styles/Deadlines.css";
 
-const TYPES = ["Assignment", "Exam", "Project", "Quiz", "Lab"];
+const TYPES = ["Assignment", "Exam", "Project"];
 const PRIORITIES = ["Low", "Medium", "High"];
 
 function toDateInputValue(dateStr) {

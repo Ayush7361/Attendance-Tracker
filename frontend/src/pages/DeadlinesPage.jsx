@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getDeadlines, getDeadlineAnalytics, getDeadlineSubjects, getWorkloadForecast, getDeadlineInsights } from "../api/deadlinesApi";
+import { getDeadlines, getDeadlineAnalytics, getDeadlineSubjects } from "../api/deadlinesApi";
 import { getSemesterEvents } from "../api/semesterApi";
-import WorkloadForecast from "../components/WorkloadForecast";
 import SemesterTimeline from "../components/SemesterTimeline";
-import InsightsPanel from "../components/InsightsPanel";
 import {
     DEADLINE_TYPES,
     getUrgencyStatus,
@@ -22,7 +20,6 @@ function OverviewTab({ analytics }) {
         analytics.statusBreakdown.overdue,
         analytics.statusBreakdown.dueToday,
         analytics.statusBreakdown.thisWeek,
-        analytics.statusBreakdown.upcoming,
         1
     );
 
@@ -49,7 +46,7 @@ function OverviewTab({ analytics }) {
 
             <div className="dl-status-bars">
                 <h3>Status Breakdown (pending only)</h3>
-                {["overdue", "dueToday", "thisWeek", "upcoming"].map((key) => (
+                {["overdue", "dueToday", "thisWeek"].map((key) => (
                     <div className="dl-bar-row" key={key}>
                         <span className="dl-bar-label">{STATUS_LABELS[key]}</span>
                         <div className="dl-bar-track">
@@ -73,8 +70,6 @@ function DeadlinesPage({ user, onLogout }) {
     const [deadlines, setDeadlines] = useState([]);
     const [subjects, setSubjects] = useState([]);
     const [analytics, setAnalytics] = useState(null);
-    const [forecast, setForecast] = useState(null);
-    const [insights, setInsights] = useState(null);
     const [semesterEvents, setSemesterEvents] = useState([]);
 
     useEffect(() => {
@@ -93,22 +88,11 @@ function DeadlinesPage({ user, onLogout }) {
 
     async function loadSmartData() {
         try {
-            const [forecastRes, insightsRes, eventsRes] = await Promise.all([
-                getWorkloadForecast(),
-                getDeadlineInsights(),
-                getSemesterEvents()
-            ]);
-            setForecast(forecastRes.data);
-            setInsights(insightsRes.data);
+            const eventsRes = await getSemesterEvents();
             setSemesterEvents(eventsRes.data);
         } catch (err) {
             console.error("Failed to load smart data", err);
         }
-    }
-
-    async function refreshSmartData() {
-        await loadSmartData();
-        loadDeadlines();
     }
 
     async function loadDeadlines() {
@@ -252,8 +236,6 @@ function DeadlinesPage({ user, onLogout }) {
 
                 {tab === "smart" && (
                     <div className="dl-smart-tab">
-                        <InsightsPanel data={insights} onReschedule={refreshSmartData} />
-                        <WorkloadForecast data={forecast} />
                         <SemesterTimeline events={semesterEvents} onRefresh={loadSmartData} />
                     </div>
                 )}
