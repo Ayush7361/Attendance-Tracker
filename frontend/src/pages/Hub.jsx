@@ -23,6 +23,10 @@ function Hub({ user, onLogout }) {
                         <h2>Attendance</h2>
                         <p>Track daily attendance, weekly schedule, and monthly percentage.</p>
                     </Link>
+                    <Link to="/deadlines" className="hub-card">
+                        <h2>Deadlines</h2>
+                        <p>Manage tasks, subtasks, filters, and progress overview.</p>
+                    </Link>
                 </div>
             </main>
         </div>

@@ -7,6 +7,8 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const scheduleRoutes = require("./routes/scheduleRoutes");
 const dayRoutes = require("./routes/dayRoutes");
+const deadlineRoutes = require("./routes/deadlineRoutes");
+const semesterRoutes = require("./routes/semesterRoutes");
 
 const app = express();
 
@@ -20,6 +22,8 @@ app.use(cors({
 app.use("/api/auth", authRoutes);
 app.use("/api/schedule", scheduleRoutes);
 app.use("/api/days", dayRoutes);
+app.use("/api/deadlines", deadlineRoutes);
+app.use("/api/semester-events", semesterRoutes);
 
 const PORT = process.env.PORT || 5000;
 

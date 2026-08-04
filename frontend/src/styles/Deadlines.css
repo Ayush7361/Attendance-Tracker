@@ -1,0 +1,514 @@
+/* Rough basic CSS for Deadlines module */
+
+.deadlines-page {
+    font-family: Arial, sans-serif;
+}
+
+.dl-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 12px;
+    border: 1px solid #999;
+    background: #f5f5f5;
+}
+
+.dl-btn {
+    padding: 6px 12px;
+    border: 1px solid #333;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.dl-btn:hover {
+    background: #eee;
+}
+
+.dl-btn.active {
+    background: #333;
+    color: #fff;
+}
+
+.dl-btn-primary {
+    background: #333;
+    color: #fff;
+}
+
+.dl-btn-primary:hover {
+    background: #555;
+}
+
+.dl-btn-danger {
+    border-color: #c00;
+    color: #c00;
+}
+
+.dl-select {
+    padding: 6px 8px;
+    border: 1px solid #333;
+    font-size: 13px;
+}
+
+.dl-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #333;
+}
+
+.dl-tab {
+    padding: 8px 16px;
+    border: 1px solid #333;
+    border-bottom: none;
+    background: #ddd;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 4px;
+}
+
+.dl-tab.active {
+    background: #fff;
+    font-weight: bold;
+}
+
+.dl-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dl-row {
+    display: block;
+    padding: 12px;
+    border: 1px solid #666;
+    background: #fff;
+    text-decoration: none;
+    color: inherit;
+}
+
+.dl-row:hover {
+    background: #f9f9f9;
+}
+
+.dl-row.completed {
+    opacity: 0.6;
+    text-decoration: line-through;
+}
+
+.dl-row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.dl-row-title {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.dl-row-meta {
+    font-size: 12px;
+    color: #555;
+    margin-top: 4px;
+}
+
+.dl-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: bold;
+    border: 1px solid;
+}
+
+.dl-badge.overdue { background: #fcc; border-color: #c00; color: #900; }
+.dl-badge.dueToday { background: #fec; border-color: #c60; color: #840; }
+.dl-badge.thisWeek { background: #ffc; border-color: #990; color: #660; }
+.dl-badge.upcoming { background: #cfc; border-color: #060; color: #060; }
+.dl-badge.completed { background: #ddd; border-color: #666; color: #333; }
+
+.dl-progress-tag {
+    font-size: 12px;
+    border: 1px solid #333;
+    padding: 1px 6px;
+    background: #eee;
+}
+
+.dl-empty {
+    padding: 24px;
+    border: 1px dashed #999;
+    text-align: center;
+    color: #666;
+}
+
+.dl-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.dl-stat-box {
+    border: 1px solid #333;
+    padding: 12px;
+    text-align: center;
+    background: #fff;
+}
+
+.dl-stat-box h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    color: #555;
+}
+
+.dl-stat-box p {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.dl-status-bars {
+    border: 1px solid #333;
+    padding: 16px;
+    background: #fff;
+}
+
+.dl-status-bars h3 {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.dl-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.dl-bar-label {
+    width: 90px;
+    flex-shrink: 0;
+}
+
+.dl-bar-track {
+    flex: 1;
+    height: 18px;
+    border: 1px solid #333;
+    background: #eee;
+}
+
+.dl-bar-fill {
+    height: 100%;
+    background: #666;
+}
+
+.dl-bar-count {
+    width: 30px;
+    text-align: right;
+}
+
+.dl-form {
+    border: 1px solid #333;
+    padding: 16px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dl-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.dl-form input,
+.dl-form select,
+.dl-form textarea {
+    padding: 6px 8px;
+    border: 1px solid #333;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+}
+
+.dl-form textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.dl-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.dl-subtask-input-row {
+    display: flex;
+    gap: 8px;
+}
+
+.dl-subtask-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dl-subtask-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px;
+    border: 1px solid #ccc;
+    background: #fafafa;
+}
+
+.dl-detail {
+    border: 1px solid #333;
+    padding: 16px;
+    background: #fff;
+}
+
+.dl-detail-header {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+.dl-detail-header h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.dl-detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: #444;
+}
+
+.dl-detail-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.dl-section {
+    margin-top: 16px;
+}
+
+.dl-section h3 {
+    font-size: 14px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+}
+
+.dl-progress-text {
+    font-size: 14px;
+    margin-top: 8px;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .dl-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Phase 3 (50%) — Smart tab */
+
+.dl-smart-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.dl-forecast,
+.dl-semester,
+.dl-insights,
+.dl-recovery {
+    border: 1px solid #333;
+    padding: 16px;
+    background: #fff;
+}
+
+.dl-forecast h3,
+.dl-semester h3,
+.dl-insights h3,
+.dl-recovery h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.dl-forecast-total {
+    font-size: 13px;
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.dl-forecast-chart {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    height: 140px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background: #fafafa;
+}
+
+.dl-forecast-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    font-size: 11px;
+}
+
+.dl-forecast-bar-wrap {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.dl-forecast-bar {
+    width: 70%;
+    min-height: 2px;
+    background: #666;
+    border: 1px solid #333;
+}
+
+.dl-forecast-hours {
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+.dl-forecast-label {
+    text-align: center;
+    color: #555;
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+.dl-forecast-note {
+    font-size: 11px;
+    color: #666;
+    margin-top: 8px;
+}
+
+.dl-insight-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dl-insight {
+    padding: 10px;
+    border: 1px solid #333;
+    font-size: 13px;
+}
+
+.dl-insight-warning { background: #fcc; }
+.dl-insight-heavy { background: #fec; }
+.dl-insight-busy { background: #ffc; }
+.dl-insight-positive { background: #cfc; }
+.dl-insight-neutral { background: #eee; }
+
+.dl-recovery {
+    margin-top: 12px;
+}
+
+.dl-recovery-desc {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.dl-recovery-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.dl-semester-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.dl-semester-form input,
+.dl-semester-form select {
+    padding: 6px 8px;
+    border: 1px solid #333;
+    font-size: 13px;
+}
+
+.dl-semester-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dl-semester-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-size: 13px;
+}
+
+.dl-semester-meta {
+    color: #555;
+    font-size: 12px;
+}
+
+.dl-timeline-bar {
+    position: relative;
+    height: 50px;
+    border: 1px solid #333;
+    background: #eee;
+    margin-bottom: 16px;
+}
+
+.dl-timeline-marker {
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 10px;
+}
+
+.dl-timeline-dot {
+    display: block;
+    width: 10px;
+    height: 10px;
+    background: #333;
+    border-radius: 50%;
+    margin: 0 auto 4px;
+}
+
+.dl-timeline-marker-label {
+    display: block;
+    max-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

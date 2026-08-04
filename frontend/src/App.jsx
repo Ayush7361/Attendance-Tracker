@@ -5,6 +5,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Hub from "./pages/Hub";
 import AttendancePage from "./pages/AttendancePage";
+import DeadlinesPage from "./pages/DeadlinesPage";
+import DeadlineDetailPage from "./pages/DeadlineDetailPage";
+import DeadlineFormPage from "./pages/DeadlineFormPage";
 import { logoutUser } from "./api/authApi";
 import "./App.css";
 
@@ -29,6 +32,10 @@ function App() {
         <Routes>
             <Route path="/" element={<Hub user={user} onLogout={handleLogout} />} />
             <Route path="/attendance" element={<AttendancePage user={user} onLogout={handleLogout} />} />
+            <Route path="/deadlines" element={<DeadlinesPage user={user} onLogout={handleLogout} />} />
+            <Route path="/deadlines/new" element={<DeadlineFormPage user={user} onLogout={handleLogout} />} />
+            <Route path="/deadlines/:id/edit" element={<DeadlineFormPage user={user} onLogout={handleLogout} />} />
+            <Route path="/deadlines/:id" element={<DeadlineDetailPage user={user} onLogout={handleLogout} />} />
         </Routes>
     );
 }
