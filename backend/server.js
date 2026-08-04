@@ -14,7 +14,7 @@ connectDB();
 
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:5173", "https://attendance-tracker-pi-blue.vercel.app"]
+    origin: ["http://localhost:5174", "https://attendance-tracker-pi-blue.vercel.app"]
 }));
 
 app.use("/api/auth", authRoutes);
