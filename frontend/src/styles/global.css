@@ -1,27 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-    /* Authentic, sophisticated color palette - Slate, Deep Emerald, Warm Ochre/Copper */
-    --bg-main: #0f1715;
-    --bg-surface: #172421;
-    --bg-card: rgba(23, 36, 33, 0.85);
-    --border-color: rgba(255, 255, 255, 0.12);
+    /* Clean, professional dark slate & emerald palette */
+    --bg-page: #0f172a;
+    --bg-card: #1e293b;
+    --bg-card-hover: #334155;
+    --border-color: #334155;
     
     --primary: #10b981;
     --primary-hover: #059669;
-    --accent: #e58e3a;
-    --accent-hover: #cb7729;
+    --accent: #f59e0b;
     
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
+    --text-heading: #ffffff;
+    --text-body: #e2e8f0;
+    --text-muted: #94a3b8;
     
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.35);
-    --radius-md: 12px;
-    --radius-lg: 18px;
-    --glass-bg: rgba(18, 30, 28, 0.72);
-    --glass-border: rgba(255, 255, 255, 0.14);
+    --radius-md: 10px;
+    --radius-lg: 14px;
 }
 
 * {
@@ -32,22 +27,22 @@
 
 body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: var(--bg-main);
-    color: var(--text-primary);
+    background-color: var(--bg-page);
+    color: var(--text-body);
     min-height: 100vh;
     line-height: 1.5;
 }
 
+/* Common App Layout for internal sections */
 .app-layout {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: #0f1715;
+    background-color: var(--bg-page);
 }
 
 .app-header {
-    background: rgba(15, 23, 21, 0.85);
-    backdrop-filter: blur(12px);
+    background: #1e293b;
     border-bottom: 1px solid var(--border-color);
     padding: 16px 32px;
     display: flex;
@@ -65,57 +60,72 @@ body {
 }
 
 .brand-badge {
-    background: linear-gradient(135deg, #10b981, #047857);
+    background: var(--primary);
     color: #ffffff;
     font-weight: 800;
     font-size: 0.9rem;
-    padding: 8px 12px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+    padding: 6px 12px;
+    border-radius: 8px;
+    letter-spacing: 0.05em;
 }
 
-.brand-timeline {
-    background: linear-gradient(135deg, #e58e3a, #b45309);
-    box-shadow: 0 2px 10px rgba(229, 142, 58, 0.3);
+.brand-badge.brand-timeline {
+    background: #f59e0b;
+}
+
+.brand-badge.brand-deadlines {
+    background: #6366f1;
 }
 
 .app-title {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #f8fafc;
+    color: #ffffff !important;
 }
 
 .app-subtitle {
     font-size: 0.82rem;
-    color: var(--text-secondary);
+    color: var(--text-muted);
 }
 
 .logout-btn {
-    padding: 8px 18px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.06);
-    color: #cbd5e1;
-    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: #334155;
+    color: #f8fafc;
+    border: 1px solid #475569;
     font-weight: 600;
     font-size: 0.85rem;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background 0.15s ease;
 }
 
 .logout-btn:hover {
-    background: rgba(239, 68, 68, 0.15);
-    color: #fca5a5;
-    border-color: rgba(239, 68, 68, 0.4);
+    background: #475569;
+    color: #ffffff;
 }
 
 .container {
-    max-width: 1040px;
+    max-width: 1000px;
     width: 100%;
-    margin: 28px auto;
+    margin: 24px auto;
     padding: 0 20px 48px;
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 20px;
+}
+
+/* Page Section Headers - High Contrast & Clear */
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
 }
 
 .back-link {
@@ -124,12 +134,26 @@ body {
     gap: 6px;
     color: var(--primary);
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 600;
-    transition: transform 0.15s ease;
 }
 
 .back-link:hover {
-    transform: translateX(-3px);
+    text-decoration: underline;
     color: #34d399;
+}
+
+/* Unified Card Panel */
+.card-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+}
+
+.panel-heading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 14px;
 }

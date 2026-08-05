@@ -59,9 +59,9 @@ function AttendancePage({ user, onLogout }) {
 
     async function loadMonthSummary() {
         try {
-            const monthNumber = monthNameToNumber(month);
-            const res = await getMonthSummary(year, monthNumber);
-            setMonthSummary(res.data || { total: 0, attended: 0 });
+            const monthNum = monthNameToNumber(month);
+            const res = await getMonthSummary(year, monthNum);
+            setMonthSummary(res.data);
         } catch (err) {
             console.error("Failed to load month summary", err);
         }
@@ -70,27 +70,27 @@ function AttendancePage({ user, onLogout }) {
     async function loadOverallSummary() {
         try {
             const res = await getOverallSummary();
-            setOverallData(res.data || { total: 0, attended: 0 });
+            setOverallData(res.data);
             setShowOverall(true);
         } catch (err) {
             console.error("Failed to load overall summary", err);
         }
     }
 
-    function handleScheduleChange(day, value) {
-        setSchedule({ ...schedule, [day]: value });
+    async function handleScheduleChange(newSchedule) {
+        setSchedule(newSchedule);
     }
 
     async function handleSaveSchedule() {
         try {
             await saveSchedule(schedule);
-            alert("Weekly schedule saved!");
+            alert("Schedule saved successfully!");
         } catch (err) {
-            alert("Failed to save schedule.");
+            console.error("Failed to save schedule", err);
         }
     }
 
-    function handleDaySaved() {
+    async function handleDaySaved() {
         loadMonthSummary();
         if (showOverall) {
             loadOverallSummary();
@@ -98,23 +98,29 @@ function AttendancePage({ user, onLogout }) {
     }
 
     async function handleResetMonth() {
-        const confirmed = confirm("Clear attendance data for " + month + " " + year + "?");
-        if (!confirmed) return;
-
-        const monthNumber = monthNameToNumber(month);
-        const start = new Date(year, monthNumber - 1, 1);
-        const end = new Date(year, monthNumber, 1);
-
-        await deleteDayRange(start, end);
-        handleDaySaved();
+        if (!window.confirm(`Are you sure you want to clear all logged days in ${month}?`)) return;
+        try {
+            const m = monthNameToNumber(month);
+            const start = `${year}-${String(m).padStart(2, "0")}-01`;
+            const lastDay = new Date(year, m, 0).getDate();
+            const end = `${year}-${String(m).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+            await deleteDayRange(start, end);
+            loadMonthSummary();
+            if (showOverall) loadOverallSummary();
+        } catch (err) {
+            console.error("Failed to reset month", err);
+        }
     }
 
     async function handleResetAll() {
-        const confirmed = confirm("Delete ALL attendance records?");
-        if (!confirmed) return;
-        await resetAll();
-        handleDaySaved();
-        setOverallData({ total: 0, attended: 0 });
+        if (!window.confirm("WARNING: This will permanently delete ALL logged attendance history! Continue?")) return;
+        try {
+            await resetAll();
+            loadMonthSummary();
+            if (showOverall) loadOverallSummary();
+        } catch (err) {
+            console.error("Failed to reset all", err);
+        }
     }
 
     const percentage = monthSummary.total === 0
@@ -138,6 +144,11 @@ function AttendancePage({ user, onLogout }) {
 
             <main className="container">
                 <Link to="/" className="back-link">← Back to Dashboard</Link>
+
+                <div className="page-header-box">
+                    <h2 className="page-title">Attendance Tracker</h2>
+                    <p className="page-subtitle">Daily class logs, subject schedules, and percentage targets.</p>
+                </div>
 
                 <div className="month-picker-bar card-panel">
                     <MonthSelector month={month} onChange={setMonth} />

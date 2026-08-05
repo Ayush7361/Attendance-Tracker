@@ -114,7 +114,7 @@ function DeadlinesPage({ user, onLogout }) {
         <div className="app-layout deadlines-page">
             <header className="app-header">
                 <div className="header-brand">
-                    <div className="brand-badge">DL</div>
+                    <div className="brand-badge brand-deadlines">DL</div>
                     <div>
                         <h1 className="app-title">Deadlines & Tasks</h1>
                         <p className="app-subtitle">Welcome back, {user.username}</p>
@@ -125,6 +125,11 @@ function DeadlinesPage({ user, onLogout }) {
 
             <main className="container">
                 <Link to="/" className="back-link">← Back to Dashboard</Link>
+
+                <div className="page-header-box">
+                    <h2 className="page-title">Deadlines & Tasks</h2>
+                    <p className="page-subtitle">Subtask checklists, urgency filters, and workload analytics.</p>
+                </div>
 
                 <div className="dl-toolbar">
                     <Link to="/deadlines/new" className="dl-btn dl-btn-primary">+ Add Deadline</Link>

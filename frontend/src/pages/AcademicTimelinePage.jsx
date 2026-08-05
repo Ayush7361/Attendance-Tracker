@@ -5,10 +5,10 @@ import { formatDueDate } from "../utils/deadlineUtils";
 import "../styles/Timeline.css";
 
 const CATEGORIES = [
-    { id: "ALL", label: "All Events", icon: "🗓️" },
-    { id: "SEMESTER", label: "Semester Events", icon: "🏫" },
-    { id: "EXAM", label: "Exam Schedule", icon: "📝" },
-    { id: "IMPORTANT", label: "Important Dates", icon: "📌" }
+    { id: "ALL", label: "All Events" },
+    { id: "SEMESTER", label: "Semester Events" },
+    { id: "EXAM", label: "Exam Schedule" },
+    { id: "IMPORTANT", label: "Important Dates" }
 ];
 
 const TYPE_MAP = {
@@ -23,7 +23,6 @@ function AcademicTimelinePage({ user, onLogout }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [isLoading, setIsLoading] = useState(true);
 
-    // Form state
     const [title, setTitle] = useState("");
     const [date, setDate] = useState("");
     const [type, setType] = useState("Semester Event");
@@ -68,7 +67,6 @@ function AcademicTimelinePage({ user, onLogout }) {
 
     const sortedEvents = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    // Filter events by tab and search
     const filteredEvents = sortedEvents.filter((ev) => {
         const matchesTab =
             activeTab === "ALL" ||
@@ -83,12 +81,10 @@ function AcademicTimelinePage({ user, onLogout }) {
         return matchesTab && matchesSearch;
     });
 
-    // Counts for stats
     const semesterCount = events.filter((e) => TYPE_MAP.SEMESTER.includes(e.type) || e.type === "Break").length;
     const examCount = events.filter((e) => TYPE_MAP.EXAM.includes(e.type) || e.type === "Exam").length;
     const importantCount = events.filter((e) => TYPE_MAP.IMPORTANT.includes(e.type) || e.type === "Registration").length;
 
-    // Timeline bar calculation
     let timelineBar = null;
     if (sortedEvents.length >= 2) {
         const min = new Date(sortedEvents[0].date).getTime();
@@ -140,51 +136,50 @@ function AcademicTimelinePage({ user, onLogout }) {
             <main className="container">
                 <Link to="/" className="back-link">← Back to Dashboard</Link>
 
-                {/* Stats Overview */}
+                <div className="page-header-box">
+                    <h2 className="page-title">Academic Timeline</h2>
+                    <p className="page-subtitle">Manage semester events, exam schedules, and important dates.</p>
+                </div>
+
+                {/* Section Overview Cards */}
                 <div className="tl-stats-grid">
                     <div
                         className={`tl-stat-card ${activeTab === "SEMESTER" ? "active" : ""}`}
                         onClick={() => setActiveTab("SEMESTER")}
                     >
-                        <div className="tl-stat-icon">🏫</div>
-                        <div>
-                            <h4>Semester Events</h4>
-                            <p>{semesterCount} Events</p>
-                        </div>
+                        <span className="tl-stat-tag tag-semester">Section 3.1</span>
+                        <h4>Semester Events</h4>
+                        <p>{semesterCount} Events</p>
                     </div>
                     <div
                         className={`tl-stat-card ${activeTab === "EXAM" ? "active" : ""}`}
                         onClick={() => setActiveTab("EXAM")}
                     >
-                        <div className="tl-stat-icon">📝</div>
-                        <div>
-                            <h4>Exam Schedule</h4>
-                            <p>{examCount} Exams</p>
-                        </div>
+                        <span className="tl-stat-tag tag-exam">Section 3.2</span>
+                        <h4>Exam Schedule</h4>
+                        <p>{examCount} Exams</p>
                     </div>
                     <div
                         className={`tl-stat-card ${activeTab === "IMPORTANT" ? "active" : ""}`}
                         onClick={() => setActiveTab("IMPORTANT")}
                     >
-                        <div className="tl-stat-icon">📌</div>
-                        <div>
-                            <h4>Important Dates</h4>
-                            <p>{importantCount} Dates</p>
-                        </div>
+                        <span className="tl-stat-tag tag-important">Section 3.3</span>
+                        <h4>Important Dates</h4>
+                        <p>{importantCount} Dates</p>
                     </div>
                 </div>
 
-                {/* Visual Timeline */}
-                <div className="tl-panel">
-                    <h3 className="tl-panel-title">Visual Semester Overview</h3>
+                {/* Visual Timeline Panel */}
+                <div className="card-panel">
+                    <h3 className="panel-heading">Visual Timeline</h3>
                     {timelineBar || (
                         <p className="tl-empty-hint">Add 2 or more dates to view the visual timeline bar.</p>
                     )}
                 </div>
 
-                {/* Add Event Section */}
-                <div className="tl-panel">
-                    <h3 className="tl-panel-title">Add Academic Event</h3>
+                {/* Add Event Form Panel */}
+                <div className="card-panel">
+                    <h3 className="panel-heading">Add New Event</h3>
                     <form className="tl-form" onSubmit={handleAddEvent}>
                         <div className="tl-form-row">
                             <input
@@ -218,7 +213,7 @@ function AcademicTimelinePage({ user, onLogout }) {
                     </form>
                 </div>
 
-                {/* Filter Tabs & Search */}
+                {/* Filter Tabs & Search Bar */}
                 <div className="tl-controls-bar">
                     <div className="tl-category-tabs">
                         {CATEGORIES.map((cat) => (
@@ -227,7 +222,7 @@ function AcademicTimelinePage({ user, onLogout }) {
                                 className={`tl-cat-tab ${activeTab === cat.id ? "active" : ""}`}
                                 onClick={() => setActiveTab(cat.id)}
                             >
-                                <span>{cat.icon}</span> {cat.label}
+                                {cat.label}
                             </button>
                         ))}
                     </div>
@@ -247,7 +242,7 @@ function AcademicTimelinePage({ user, onLogout }) {
                         <div className="tl-empty">Loading timeline events...</div>
                     ) : filteredEvents.length === 0 ? (
                         <div className="tl-empty">
-                            No events found for this filter. Add your semester events, exam schedules, or key dates above!
+                            No events found for this section. Use the form above to add semester events, exam schedules, or important dates.
                         </div>
                     ) : (
                         filteredEvents.map((ev) => {
@@ -276,7 +271,7 @@ function AcademicTimelinePage({ user, onLogout }) {
                                             <span className={`tl-type-badge ${badgeStyle}`}>{ev.type}</span>
                                         </div>
                                         <div className="tl-event-meta">
-                                            📅 {formatDueDate(ev.date)} {isPast && "· (Past)"}
+                                            Due {formatDueDate(ev.date)} {isPast && "· (Past)"}
                                         </div>
                                     </div>
                                     <button

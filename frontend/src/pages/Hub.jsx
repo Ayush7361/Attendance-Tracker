@@ -20,35 +20,35 @@ function Hub({ user, onLogout }) {
             <main className="hub-container">
                 <div className="hub-hero">
                     <h2 className="hub-greeting">Academic Workspace</h2>
-                    <p className="hub-tagline">Track daily attendance, manage upcoming deadlines, and plan your semester schedule.</p>
+                    <p className="hub-tagline">Track daily attendance, manage upcoming deadlines, and plan your academic timeline.</p>
                 </div>
 
                 <div className="hub-grid">
                     <Link to="/attendance" className="hub-card">
-                        <div className="hub-card-icon card-icon-attendance">📊</div>
-                        <div className="hub-card-content">
+                        <div className="hub-card-header">
+                            <span className="hub-card-tag tag-attendance">Section 1</span>
                             <h2>Attendance Tracker</h2>
-                            <p>Daily class logs, subject schedules, and percentage targets.</p>
-                            <span className="hub-card-link">Open Attendance →</span>
                         </div>
+                        <p>Daily class logs, subject schedules, and percentage targets.</p>
+                        <span className="hub-card-link">Open Attendance →</span>
                     </Link>
 
                     <Link to="/deadlines" className="hub-card">
-                        <div className="hub-card-icon card-icon-deadlines">⏱️</div>
-                        <div className="hub-card-content">
+                        <div className="hub-card-header">
+                            <span className="hub-card-tag tag-deadlines">Section 2</span>
                             <h2>Deadlines & Tasks</h2>
-                            <p>Subtask checklists, urgency filters, and workload analytics.</p>
-                            <span className="hub-card-link">Manage Tasks →</span>
                         </div>
+                        <p>Subtask checklists, urgency filters, and workload analytics.</p>
+                        <span className="hub-card-link">Manage Tasks →</span>
                     </Link>
 
                     <Link to="/timeline" className="hub-card">
-                        <div className="hub-card-icon card-icon-timeline">📅</div>
-                        <div className="hub-card-content">
+                        <div className="hub-card-header">
+                            <span className="hub-card-tag tag-timeline">Section 3</span>
                             <h2>Academic Timeline</h2>
-                            <p>Semester events, exam schedules, and key academic dates.</p>
-                            <span className="hub-card-link">View Timeline →</span>
                         </div>
+                        <p>Semester events, exam schedules, and key academic dates.</p>
+                        <span className="hub-card-link">View Timeline →</span>
                     </Link>
                 </div>
             </main>
