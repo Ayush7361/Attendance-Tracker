@@ -90,21 +90,24 @@ function ScheduleForm({ schedule, onChange, onSave }) {
                     </button>
                 </form>
 
-                <div className="subject-list">
-                    {activeSubjects.map((sub, index) => (
-                        <div key={index} className="subject-tag">
-                            <span>{sub}</span>
-                            <button
-                                type="button"
-                                className="remove-tag-btn"
-                                onClick={() => handleRemoveSubject(index)}
-                                title="Remove subject"
-                            >
-                                &times;
-                            </button>
-                        </div>
-                    ))}
-                </div>
+               <div className="subject-list">
+  {activeSubjects.length === 0 && (
+    <p className="empty-list-hint">No subjects yet for this day</p>
+  )}
+  {activeSubjects.map((sub, index) => (
+    <div key={index} className="subject-list-item">
+      <span className="subject-list-name">{sub}</span>
+      <button
+        type="button"
+        className="remove-tag-btn"
+        onClick={() => handleRemoveSubject(index)}
+        title="Remove subject"
+      >
+        ×
+      </button>
+    </div>
+  ))}
+</div>
             </div>
 
             <div className="schedule-footer">

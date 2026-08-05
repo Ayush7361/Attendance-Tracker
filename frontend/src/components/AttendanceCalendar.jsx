@@ -192,30 +192,43 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                             </h3>
                         </div>
 
-                        <div className="subjects-checklist">
-                            {subjectsList.map((sub, idx) => (
-                                <div key={idx} className="subject-row">
-                                    <span className="subject-name">{sub.name}</span>
-                                    <div className="row-controls">
-                                        <button
-                                            type="button"
-                                            className={`status-badge ${sub.attended ? "attended" : "missed"}`}
-                                            onClick={() => setSubjectAttended(idx, !sub.attended)}
-                                        >
-                                            {sub.attended ? "Attended" : "Missed"}
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="remove-row-btn"
-                                            onClick={() => handleRemoveSubjectRow(idx)}
-                                            title="Remove subject"
-                                        >
-                                            &times;
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                         <div className="subjects-checklist">
+  {subjectsList.length === 0 && (
+    <p className="empty-checklist">No classes scheduled for this day. Add one below.</p>
+  )}
+  {subjectsList.map((sub, idx) => (
+    <div
+      key={idx}
+      className={`subject-row ${sub.attended ? "is-attended" : "is-missed"}`}
+      onClick={() => setSubjectAttended(idx, !sub.attended)}
+    >
+      <span className="subject-name">{sub.name}</span>
+      <div className="row-controls">
+        <button
+          type="button"
+          className={`status-toggle ${sub.attended ? "attended" : "missed"}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            setSubjectAttended(idx, !sub.attended);
+          }}
+        >
+          {sub.attended ? "✓ Attended" : "✕ Missed"}
+        </button>
+        <button
+          type="button"
+          className="remove-row-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRemoveSubjectRow(idx);
+          }}
+          title="Remove"
+        >
+          ×
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
 
                         <form onSubmit={handleAddCustomSubject} className="add-extra-subject-form">
                             <input
