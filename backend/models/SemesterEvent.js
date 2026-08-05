@@ -10,7 +10,7 @@ const semesterEventSchema = new mongoose.Schema({
     date: { type: Date, required: true },
     type: {
         type: String,
-        enum: ["Exam", "Break", "Registration", "Other"],
+        enum: ["Semester Event", "Exam", "Important Date", "Break", "Registration", "Other"],
         default: "Other"
     }
 }, { timestamps: true });

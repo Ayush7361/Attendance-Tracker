@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getDeadlines, getDeadlineAnalytics, getDeadlineSubjects } from "../api/deadlinesApi";
-import { getSemesterEvents } from "../api/semesterApi";
-import SemesterTimeline from "../components/SemesterTimeline";
 import {
     DEADLINE_TYPES,
     getUrgencyStatus,
@@ -14,7 +12,7 @@ import {
 import "../styles/Deadlines.css";
 
 function OverviewTab({ analytics }) {
-    if (!analytics) return <p className="dl-empty">Loading...</p>;
+    if (!analytics) return <p className="dl-empty">Loading analytics...</p>;
 
     const maxCount = Math.max(
         analytics.statusBreakdown.overdue,
@@ -70,7 +68,6 @@ function DeadlinesPage({ user, onLogout }) {
     const [deadlines, setDeadlines] = useState([]);
     const [subjects, setSubjects] = useState([]);
     const [analytics, setAnalytics] = useState(null);
-    const [semesterEvents, setSemesterEvents] = useState([]);
 
     useEffect(() => {
         loadDeadlines();
@@ -81,19 +78,7 @@ function DeadlinesPage({ user, onLogout }) {
         if (tab === "overview") {
             loadAnalytics();
         }
-        if (tab === "calendar") {
-            loadCalendarData();
-        }
     }, [tab]);
-
-    async function loadCalendarData() {
-        try {
-            const eventsRes = await getSemesterEvents();
-            setSemesterEvents(eventsRes.data);
-        } catch (err) {
-            console.error("Failed to load calendar data", err);
-        }
-    }
 
     async function loadDeadlines() {
         try {
@@ -131,7 +116,7 @@ function DeadlinesPage({ user, onLogout }) {
                 <div className="header-brand">
                     <div className="brand-badge">DL</div>
                     <div>
-                        <h1 className="app-title">Deadlines</h1>
+                        <h1 className="app-title">Deadlines & Tasks</h1>
                         <p className="app-subtitle">Welcome back, {user.username}</p>
                     </div>
                 </div>
@@ -150,19 +135,13 @@ function DeadlinesPage({ user, onLogout }) {
                         className={"dl-tab" + (tab === "list" ? " active" : "")}
                         onClick={() => setTab("list")}
                     >
-                        List
+                        Task List
                     </button>
                     <button
                         className={"dl-tab" + (tab === "overview" ? " active" : "")}
                         onClick={() => setTab("overview")}
                     >
-                        Overview
-                    </button>
-                    <button
-                        className={"dl-tab" + (tab === "calendar" ? " active" : "")}
-                        onClick={() => setTab("calendar")}
-                    >
-                        Academic Calendar
+                        Analytics & Overview
                     </button>
                 </div>
 
@@ -233,12 +212,6 @@ function DeadlinesPage({ user, onLogout }) {
                 )}
 
                 {tab === "overview" && <OverviewTab analytics={analytics} />}
-
-                {tab === "calendar" && (
-                    <div className="dl-calendar-tab">
-                        <SemesterTimeline events={semesterEvents} onRefresh={loadCalendarData} />
-                    </div>
-                )}
             </main>
         </div>
     );
