@@ -31,7 +31,6 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         loadMonthRecords();
     }, [visibleMonth]);
 
-    // Automatically load Today's date & timetable checklist on mount or schedule change
     useEffect(() => {
         const dateToLoad = selectedDate || new Date();
         handleDayClick(dateToLoad);
@@ -85,10 +84,10 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         if (Array.isArray(scheduledSubjects) && scheduledSubjects.length > 0) {
             setSubjectsList(scheduledSubjects.map((subName) => ({
                 name: subName,
-                attended: false //  Default unlogged subjects to Not Attended so user explicitly chooses
+                attended: false
             })));
         } else if (typeof scheduledSubjects === "number" && scheduledSubjects > 0) {
-            const list = [];            
+            const list = [];
             for (let i = 1; i <= scheduledSubjects; i++) {
                 list.push({ name: `Class ${i}`, attended: false });
             }
@@ -198,22 +197,13 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                                 <div key={idx} className="subject-row">
                                     <span className="subject-name">{sub.name}</span>
                                     <div className="row-controls">
-                                        <div className="attendance-toggle-group">
-                                            <button
-                                                type="button"
-                                                className={`toggle-option attended ${sub.attended ? "active" : ""}`}
-                                                onClick={() => setSubjectAttended(idx, true)}
-                                            >
-                                                Attended
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className={`toggle-option missed ${!sub.attended ? "active" : ""}`}
-                                                onClick={() => setSubjectAttended(idx, false)}
-                                            >
-                                                Not Attended
-                                            </button>
-                                        </div>
+                                        <button
+                                            type="button"
+                                            className={`status-badge ${sub.attended ? "attended" : "missed"}`}
+                                            onClick={() => setSubjectAttended(idx, !sub.attended)}
+                                        >
+                                            {sub.attended ? "Attended" : "Missed"}
+                                        </button>
                                         <button
                                             type="button"
                                             className="remove-row-btn"

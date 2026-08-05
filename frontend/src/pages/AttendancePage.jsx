@@ -34,6 +34,7 @@ function AttendancePage({ user, onLogout }) {
     const [monthSummary, setMonthSummary] = useState({ total: 0, attended: 0 });
     const [overallData, setOverallData] = useState({ total: 0, attended: 0 });
     const [showOverall, setShowOverall] = useState(false);
+    const [showTimetable, setShowTimetable] = useState(false);
 
     useEffect(() => {
         loadSchedule();
@@ -157,9 +158,22 @@ function AttendancePage({ user, onLogout }) {
                 <SummaryCards total={monthSummary.total} attended={monthSummary.attended} percentage={percentage} />
                 <ProgressBar percentage={percentage} />
 
-                <ScheduleForm schedule={schedule} onChange={handleScheduleChange} onSave={handleSaveSchedule} />
-
                 <AttendanceCalendar schedule={schedule} onDaySaved={handleDaySaved} />
+
+                <div className="timetable-collapsible card-panel">
+                    <button
+                        type="button"
+                        className="timetable-toggle-btn"
+                        onClick={() => setShowTimetable(!showTimetable)}
+                    >
+                        <span>Weekly Subject Timetable</span>
+                        <span className={`toggle-arrow ${showTimetable ? "open" : ""}`}>▾</span>
+                    </button>
+
+                    {showTimetable && (
+                        <ScheduleForm schedule={schedule} onChange={handleScheduleChange} onSave={handleSaveSchedule} />
+                    )}
+                </div>
 
                 <ResetSection onResetMonth={handleResetMonth} onResetAll={handleResetAll} />
 

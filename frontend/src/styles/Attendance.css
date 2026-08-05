@@ -276,5 +276,78 @@
     cursor: pointer;
 }
 
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.timetable-collapsible {
+    padding: 0;
+    overflow: hidden;
+}
+
+.timetable-toggle-btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    background: transparent;
+    border: none;
+    color: #f8fafc;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.toggle-arrow {
+    color: #34d399;
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+}
+
+.toggle-arrow.open {
+    transform: rotate(180deg);
+}
+
+.timetable-collapsible .schedule-card {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0;
+}
+
+@media (max-width: 640px) {
+.cards {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 12px;
+        padding-bottom: 4px;
+    }
+
+.card {
+        min-width: 150px;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+        padding: 16px;
+    }
+
+.card p {
+        font-size: 1.6rem;
+    }
+
+.day-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+
+.day-tab {
+        min-width: 48px;
+    }
+}
 .reset-btn.danger { color: #f87171; border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.1); }
 .reset-btn.danger:hover { background: #ef4444; color: white; }
