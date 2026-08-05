@@ -3,9 +3,9 @@
 :root {
     /* Clean, professional dark slate & emerald palette */
     --bg-page: #0f172a;
-    --bg-card: #1e293b;
-    --bg-card-hover: #334155;
-    --border-color: #334155;
+    --bg-card: rgba(30, 41, 59, 0.85);
+    --bg-card-hover: rgba(51, 65, 85, 0.95);
+    --border-color: rgba(255, 255, 255, 0.12);
     
     --primary: #10b981;
     --primary-hover: #059669;
@@ -33,16 +33,18 @@ body {
     line-height: 1.5;
 }
 
-/* Common App Layout for internal sections */
+/* Internal Pages Layout with the 1st dark teal ocean background image */
 .app-layout {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: var(--bg-page);
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.94) 100%),
+                url('/section-bg.jpg') center/cover no-repeat fixed;
 }
 
 .app-header {
-    background: #1e293b;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--border-color);
     padding: 16px 32px;
     display: flex;
@@ -91,9 +93,9 @@ body {
 .logout-btn {
     padding: 8px 16px;
     border-radius: 8px;
-    background: #334155;
+    background: rgba(255, 255, 255, 0.08);
     color: #f8fafc;
-    border: 1px solid #475569;
+    border: 1px solid var(--border-color);
     font-weight: 600;
     font-size: 0.85rem;
     cursor: pointer;
@@ -101,7 +103,7 @@ body {
 }
 
 .logout-btn:hover {
-    background: #475569;
+    background: rgba(239, 68, 68, 0.2);
     color: #ffffff;
 }
 
@@ -115,9 +117,9 @@ body {
     gap: 20px;
 }
 
-/* Page Section Headers - High Contrast & Clear */
+/* Page Headers - High Contrast & Clear */
 .page-title {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: #ffffff;
     margin-bottom: 4px;
@@ -132,7 +134,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: var(--primary);
+    color: #34d399;
     text-decoration: none;
     font-size: 0.88rem;
     font-weight: 600;
@@ -140,12 +142,13 @@ body {
 
 .back-link:hover {
     text-decoration: underline;
-    color: #34d399;
+    color: #6ee7b7;
 }
 
-/* Unified Card Panel */
+/* Unified Glassmorphism Card Panel */
 .card-panel {
-    background: var(--bg-card);
+    background: rgba(30, 41, 59, 0.85);
+    backdrop-filter: blur(12px);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 22px;

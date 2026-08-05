@@ -14,7 +14,7 @@ const CATEGORIES = [
 const TYPE_MAP = {
     SEMESTER: ["Semester Event", "Break", "Orientation", "Other"],
     EXAM: ["Exam", "Quiz", "Lab Exam", "Midterm", "Final"],
-    IMPORTANT: ["Important Date", "Registration", "Fee Deadline"]
+    IMPORTANT: ["Important Date", "Fee Deadline"]
 };
 
 function AcademicTimelinePage({ user, onLogout }) {
@@ -72,7 +72,7 @@ function AcademicTimelinePage({ user, onLogout }) {
             activeTab === "ALL" ||
             (activeTab === "SEMESTER" && (TYPE_MAP.SEMESTER.includes(ev.type) || ev.type === "Break")) ||
             (activeTab === "EXAM" && (TYPE_MAP.EXAM.includes(ev.type) || ev.type === "Exam")) ||
-            (activeTab === "IMPORTANT" && (TYPE_MAP.IMPORTANT.includes(ev.type) || ev.type === "Registration"));
+            (activeTab === "IMPORTANT" && (TYPE_MAP.IMPORTANT.includes(ev.type) || ev.type === "Important Date"));
 
         const matchesSearch =
             ev.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -83,42 +83,7 @@ function AcademicTimelinePage({ user, onLogout }) {
 
     const semesterCount = events.filter((e) => TYPE_MAP.SEMESTER.includes(e.type) || e.type === "Break").length;
     const examCount = events.filter((e) => TYPE_MAP.EXAM.includes(e.type) || e.type === "Exam").length;
-    const importantCount = events.filter((e) => TYPE_MAP.IMPORTANT.includes(e.type) || e.type === "Registration").length;
-
-    let timelineBar = null;
-    if (sortedEvents.length >= 2) {
-        const min = new Date(sortedEvents[0].date).getTime();
-        const max = new Date(sortedEvents[sortedEvents.length - 1].date).getTime();
-        const range = max - min || 1;
-
-        timelineBar = (
-            <div className="tl-bar-container">
-                <div className="tl-bar-track">
-                    {sortedEvents.map((ev) => {
-                        const pos = ((new Date(ev.date).getTime() - min) / range) * 100;
-                        const isExam = ev.type === "Exam" || TYPE_MAP.EXAM.includes(ev.type);
-                        const isImportant = ev.type === "Registration" || TYPE_MAP.IMPORTANT.includes(ev.type);
-
-                        let badgeClass = "tl-dot-semester";
-                        if (isExam) badgeClass = "tl-dot-exam";
-                        else if (isImportant) badgeClass = "tl-dot-important";
-
-                        return (
-                            <div
-                                key={ev._id}
-                                className="tl-marker"
-                                style={{ left: `${Math.min(Math.max(pos, 3), 97)}%` }}
-                                title={`${ev.title} (${ev.type}) — ${formatDueDate(ev.date)}`}
-                            >
-                                <span className={`tl-dot ${badgeClass}`} />
-                                <span className="tl-marker-label">{ev.title}</span>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-        );
-    }
+    const importantCount = events.filter((e) => TYPE_MAP.IMPORTANT.includes(e.type) || e.type === "Important Date").length;
 
     return (
         <div className="app-layout timeline-page">
@@ -147,7 +112,6 @@ function AcademicTimelinePage({ user, onLogout }) {
                         className={`tl-stat-card ${activeTab === "SEMESTER" ? "active" : ""}`}
                         onClick={() => setActiveTab("SEMESTER")}
                     >
-                        <span className="tl-stat-tag tag-semester">Section 3.1</span>
                         <h4>Semester Events</h4>
                         <p>{semesterCount} Events</p>
                     </div>
@@ -155,7 +119,6 @@ function AcademicTimelinePage({ user, onLogout }) {
                         className={`tl-stat-card ${activeTab === "EXAM" ? "active" : ""}`}
                         onClick={() => setActiveTab("EXAM")}
                     >
-                        <span className="tl-stat-tag tag-exam">Section 3.2</span>
                         <h4>Exam Schedule</h4>
                         <p>{examCount} Exams</p>
                     </div>
@@ -163,18 +126,9 @@ function AcademicTimelinePage({ user, onLogout }) {
                         className={`tl-stat-card ${activeTab === "IMPORTANT" ? "active" : ""}`}
                         onClick={() => setActiveTab("IMPORTANT")}
                     >
-                        <span className="tl-stat-tag tag-important">Section 3.3</span>
                         <h4>Important Dates</h4>
                         <p>{importantCount} Dates</p>
                     </div>
-                </div>
-
-                {/* Visual Timeline Panel */}
-                <div className="card-panel">
-                    <h3 className="panel-heading">Visual Timeline</h3>
-                    {timelineBar || (
-                        <p className="tl-empty-hint">Add 2 or more dates to view the visual timeline bar.</p>
-                    )}
                 </div>
 
                 {/* Add Event Form Panel */}
@@ -186,7 +140,7 @@ function AcademicTimelinePage({ user, onLogout }) {
                                 className="tl-input"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                placeholder="Event title (e.g. Midterm Exam, Cultural Fest, Drop Date)"
+                                placeholder="Event title (e.g. Midterm Exam, Cultural Fest, Fee Deadline)"
                                 required
                             />
                             <input
@@ -205,7 +159,6 @@ function AcademicTimelinePage({ user, onLogout }) {
                                 <option value="Exam">Exam</option>
                                 <option value="Important Date">Important Date</option>
                                 <option value="Break">Break / Recess</option>
-                                <option value="Registration">Registration</option>
                                 <option value="Other">Other</option>
                             </select>
                             <button type="submit" className="tl-btn-add">+ Add Event</button>
@@ -242,12 +195,12 @@ function AcademicTimelinePage({ user, onLogout }) {
                         <div className="tl-empty">Loading timeline events...</div>
                     ) : filteredEvents.length === 0 ? (
                         <div className="tl-empty">
-                            No events found for this section. Use the form above to add semester events, exam schedules, or important dates.
+                            No events found. Use the form above to add semester events, exam schedules, or important dates.
                         </div>
                     ) : (
                         filteredEvents.map((ev) => {
                             const isExam = ev.type === "Exam" || TYPE_MAP.EXAM.includes(ev.type);
-                            const isImportant = ev.type === "Registration" || TYPE_MAP.IMPORTANT.includes(ev.type);
+                            const isImportant = TYPE_MAP.IMPORTANT.includes(ev.type) || ev.type === "Important Date";
 
                             let badgeStyle = "badge-semester";
                             if (isExam) badgeStyle = "badge-exam";

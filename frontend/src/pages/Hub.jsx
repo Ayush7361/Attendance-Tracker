@@ -26,7 +26,6 @@ function Hub({ user, onLogout }) {
                 <div className="hub-grid">
                     <Link to="/attendance" className="hub-card">
                         <div className="hub-card-header">
-                            <span className="hub-card-tag tag-attendance">Section 1</span>
                             <h2>Attendance Tracker</h2>
                         </div>
                         <p>Daily class logs, subject schedules, and percentage targets.</p>
@@ -35,7 +34,6 @@ function Hub({ user, onLogout }) {
 
                     <Link to="/deadlines" className="hub-card">
                         <div className="hub-card-header">
-                            <span className="hub-card-tag tag-deadlines">Section 2</span>
                             <h2>Deadlines & Tasks</h2>
                         </div>
                         <p>Subtask checklists, urgency filters, and workload analytics.</p>
@@ -44,7 +42,6 @@ function Hub({ user, onLogout }) {
 
                     <Link to="/timeline" className="hub-card">
                         <div className="hub-card-header">
-                            <span className="hub-card-tag tag-timeline">Section 3</span>
                             <h2>Academic Timeline</h2>
                         </div>
                         <p>Semester events, exam schedules, and key academic dates.</p>
