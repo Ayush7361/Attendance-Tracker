@@ -99,6 +99,9 @@ function StudyHistoryPanel({ sessions = [], onDeleteSession }) {
                                 <div className="history-item-main">
                                     <div className="history-item-top">
                                         <span className="history-subject-tag">{session.subject}</span>
+                                        <span className="history-mode-badge">
+                                            {session.mode === "custom" ? "Custom" : "Stopwatch"}
+                                        </span>
                                         <span className={`history-status-badge ${isCompleted ? "completed" : "stopped"}`}>
                                             {isCompleted ? "Completed" : "Stopped Early"}
                                         </span>

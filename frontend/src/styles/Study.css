@@ -1,6 +1,6 @@
-/* Brand badge color for Study Sessions */
+/* Brand badge color for Study Sessions - Muted Sage Green */
 .brand-badge.brand-study {
-    background: #2563eb;
+    background: #3f6b53;
 }
 
 .study-page-container {
@@ -15,23 +15,23 @@
 
 /* ==========================================================================
    HERO ACTIVE SESSION CARD
-   Warm cream/off-white background, soft rounded corners, high contrast text
+   Warm cream/off-white background, generous internal padding, soft rounded corners
+   Palette: Muted sage green (#3f6b53), Warm Clay (#b06b45), Warm Cream (#fbf8f3)
    ========================================================================== */
 .study-hero-card {
-    background: #fdfbf7;
-    border: 1px solid rgba(217, 213, 203, 0.8);
-    border-radius: 20px;
-    padding: 32px 28px;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.12);
+    background: #fbf8f3;
+    border: 1px solid #e6dfd3;
+    border-radius: 24px;
+    padding: 36px 30px;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 20px;
     width: 100%;
-    color: #1e293b;
+    color: #2c3531;
     position: relative;
-    overflow: hidden;
 }
 
 .hero-card-header {
@@ -45,47 +45,79 @@
 }
 
 .hero-card-title {
-    font-size: 1.5rem;
+    font-size: 1.55rem;
     font-weight: 800;
-    color: #0f172a;
+    color: #1e2622;
     letter-spacing: -0.02em;
     margin-bottom: 2px;
 }
 
 .hero-card-subtitle {
     font-size: 0.88rem;
-    color: #64748b;
+    color: #637069;
     font-weight: 500;
 }
 
-/* Cycle Mode Selector Tabs inside Hero Header */
-.mode-tabs-container {
+/* Mode Toggle Tabs (Stopwatch / Custom Duration) */
+.mode-toggle-container {
     display: flex;
     gap: 4px;
-    background: #f1ede4;
+    background: #efeadf;
     padding: 4px;
     border-radius: 12px;
-    border: 1px solid #e2ddd3;
+    border: 1px solid #e0d8c8;
 }
 
-.mode-tab-btn {
-    padding: 8px 14px;
+.mode-toggle-btn {
+    padding: 8px 16px;
     border: none;
     border-radius: 8px;
     background: transparent;
-    color: #64748b;
-    font-size: 0.82rem;
+    color: #637069;
+    font-size: 0.84rem;
     font-weight: 600;
     cursor: pointer;
-    min-height: 38px;
+    min-height: 40px;
     transition: all 0.15s ease;
 }
 
-.mode-tab-btn.active {
+.mode-toggle-btn.active {
     background: #ffffff;
-    color: #2563eb;
+    color: #2c4f3d;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
     font-weight: 700;
+}
+
+/* Custom Duration Input Box */
+.custom-duration-input-box {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: #f4eee2;
+    padding: 10px 18px;
+    border-radius: 12px;
+    border: 1px solid #e4dccb;
+}
+
+.custom-input-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #48544d;
+}
+
+.custom-duration-input {
+    width: 80px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #c9beab;
+    background: #ffffff;
+    color: #1e2622;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+    min-height: 40px;
 }
 
 /* Subject Selector Section */
@@ -101,27 +133,25 @@
 .subject-selector-label {
     font-size: 0.78rem;
     font-weight: 700;
-    color: #64748b;
+    color: #637069;
     text-transform: uppercase;
     letter-spacing: 0.06em;
 }
 
-/* Horizontally scrollable chip row on desktop & tablet */
 .subject-chips-row {
     display: flex;
     gap: 8px;
     overflow-x: auto;
     max-width: 100%;
     padding: 4px 0;
-    scrollbar-width: thin;
 }
 
 .subject-chip {
     padding: 8px 16px;
     border-radius: 999px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid #d4cbba;
     background: #ffffff;
-    color: #334155;
+    color: #3f4a44;
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
@@ -131,17 +161,17 @@
 }
 
 .subject-chip:hover:not(:disabled) {
-    border-color: #2563eb;
-    color: #2563eb;
-    background: #eff6ff;
+    border-color: #3f6b53;
+    color: #2c4f3d;
+    background: #f0f5f2;
 }
 
 .subject-chip.active {
-    background: #2563eb;
+    background: #b06b45;
     color: #ffffff;
-    border-color: #2563eb;
+    border-color: #b06b45;
     font-weight: 700;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+    box-shadow: 0 2px 8px rgba(176, 107, 69, 0.25);
 }
 
 .subject-chip:disabled {
@@ -149,7 +179,6 @@
     cursor: not-allowed;
 }
 
-/* Fallback Dropdown selector for narrow mobile viewports */
 .subject-dropdown-mobile {
     display: none;
     width: 100%;
@@ -164,61 +193,67 @@
     min-height: 44px;
 }
 
-/* Now Studying Status Pill Label */
+/* Status Pill Badge ("NOW STUDYING · [Subject]") */
 .hero-status-pill {
     font-size: 0.76rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #2563eb;
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
+    color: #2c4f3d;
+    background: #eaf2ed;
+    border: 1px solid #cce0d4;
     padding: 6px 16px;
     border-radius: 999px;
     margin-top: 4px;
 }
 
-/* Large Timer Count Display */
+.hero-status-pill.break-pill {
+    color: #8f5636;
+    background: #fbf0e8;
+    border-color: #f3d7c5;
+}
+
+/* Timer Count Display */
 .hero-timer-display {
     font-size: 4rem;
     font-weight: 800;
-    color: #0f172a;
+    color: #1a231e;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.04em;
     line-height: 1;
     margin: 4px 0;
 }
 
-/* Clean Plain-text Metadata Line */
+/* Plain-Text Metadata Line */
 .hero-metadata-line {
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    color: #64748b;
+    color: #637069;
 }
 
-/* Thick Pill Progress Bar */
+/* Thick Pill Progress Bar (Custom Duration Mode) */
 .hero-progress-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 480px;
     height: 18px;
-    background: #e2e8f0;
+    background: #e8e2d5;
     border-radius: 999px;
     overflow: hidden;
     padding: 3px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid #dad1c1;
 }
 
 .hero-progress-bar-fill {
     height: 100%;
     border-radius: 999px;
-    background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+    background: linear-gradient(90deg, #3f6b53 0%, #2c4f3d 100%);
     transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Large Full-Width Pill Primary Button */
+/* Primary Action Buttons */
 .hero-actions-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 480px;
     margin-top: 8px;
 }
 
@@ -228,23 +263,18 @@
     padding: 14px 28px;
     border: none;
     border-radius: 999px;
-    background: #2563eb;
+    background: #2c4f3d;
     color: #ffffff;
     font-size: 1.05rem;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
-    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 6px 18px rgba(44, 79, 61, 0.3);
+    transition: transform 0.15s ease, background 0.15s ease;
 }
 
 .hero-primary-btn:hover {
-    background: #1d4ed8;
+    background: #233e30;
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45);
-}
-
-.hero-primary-btn:active {
-    transform: translateY(0);
 }
 
 .hero-active-btn-group {
@@ -254,33 +284,72 @@
 }
 
 .hero-pause-btn {
-    flex: 2;
-    background: #2563eb;
+    flex: 1;
+    background: #3f6b53;
+}
+
+.hero-end-btn {
+    flex: 1;
+    background: #b06b45;
 }
 
 .hero-secondary-btn {
     flex: 1;
     min-height: 52px;
     padding: 14px 20px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid #d4cbba;
     border-radius: 999px;
     background: #ffffff;
-    color: #475569;
+    color: #48544d;
     font-size: 0.95rem;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.15s ease;
 }
 
-.hero-secondary-btn:hover {
-    background: #f1f5f9;
-    color: #0f172a;
-    border-color: #94a3b8;
+/* Post-Session Break Options */
+.hero-ended-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+}
+
+.session-ended-note {
+    font-size: 0.88rem;
+    color: #48544d;
+    font-weight: 600;
+}
+
+.hero-ended-btn-group {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.hero-secondary-break-btn {
+    flex: 1;
+    min-height: 52px;
+    padding: 14px 20px;
+    border: 1px solid #b06b45;
+    border-radius: 999px;
+    background: #fbf0e8;
+    color: #8f5636;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.hero-secondary-break-btn:hover {
+    background: #f7e4d7;
+}
+
+.hero-end-break-btn {
+    background: #b06b45;
 }
 
 /* ==========================================================================
-   TODAY & THIS WEEK SUMMARY CARDS
-   Matching SummaryCards visual structure
+   STATS & SUMMARY CARDS
    ========================================================================== */
 .study-stats-wrapper {
     display: flex;
@@ -311,18 +380,12 @@
     flex-direction: column;
     gap: 10px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-    transition: border-color 0.2s ease, transform 0.2s ease;
-}
-
-.card.study-summary-card:hover {
-    border-color: rgba(59, 130, 246, 0.4);
-    transform: translateY(-2px);
 }
 
 .card-period-label {
     font-size: 0.75rem;
     font-weight: 800;
-    color: #3b82f6;
+    color: #3f6b53;
     letter-spacing: 0.08em;
 }
 
@@ -332,7 +395,6 @@
     color: #94a3b8;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    margin-bottom: 0;
 }
 
 .card-total-time {
@@ -370,12 +432,12 @@
 }
 
 .breakdown-sub-time {
-    color: #60a5fa;
+    color: #84b397;
     font-weight: 700;
 }
 
 /* ==========================================================================
-   SESSION HISTORY LOG PANEL
+   SESSION HISTORY PANEL
    ========================================================================== */
 .history-panel {
     display: flex;
@@ -439,7 +501,6 @@
     gap: 10px;
     max-height: 420px;
     overflow-y: auto;
-    padding-right: 4px;
 }
 
 .history-empty-state {
@@ -457,12 +518,6 @@
     background: rgba(15, 23, 42, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
-    transition: background 0.15s ease;
-}
-
-.history-item-row:hover {
-    background: rgba(30, 41, 59, 0.8);
-    border-color: rgba(59, 130, 246, 0.3);
 }
 
 .history-item-main {
@@ -474,7 +529,7 @@
 .history-item-top {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
 }
 
@@ -482,6 +537,16 @@
     font-size: 0.9rem;
     font-weight: 700;
     color: #ffffff;
+}
+
+.history-mode-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(63, 107, 83, 0.25);
+    color: #84b397;
+    border: 1px solid rgba(63, 107, 83, 0.4);
 }
 
 .history-status-badge {
@@ -494,13 +559,11 @@
 .history-status-badge.completed {
     background: rgba(16, 185, 129, 0.2);
     color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .history-status-badge.stopped {
-    background: rgba(245, 158, 11, 0.2);
-    color: #fbbf24;
-    border: 1px solid rgba(245, 158, 11, 0.3);
+    background: rgba(176, 107, 69, 0.2);
+    color: #e09467;
 }
 
 .history-item-details {
@@ -513,7 +576,7 @@
 
 .history-duration {
     font-weight: 600;
-    color: #38bdf8;
+    color: #84b397;
 }
 
 .history-bullet {
@@ -525,30 +588,19 @@
     border: none;
     color: #64748b;
     font-size: 1.4rem;
-    line-height: 1;
     cursor: pointer;
     padding: 6px 10px;
-    border-radius: 6px;
     min-height: 40px;
     min-width: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.15s ease, background 0.15s ease;
 }
 
-.history-delete-btn:hover {
-    color: #ef4444;
-    background: rgba(239, 68, 68, 0.15);
-}
-
-/* ==========================================================================
-   MOBILE RESPONSIVENESS ADJUSTMENTS (~375px - 430px)
-   ========================================================================== */
+/* Mobile Breakpoints */
 @media (max-width: 600px) {
     .study-hero-card {
-        padding: 24px 18px;
-        gap: 16px;
+        padding: 26px 18px;
     }
 
     .hero-card-header {
@@ -557,14 +609,12 @@
         text-align: center;
     }
 
-    .mode-tabs-container {
+    .mode-toggle-container {
         width: 100%;
-        justify-content: center;
     }
 
-    .mode-tab-btn {
+    .mode-toggle-btn {
         flex: 1;
-        padding: 8px 6px;
     }
 
     .subject-chips-row {
@@ -585,18 +635,9 @@
 
     .history-filter-bar {
         flex-direction: column;
-        align-items: stretch;
-    }
-
-    .filter-group {
-        justify-content: space-between;
     }
 
     .filter-select {
-        flex: 1;
-    }
-
-    .history-item-row {
-        padding: 12px 14px;
+        width: 100%;
     }
 }

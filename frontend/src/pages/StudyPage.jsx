@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import StudyTimer from "../components/StudyTimer";
+import StudyTracker from "../components/StudyTracker";
 import StudyStatsCard from "../components/StudyStatsCard";
 import StudyHistoryPanel from "../components/StudyHistoryPanel";
 import { getSchedule } from "../api/attendanceApi";
@@ -40,7 +40,7 @@ function StudyPage({ user, onLogout }) {
                 }
             }
         } catch (err) {
-            console.error("Failed to load schedule subjects for study timer", err);
+            console.error("Failed to load schedule subjects for study tracker", err);
         }
 
         try {
@@ -101,12 +101,12 @@ function StudyPage({ user, onLogout }) {
                 <div className="page-header-box">
                     <h2 className="page-title">Study Sessions</h2>
                     <p className="page-subtitle">
-                        Subject-tagged focus timer, cycle tracking, and daily study analytics.
+                        Flexible subject-tagged focus tracking, stopwatch & custom duration modes, and study analytics.
                     </p>
                 </div>
 
                 {/* Hero Active Session Card */}
-                <StudyTimer
+                <StudyTracker
                     availableSubjects={availableSubjects}
                     onSessionComplete={handleSessionComplete}
                 />

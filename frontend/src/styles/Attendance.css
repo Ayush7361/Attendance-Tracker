@@ -1,13 +1,17 @@
+/* Month Selector Bar */
 .month-picker-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 24px;
-    background: rgba(23, 36, 33, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 14px;
+    padding: 18px 24px;
+    background: rgba(30, 41, 59, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
+/* Metric Cards Grid */
 .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -15,18 +19,19 @@
 }
 
 .card {
-    background: rgba(23, 36, 33, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 14px;
+    background: rgba(30, 41, 59, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
     padding: 22px;
     text-align: center;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-    transition: transform 0.15s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
 .card:hover {
     transform: translateY(-2px);
-    border-color: rgba(16, 185, 129, 0.3);
+    border-color: rgba(63, 107, 83, 0.5);
 }
 
 .card h3 {
@@ -39,45 +44,323 @@
 }
 
 .card p {
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 800;
     color: #f8fafc;
 }
 
+/* Progress Bar */
 .progress-container {
     width: 100%;
-    height: 26px;
-    background: rgba(15, 23, 21, 0.8);
+    height: 24px;
+    background: rgba(15, 23, 42, 0.8);
     border-radius: 999px;
     overflow: hidden;
     padding: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .progress-bar {
     height: 100%;
     border-radius: 999px;
-    background: linear-gradient(90deg, #10b981, #059669);
+    background: linear-gradient(90deg, #3f6b53 0%, #2c4f3d 100%);
     color: white;
     text-align: center;
-    line-height: 20px;
+    line-height: 18px;
     font-size: 0.8rem;
     font-weight: 700;
     transition: width 0.4s ease;
 }
 
+/* Card Panel Layout */
 .card-panel {
-    background: rgba(23, 36, 33, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 14px;
+    background: rgba(30, 41, 59, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
     padding: 24px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
+/* Calendar Card & Body */
+.attendance-calendar-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.calendar-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.log-today-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: rgba(63, 107, 83, 0.25);
+    color: #84b397;
+    border: 1px solid rgba(63, 107, 83, 0.4);
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    min-height: 40px;
+    transition: all 0.15s ease;
+}
+
+.log-today-btn:hover {
+    background: #3f6b53;
+    color: #ffffff;
+}
+
+.calendar-body {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* Day Checklist Panel */
+.day-checklist-panel {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.checklist-date-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.today-badge {
+    background: #b06b45;
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* Subjects Checklist */
+.subjects-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.subject-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(30, 41, 59, 0.6);
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    gap: 12px;
+}
+
+.subject-row.is-attended {
+    background: rgba(63, 107, 83, 0.2);
+    border-color: rgba(63, 107, 83, 0.5);
+}
+
+.subject-row.is-missed {
+    background: rgba(176, 107, 69, 0.15);
+    border-color: rgba(176, 107, 69, 0.4);
+}
+
+.subject-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #f8fafc;
+    flex: 1;
+}
+
+.row-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-toggle {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    min-height: 38px;
+    transition: transform 0.15s ease;
+}
+
+.status-toggle.attended {
+    background: #3f6b53;
+    color: #ffffff;
+}
+
+.status-toggle.missed {
+    background: #b06b45;
+    color: #ffffff;
+}
+
+.remove-row-btn {
+    background: rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+}
+
+.remove-row-btn:hover {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+/* Add Class Form */
+.add-extra-subject-form {
+    display: flex;
+    gap: 10px;
+}
+
+.add-subject-input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(15, 23, 42, 0.8);
+    color: #f8fafc;
+    font-size: 0.88rem;
+    outline: none;
+    min-height: 44px;
+}
+
+.add-subject-input:focus {
+    border-color: #3f6b53;
+}
+
+.add-subject-btn {
+    padding: 10px 18px;
+    border-radius: 10px;
+    background: #3f6b53;
+    color: #ffffff;
+    border: none;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    min-height: 44px;
+    white-space: nowrap;
+}
+
+.add-subject-btn:hover {
+    background: #2c4f3d;
+}
+
+/* Stats Pill Bar */
+.checklist-stats {
+    display: flex;
+    gap: 12px;
+    justify-content: space-around;
+    padding: 10px 14px;
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.stat-pill {
+    font-size: 0.88rem;
+    color: #94a3b8;
+}
+
+.stat-pill strong {
+    color: #ffffff;
+    font-weight: 800;
+    margin-left: 4px;
+}
+
+/* Save Day Record Button */
+.save-day-record-btn {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: #2c4f3d;
+    color: #ffffff;
+    border: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(44, 79, 61, 0.35);
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.save-day-record-btn:hover {
+    background: #233e30;
+    transform: translateY(-1px);
+}
+
+.save-day-record-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Collapsible Timetable */
+.timetable-toggle-btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 4px 0;
+}
+
+.toggle-arrow {
+    transition: transform 0.2s ease;
+}
+
+.toggle-arrow.open {
+    transform: rotate(180deg);
+}
+
+/* Timetable Editor */
 .day-tabs {
     display: flex;
     gap: 6px;
-    flex-wrap: wrap;
-    background: rgba(15, 23, 21, 0.6);
+    overflow-x: auto;
+    background: rgba(15, 23, 42, 0.6);
     padding: 6px;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -85,8 +368,8 @@
 
 .day-tab {
     flex: 1;
-    min-width: 60px;
-    padding: 8px 10px;
+    min-width: 54px;
+    padding: 8px;
     border: none;
     border-radius: 8px;
     background: transparent;
@@ -98,16 +381,17 @@
     align-items: center;
     justify-content: center;
     gap: 4px;
+    min-height: 40px;
 }
 
 .day-tab.active {
-    background: rgba(16, 185, 129, 0.2);
-    color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.4);
+    background: rgba(63, 107, 83, 0.3);
+    color: #84b397;
+    border: 1px solid rgba(63, 107, 83, 0.5);
 }
 
 .day-tab-count {
-    background: rgba(16, 185, 129, 0.25);
+    background: rgba(63, 107, 83, 0.4);
     color: #a7f3d0;
     font-size: 0.72rem;
     padding: 1px 6px;
@@ -115,253 +399,100 @@
     font-weight: 700;
 }
 
-.active-day-editor {
-    background: rgba(15, 23, 21, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    padding: 18px;
+.save-schedule-btn {
+    width: 100%;
+    min-height: 44px;
     margin-top: 14px;
-}
-
-.active-day-editor h3 {
-    font-size: 0.92rem;
-    font-weight: 600;
-    color: #f1f5f9;
-    margin-bottom: 12px;
-}
-
-.add-subject-form {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 14px;
-}
-
-.subject-input {
-    flex: 1;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    font-size: 0.88rem;
-    outline: none;
-    background: rgba(15, 23, 21, 0.8);
-    color: #f8fafc;
-}
-
-.subject-input:focus { border-color: #10b981; }
-
-.add-btn, .save-schedule-btn, .save-day-record-btn {
-    padding: 8px 16px;
-    border-radius: 8px;
-    background: #10b981;
-    color: white;
+    border-radius: 10px;
+    background: #3f6b53;
+    color: #ffffff;
     border: none;
     font-weight: 700;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     cursor: pointer;
 }
 
-.add-btn:hover, .save-schedule-btn:hover, .save-day-record-btn:hover {
-    background: #059669;
-}
-/* ===== Mobile-friendly list refinements ===== */
-
-/* Subject rows become full-width tappable list items */
-.subject-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(23, 36, 33, 0.8);
-  cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
-  gap: 12px;
-}
-
-.subject-row.is-attended {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.45);
-}
-
-.subject-row.is-missed {
-  background: rgba(239, 68, 68, 0.12);
-  border-color: rgba(239, 68, 68, 0.4);
-}
-
-.subject-name {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #f8fafc;
-  flex: 1;
-  min-width: 0;
-}
-
-/* Big clear green / red toggle */
-.status-toggle {
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: none;
-  font-size: 0.8rem;
-  font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
-  min-width: 110px;
-  text-align: center;
-}
-
-.status-toggle.attended {
-  background: #10b981;
-  color: white;
-}
-
-.status-toggle.missed {
-  background: #ef4444;
-  color: white;
-}
-
-.remove-row-btn {
-  background: rgba(255, 255, 255, 0.08);
-  color: #94a3b8;
-  border: none;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.remove-row-btn:hover {
-  background: #ef4444;
-  color: white;
-}
-
-.empty-checklist,
-.empty-list-hint {
-  color: #64748b;
-  font-size: 0.88rem;
-  text-align: center;
-  padding: 12px 0;
-}
-
-/* Schedule list style (vertical on mobile) */
-.subject-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.subject-list-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-}
-
-.subject-list-name {
-  font-size: 0.92rem;
-  font-weight: 500;
-  color: #f1f5f9;
-}
-
-/* Day tabs stay horizontal & scrollable */
-.day-tabs {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  flex-wrap: nowrap;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.day-tabs::-webkit-scrollbar {
-  display: none;
-}
-
-/* ===== Stronger mobile layout ===== */
-@media (max-width: 640px) {
-  .card-panel {
-    padding: 16px;
-    border-radius: 12px;
-  }
-
-  .calendar-body {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  .rdp {
-    --rdp-cell-size: 36px;
-    padding: 8px;
-  }
-
-  .day-checklist-panel {
-    padding: 14px;
-  }
-
-  .subject-row {
-    padding: 12px 14px;
-  }
-
-  .status-toggle {
-    min-width: 100px;
-    padding: 7px 12px;
-  }
-
-  .add-extra-subject-form,
-  .add-subject-form {
-    flex-direction: column;
-  }
-
-  .add-extra-subject-form input,
-  .add-subject-form .subject-input {
-    width: 100%;
-  }
-
-  .save-day-record-btn,
-  .save-schedule-btn {
-    width: 100%;
-    padding: 12px;
-  }
-
-  .checklist-stats {
+/* Reset Section */
+.reset-section {
     display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
-  }
-
-  /* Horizontal scroll for summary cards (already present, kept) */
-  .cards {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
     gap: 12px;
-    padding-bottom: 4px;
-  }
-  .card {
-    min-width: 140px;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-  }
-} 
-.card p {
-        font-size: 1.6rem;
+    justify-content: flex-end;
+}
+
+.reset-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    color: #cbd5e1;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 40px;
+}
+
+.reset-btn.danger {
+    color: #f87171;
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.reset-btn.danger:hover {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+/* Overall Attendance Box */
+.overall-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.overall-heading {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.overall-desc {
+    font-size: 0.88rem;
+    color: #94a3b8;
+}
+
+.overall-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: #3f6b53;
+    color: #ffffff;
+    border: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    align-self: flex-start;
+    min-height: 44px;
+}
+
+/* Mobile Breakpoints */
+@media (max-width: 768px) {
+    .calendar-body {
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
 
-.day-tabs {
-        overflow-x: auto;
-        flex-wrap: nowrap;
+    .add-extra-subject-form {
+        flex-direction: column;
     }
 
-.day-tab {
-        min-width: 48px;
+    .add-subject-btn {
+        width: 100%;
     }
 
-.reset-btn.danger { color: #f87171; border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.1); }
-.reset-btn.danger:hover { background: #ef4444; color: white; }
+    .reset-section {
+        flex-direction: column;
+    }
+
+    .reset-btn {
+        width: 100%;
+    }
+}

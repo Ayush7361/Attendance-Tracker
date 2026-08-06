@@ -186,63 +186,64 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                 {selectedDate && (
                     <div className="day-checklist-panel">
                         <div className="checklist-header">
-                            <h3>
-                                {selectedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
+                            <h3 className="checklist-date-heading">
+                                <span>{selectedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</span>
                                 {isTodaySelected && <span className="today-badge">Today</span>}
                             </h3>
                         </div>
 
-                         <div className="subjects-checklist">
-  {subjectsList.length === 0 && (
-    <p className="empty-checklist">No classes scheduled for this day. Add one below.</p>
-  )}
-  {subjectsList.map((sub, idx) => (
-    <div
-      key={idx}
-      className={`subject-row ${sub.attended ? "is-attended" : "is-missed"}`}
-      onClick={() => setSubjectAttended(idx, !sub.attended)}
-    >
-      <span className="subject-name">{sub.name}</span>
-      <div className="row-controls">
-        <button
-          type="button"
-          className={`status-toggle ${sub.attended ? "attended" : "missed"}`}
-          onClick={(e) => {
-            e.stopPropagation();
-            setSubjectAttended(idx, !sub.attended);
-          }}
-        >
-          {sub.attended ? "✓ Attended" : "✕ Missed"}
-        </button>
-        <button
-          type="button"
-          className="remove-row-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleRemoveSubjectRow(idx);
-          }}
-          title="Remove"
-        >
-          ×
-        </button>
-      </div>
-    </div>
-  ))}
-</div>
+                        <div className="subjects-checklist">
+                            {subjectsList.length === 0 && (
+                                <p className="empty-checklist">No classes scheduled for this day. Add one below.</p>
+                            )}
+                            {subjectsList.map((sub, idx) => (
+                                <div
+                                    key={idx}
+                                    className={`subject-row ${sub.attended ? "is-attended" : "is-missed"}`}
+                                    onClick={() => setSubjectAttended(idx, !sub.attended)}
+                                >
+                                    <span className="subject-name">{sub.name}</span>
+                                    <div className="row-controls">
+                                        <button
+                                            type="button"
+                                            className={`status-toggle ${sub.attended ? "attended" : "missed"}`}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setSubjectAttended(idx, !sub.attended);
+                                            }}
+                                        >
+                                            {sub.attended ? "✓ Attended" : "✕ Missed"}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="remove-row-btn"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleRemoveSubjectRow(idx);
+                                            }}
+                                            title="Remove"
+                                        >
+                                            ×
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
 
                         <form onSubmit={handleAddCustomSubject} className="add-extra-subject-form">
                             <input
                                 type="text"
-                                placeholder="Add class..."
+                                className="add-subject-input"
+                                placeholder="Add custom class..."
                                 value={customSubjectInput}
                                 onChange={(e) => setCustomSubjectInput(e.target.value)}
                             />
-                            <button type="submit">+ Add</button>
+                            <button type="submit" className="add-subject-btn">+ Add</button>
                         </form>
 
                         <div className="checklist-stats">
-                            <span>Total: <strong>{totalCount}</strong></span>
-                            <span>Attended: <strong>{attendedCount}</strong></span>
+                            <div className="stat-pill">Total Classes: <strong>{totalCount}</strong></div>
+                            <div className="stat-pill">Attended: <strong>{attendedCount}</strong></div>
                         </div>
 
                         <button className="save-day-record-btn" onClick={handleSave} disabled={saving}>

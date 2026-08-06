@@ -16,6 +16,11 @@ const studySessionSchema = new mongoose.Schema(
             type: Number, // in minutes
             required: true
         },
+        mode: {
+            type: String,
+            enum: ["stopwatch", "custom"],
+            default: "stopwatch"
+        },
         date: {
             type: Date,
             default: Date.now

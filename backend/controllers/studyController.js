@@ -12,7 +12,7 @@ async function getStudySessions(req, res) {
 
 async function saveStudySession(req, res) {
     try {
-        const { subject, duration, date, completed, notes } = req.body;
+        const { subject, duration, mode, date, completed, notes } = req.body;
         if (!subject || duration === undefined) {
             return res.status(400).json({ message: "Subject and duration are required" });
         }
@@ -21,6 +21,7 @@ async function saveStudySession(req, res) {
             userId: req.userId,
             subject,
             duration,
+            mode: mode || "stopwatch",
             date: date || new Date(),
             completed: completed !== undefined ? completed : true,
             notes: notes || ""
