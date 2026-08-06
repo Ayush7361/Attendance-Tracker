@@ -39,7 +39,20 @@ body {
     display: flex;
     flex-direction: column;
     background: linear-gradient(180deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.94) 100%),
-                url('/section-bg.jpg') center/cover no-repeat fixed;
+                url('/bg-teal-mesh.jpg') center/cover no-repeat fixed;
+}
+
+/* 2-2 Background Image assignment across the 4 sections */
+.app-layout.attendance-layout,
+.app-layout.timeline-layout {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.82) 0%, rgba(15, 23, 42, 0.94) 100%),
+                url('/bg-teal-mesh.jpg') center/cover no-repeat fixed;
+}
+
+.app-layout.study-layout,
+.app-layout.deadlines-layout {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.78) 0%, rgba(15, 23, 42, 0.92) 100%),
+                url('/bg-pink-desk.jpg') center/cover no-repeat fixed;
 }
 
 .app-header {

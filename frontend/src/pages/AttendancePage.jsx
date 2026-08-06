@@ -129,7 +129,7 @@ function AttendancePage({ user, onLogout }) {
         : ((monthSummary.attended / monthSummary.total) * 100).toFixed(1);
 
     return (
-        <div className="app-layout">
+        <div className="app-layout attendance-layout">
             <header className="app-header">
                 <div className="header-brand">
                     <div className="brand-badge">AT</div>
