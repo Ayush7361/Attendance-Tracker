@@ -25,7 +25,7 @@ function Login({ onSwitchToRegister }) {
         <div className="auth-page">
             <div className="auth-brand">
                 <div className="auth-logo">Study Dashboard</div>
-                <h1 className="auth-headline">Classes, deadlines,<br />All handled in one place.</h1>
+                <h1 className="auth-headline">Classes, deadlines, timeline, study sessions <br />All handled in one place.</h1>
                 <p className="auth-subtext">
                     Track attendance, manage deadlines, and keep your academic calendar in one place.
                 </p>
