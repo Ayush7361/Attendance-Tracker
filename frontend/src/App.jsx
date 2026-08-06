@@ -9,6 +9,7 @@ import DeadlinesPage from "./pages/DeadlinesPage";
 import DeadlineDetailPage from "./pages/DeadlineDetailPage";
 import DeadlineFormPage from "./pages/DeadlineFormPage";
 import AcademicTimelinePage from "./pages/AcademicTimelinePage";
+import StudyPage from "./pages/StudyPage";
 import { logoutUser } from "./api/authApi";
 import "./App.css";
 
@@ -38,6 +39,7 @@ function App() {
             <Route path="/deadlines/:id/edit" element={<DeadlineFormPage user={user} onLogout={handleLogout} />} />
             <Route path="/deadlines/:id" element={<DeadlineDetailPage user={user} onLogout={handleLogout} />} />
             <Route path="/timeline" element={<AcademicTimelinePage user={user} onLogout={handleLogout} />} />
+            <Route path="/study" element={<StudyPage user={user} onLogout={handleLogout} />} />
         </Routes>
     );
 }

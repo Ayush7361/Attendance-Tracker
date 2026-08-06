@@ -47,6 +47,14 @@ function Hub({ user, onLogout }) {
                         <p>Semester events, exam schedules, and key academic dates.</p>
                         <span className="hub-card-link">View Timeline →</span>
                     </Link>
+
+                    <Link to="/study" className="hub-card">
+                        <div className="hub-card-header">
+                            <h2>Study Sessions</h2>
+                        </div>
+                        <p>Subject-tagged focus timer, cycle tracking, and daily study analytics.</p>
+                        <span className="hub-card-link">Open Timer →</span>
+                    </Link>
                 </div>
             </main>
         </div>

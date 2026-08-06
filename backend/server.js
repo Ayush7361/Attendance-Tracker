@@ -9,6 +9,7 @@ const scheduleRoutes = require("./routes/scheduleRoutes");
 const dayRoutes = require("./routes/dayRoutes");
 const deadlineRoutes = require("./routes/deadlineRoutes");
 const semesterRoutes = require("./routes/semesterRoutes");
+const studyRoutes = require("./routes/studyRoutes");
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use("/api/schedule", scheduleRoutes);
 app.use("/api/days", dayRoutes);
 app.use("/api/deadlines", deadlineRoutes);
 app.use("/api/semester-events", semesterRoutes);
+app.use("/api/study-sessions", studyRoutes);
 
 const PORT = process.env.PORT || 5000;
 

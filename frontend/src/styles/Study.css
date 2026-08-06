@@ -1,0 +1,602 @@
+/* Brand badge color for Study Sessions */
+.brand-badge.brand-study {
+    background: #2563eb;
+}
+
+.study-page-container {
+    max-width: 900px;
+    width: 100%;
+    margin: 20px auto;
+    padding: 0 16px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* ==========================================================================
+   HERO ACTIVE SESSION CARD
+   Warm cream/off-white background, soft rounded corners, high contrast text
+   ========================================================================== */
+.study-hero-card {
+    background: #fdfbf7;
+    border: 1px solid rgba(217, 213, 203, 0.8);
+    border-radius: 20px;
+    padding: 32px 28px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    width: 100%;
+    color: #1e293b;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-card-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+    text-align: left;
+}
+
+.hero-card-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+    margin-bottom: 2px;
+}
+
+.hero-card-subtitle {
+    font-size: 0.88rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Cycle Mode Selector Tabs inside Hero Header */
+.mode-tabs-container {
+    display: flex;
+    gap: 4px;
+    background: #f1ede4;
+    padding: 4px;
+    border-radius: 12px;
+    border: 1px solid #e2ddd3;
+}
+
+.mode-tab-btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #64748b;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 38px;
+    transition: all 0.15s ease;
+}
+
+.mode-tab-btn.active {
+    background: #ffffff;
+    color: #2563eb;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    font-weight: 700;
+}
+
+/* Subject Selector Section */
+.subject-selector-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.subject-selector-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* Horizontally scrollable chip row on desktop & tablet */
+.subject-chips-row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    max-width: 100%;
+    padding: 4px 0;
+    scrollbar-width: thin;
+}
+
+.subject-chip {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #334155;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    min-height: 40px;
+    transition: all 0.15s ease;
+}
+
+.subject-chip:hover:not(:disabled) {
+    border-color: #2563eb;
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+.subject-chip.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.subject-chip:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Fallback Dropdown selector for narrow mobile viewports */
+.subject-dropdown-mobile {
+    display: none;
+    width: 100%;
+    max-width: 320px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #1e293b;
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-height: 44px;
+}
+
+/* Now Studying Status Pill Label */
+.hero-status-pill {
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #2563eb;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-top: 4px;
+}
+
+/* Large Timer Count Display */
+.hero-timer-display {
+    font-size: 4rem;
+    font-weight: 800;
+    color: #0f172a;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin: 4px 0;
+}
+
+/* Clean Plain-text Metadata Line */
+.hero-metadata-line {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #64748b;
+}
+
+/* Thick Pill Progress Bar */
+.hero-progress-container {
+    width: 100%;
+    max-width: 500px;
+    height: 18px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+    padding: 3px;
+    border: 1px solid #cbd5e1;
+}
+
+.hero-progress-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Large Full-Width Pill Primary Button */
+.hero-actions-container {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 8px;
+}
+
+.hero-primary-btn {
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 999px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.hero-primary-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45);
+}
+
+.hero-primary-btn:active {
+    transform: translateY(0);
+}
+
+.hero-active-btn-group {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.hero-pause-btn {
+    flex: 2;
+    background: #2563eb;
+}
+
+.hero-secondary-btn {
+    flex: 1;
+    min-height: 52px;
+    padding: 14px 20px;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #475569;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.hero-secondary-btn:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+    border-color: #94a3b8;
+}
+
+/* ==========================================================================
+   TODAY & THIS WEEK SUMMARY CARDS
+   Matching SummaryCards visual structure
+   ========================================================================== */
+.study-stats-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.study-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.card.study-summary-card {
+    background: rgba(30, 41, 59, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.card.study-summary-card:hover {
+    border-color: rgba(59, 130, 246, 0.4);
+    transform: translateY(-2px);
+}
+
+.card-period-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #3b82f6;
+    letter-spacing: 0.08em;
+}
+
+.study-summary-card h3 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0;
+}
+
+.card-total-time {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #f8fafc;
+    line-height: 1.1;
+}
+
+.subject-breakdown-list {
+    margin-top: 10px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.no-breakdown-hint {
+    font-size: 0.82rem;
+    color: #64748b;
+    font-style: italic;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.breakdown-sub-name {
+    color: #cbd5e1;
+    font-weight: 500;
+}
+
+.breakdown-sub-time {
+    color: #60a5fa;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   SESSION HISTORY LOG PANEL
+   ========================================================================== */
+.history-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-header h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.history-count-badge {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+.history-filter-bar {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-label {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(15, 23, 42, 0.8);
+    color: #f8fafc;
+    font-size: 0.85rem;
+    font-weight: 600;
+    min-height: 38px;
+}
+
+.history-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.history-empty-state {
+    padding: 24px;
+    text-align: center;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.history-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    transition: background 0.15s ease;
+}
+
+.history-item-row:hover {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.history-item-main {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.history-item-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.history-subject-tag {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.history-status-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+.history-status-badge.completed {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.history-status-badge.stopped {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.history-item-details {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: #94a3b8;
+}
+
+.history-duration {
+    font-weight: 600;
+    color: #38bdf8;
+}
+
+.history-bullet {
+    color: #475569;
+}
+
+.history-delete-btn {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 6px;
+    min-height: 40px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.history-delete-btn:hover {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.15);
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVENESS ADJUSTMENTS (~375px - 430px)
+   ========================================================================== */
+@media (max-width: 600px) {
+    .study-hero-card {
+        padding: 24px 18px;
+        gap: 16px;
+    }
+
+    .hero-card-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .mode-tabs-container {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .mode-tab-btn {
+        flex: 1;
+        padding: 8px 6px;
+    }
+
+    .subject-chips-row {
+        display: none;
+    }
+
+    .subject-dropdown-mobile {
+        display: block;
+    }
+
+    .hero-timer-display {
+        font-size: 3.2rem;
+    }
+
+    .study-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .history-filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-group {
+        justify-content: space-between;
+    }
+
+    .filter-select {
+        flex: 1;
+    }
+
+    .history-item-row {
+        padding: 12px 14px;
+    }
+}
