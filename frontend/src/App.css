@@ -5,3 +5,37 @@
 @import "./styles/Timeline.css";
 @import "./styles/Deadlines.css";
 @import "./styles/Auth.css";
+.rdp-day {
+    position: relative;
+}
+
+.day-logged-good,
+.day-logged-partial,
+.day-logged-bad {
+    font-weight: 600;
+}
+
+.day-logged-good::after,
+.day-logged-partial::after,
+.day-logged-bad::after {
+    content: "";
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.day-logged-good::after {
+    background-color: #3f6b53;
+}
+
+.day-logged-partial::after {
+    background-color: #b06b45;
+}
+
+.day-logged-bad::after {
+    background-color: #dc2626;
+}

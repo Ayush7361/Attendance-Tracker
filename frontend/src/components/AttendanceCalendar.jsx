@@ -47,12 +47,31 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         }
     }
 
-    function buildLoggedDates() {
-        const logged = [];
+    // Splits logged records into three buckets based on attendance ratio,
+    // so the calendar can show a different marker per day status.
+    function buildDayStatusModifiers() {
+        const fullyAttended = [];
+        const partiallyMissed = [];
+        const noneAttended = [];
+
         for (let i = 0; i < records.length; i++) {
-            logged.push(parseServerDate(records[i].date));
+            const rec = records[i];
+            const total = rec.totalClasses || 0;
+            const attended = rec.attendedClasses || 0;
+            if (total === 0) continue;
+
+            const date = parseServerDate(rec.date);
+
+            if (attended === total) {
+                fullyAttended.push(date);
+            } else if (attended === 0) {
+                noneAttended.push(date);
+            } else {
+                partiallyMissed.push(date);
+            }
         }
-        return logged;
+
+        return { fullyAttended, partiallyMissed, noneAttended };
     }
 
     async function handleDayClick(date) {
@@ -160,7 +179,7 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         handleDayClick(today);
     }
 
-    const loggedDates = buildLoggedDates();
+    const { fullyAttended, partiallyMissed, noneAttended } = buildDayStatusModifiers();
     const isTodaySelected = selectedDate && formatDateKey(selectedDate) === formatDateKey(new Date());
 
     return (
@@ -179,8 +198,12 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                     onSelect={handleDayClick}
                     month={visibleMonth}
                     onMonthChange={setVisibleMonth}
-                    modifiers={{ logged: loggedDates }}
-                    modifiersClassNames={{ logged: "day-logged" }}
+                    modifiers={{ fullyAttended, partiallyMissed, noneAttended }}
+                    modifiersClassNames={{
+                        fullyAttended: "day-logged-good",
+                        partiallyMissed: "day-logged-partial",
+                        noneAttended: "day-logged-bad"
+                    }}
                 />
 
                 {selectedDate && (

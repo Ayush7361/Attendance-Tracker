@@ -1,63 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 .auth-page {
     min-height: 100vh;
     display: flex;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background: #0f1715;
+    background: #20242a;
 }
 
+/* Left panel — the "notebook cover": ink-dark, faint dot-grid texture, handwritten headline */
 .auth-brand {
     flex: 6;
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: 60px;
-    background: linear-gradient(135deg, rgba(15, 23, 21, 0.85), rgba(23, 36, 33, 0.95)),
-                url('/dashboard-bg.jpg') center/cover no-repeat;
+    position: relative;
+    background: #20242a;
     color: white;
+    overflow: hidden;
+}
+
+.auth-brand::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(246, 244, 238, 0.08) 1px, transparent 1px);
+    background-size: 22px 22px;
+    pointer-events: none;
+}
+
+.auth-brand > * {
+    position: relative;
+    z-index: 1;
 }
 
 .auth-logo {
-    font-size: 22px;
-    font-weight: 800;
+    font-family: 'Caveat', cursive;
+    font-size: 32px;
+    font-weight: 700;
     margin-bottom: 40px;
-    color: #34d399;
+    color: #f0b429;
+    letter-spacing: 0.02em;
 }
 
 .auth-headline {
-    font-size: 34px;
-    font-weight: 800;
-    line-height: 1.3;
+    font-family: 'Caveat', cursive;
+    font-size: 46px;
+    font-weight: 700;
+    line-height: 1.25;
     margin-bottom: 16px;
-    color: #f8fafc;
+    color: #f6f4ee;
 }
 
 .auth-subtext {
     font-size: 15px;
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(246, 244, 238, 0.68);
     line-height: 1.6;
+    max-width: 420px;
 }
 
+/* Right panel — the "page": paper tone, ink type, pen-colored accents */
 .auth-form-side {
     flex: 4;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: #172421;
+    background: #f6f4ee;
     padding: 40px;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgba(32, 36, 42, 0.1);
 }
 
 .auth-form-side h2 {
-    font-size: 24px;
+    font-family: 'Caveat', cursive;
+    font-size: 32px;
     font-weight: 700;
-    color: #f8fafc;
-    margin-bottom: 6px;
+    color: #20242a;
+    margin-bottom: 4px;
 }
 
 .auth-form-subtitle {
     font-size: 14px;
-    color: #94a3b8;
+    color: #5c6470;
     margin-bottom: 28px;
 }
 
@@ -69,7 +93,7 @@
 .auth-field label {
     display: block;
     font-size: 13px;
-    color: #cbd5e1;
+    color: #3a3f47;
     margin-bottom: 6px;
     font-weight: 600;
 }
@@ -77,55 +101,56 @@
 .auth-field input {
     width: 100%;
     padding: 12px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    background: rgba(15, 23, 21, 0.8);
-    color: #f8fafc;
+    border-radius: 4px;
+    border: 1.5px solid rgba(32, 36, 42, 0.18);
+    background: #ffffff;
+    color: #20242a;
     font-size: 14px;
     outline: none;
+    transition: border-color 0.15s ease;
 }
 
 .auth-field input:focus {
-    border-color: #10b981;
+    border-color: #2f6b4f;
 }
 
 .auth-submit {
     width: 100%;
     padding: 12px;
     border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #10b981, #059669);
+    border-radius: 4px;
+    background: #2f6b4f;
     color: white;
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     margin-top: 6px;
-    transition: background 0.2s ease;
+    transition: background 0.15s ease;
 }
 
 .auth-submit:hover {
-    background: #047857;
+    background: #23543d;
 }
 
 .auth-error {
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #fca5a5;
+    background: rgba(179, 53, 44, 0.08);
+    border: 1.5px solid rgba(179, 53, 44, 0.35);
+    color: #b3352c;
     font-size: 13px;
     padding: 10px 12px;
-    border-radius: 8px;
+    border-radius: 4px;
     margin-top: 12px;
 }
 
 .auth-switch {
     text-align: center;
     font-size: 13px;
-    color: #94a3b8;
+    color: #5c6470;
     margin-top: 20px;
 }
 
 .auth-switch .link {
-    color: #34d399;
+    color: #2f6b4f;
     font-weight: 700;
     cursor: pointer;
 }
