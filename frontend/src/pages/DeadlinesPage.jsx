@@ -9,6 +9,7 @@ import {
     getSubtaskProgress,
     STATUS_LABELS
 } from "../utils/deadlineUtils";
+import MobileNotificationDrawer from "../components/MobileNotificationDrawer";
 import "../styles/Deadlines.css";
 
 function OverviewTab({ analytics }) {
@@ -120,7 +121,10 @@ function DeadlinesPage({ user, onLogout }) {
                         <p className="app-subtitle">Welcome back, {user.username}</p>
                     </div>
                 </div>
-                <button className="logout-btn" onClick={onLogout}>Logout</button>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <MobileNotificationDrawer deadlines={deadlines} />
+                    <button className="logout-btn" onClick={onLogout}>Logout</button>
+                </div>
             </header>
 
             <main className="container">

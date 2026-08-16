@@ -6,6 +6,7 @@ import StudyHistoryPanel from "../components/StudyHistoryPanel";
 import { getSchedule } from "../api/attendanceApi";
 import { getStudySessions, saveStudySession, deleteStudySession } from "../api/studyApi";
 import { getDeadlines } from "../api/deadlinesApi";
+import MobileNotificationDrawer from "../components/MobileNotificationDrawer";
 import "../styles/Study.css";
 
 function StudyPage({ user, onLogout }) {
@@ -101,9 +102,12 @@ function StudyPage({ user, onLogout }) {
                         <p className="app-subtitle">Welcome back, {user.username}</p>
                     </div>
                 </div>
-                <button className="logout-btn" onClick={onLogout}>
-                    Logout
-                </button>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <MobileNotificationDrawer deadlines={deadlines} />
+                    <button className="logout-btn" onClick={onLogout}>
+                        Logout
+                    </button>
+                </div>
             </header>
 
             <main className="container study-page-container">

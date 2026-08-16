@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getSemesterEvents, createSemesterEvent, deleteSemesterEvent } from "../api/semesterApi";
 import { formatDueDate } from "../utils/deadlineUtils";
+import MobileNotificationDrawer from "../components/MobileNotificationDrawer";
 import "../styles/Timeline.css";
 
 const CATEGORIES = [
@@ -95,7 +96,10 @@ function AcademicTimelinePage({ user, onLogout }) {
                         <p className="app-subtitle">Welcome back, {user.username}</p>
                     </div>
                 </div>
-                <button className="logout-btn" onClick={onLogout}>Logout</button>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <MobileNotificationDrawer events={events} />
+                    <button className="logout-btn" onClick={onLogout}>Logout</button>
+                </div>
             </header>
 
             <main className="container">

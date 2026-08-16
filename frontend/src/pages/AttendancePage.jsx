@@ -15,6 +15,7 @@ import {
     deleteDayRange,
     resetAll
 } from "../api/attendanceApi";
+import MobileNotificationDrawer from "../components/MobileNotificationDrawer";
 import "../App.css";
 
 const monthNames = [
@@ -138,9 +139,12 @@ function AttendancePage({ user, onLogout }) {
                         <p className="app-subtitle">Welcome back, {user.username}</p>
                     </div>
                 </div>
-                <button className="logout-btn" onClick={onLogout}>
-                    Logout
-                </button>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <MobileNotificationDrawer schedule={schedule} />
+                    <button className="logout-btn" onClick={onLogout}>
+                        Logout
+                    </button>
+                </div>
             </header>
 
             <main className="container">
