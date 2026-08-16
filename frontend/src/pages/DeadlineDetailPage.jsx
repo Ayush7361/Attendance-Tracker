@@ -37,6 +37,12 @@ function DeadlineDetailPage({ user, onLogout }) {
         }
     }
 
+    async function updateStatus(newStatus) {
+        const isCompleted = newStatus === "Completed";
+        const res = await updateDeadline(id, { status: newStatus, completed: isCompleted });
+        setDeadline(res.data);
+    }
+
     async function toggleSubtask(index) {
         const subtasks = deadline.subtasks.map((s, i) =>
             i === index ? { ...s, done: !s.done } : s
@@ -46,7 +52,9 @@ function DeadlineDetailPage({ user, onLogout }) {
     }
 
     async function toggleComplete() {
-        const res = await updateDeadline(id, { completed: !deadline.completed });
+        const isComp = !deadline.completed;
+        const newStatus = isComp ? "Completed" : "In Progress";
+        const res = await updateDeadline(id, { completed: isComp, status: newStatus });
         setDeadline(res.data);
     }
 
@@ -66,6 +74,7 @@ function DeadlineDetailPage({ user, onLogout }) {
 
     const status = getUrgencyStatus(deadline.dueDate, deadline.completed);
     const progress = getSubtaskProgress(deadline.subtasks);
+    const currentStage = deadline.status || "To Do";
 
     const subjectLower = (deadline.subject || "").toLowerCase();
     const deadlineDate = new Date(deadline.dueDate);
@@ -127,12 +136,48 @@ function DeadlineDetailPage({ user, onLogout }) {
                                 {getUrgencyLabel(deadline.dueDate, deadline.completed)}
                             </span>
                         </div>
+
+                        {/* Interactive Stage Status Bar */}
+                        <div className="dl-stage-bar-container">
+                            <span className="dl-stage-label">Workflow Stage:</span>
+                            <div className="dl-stage-pills">
+                                {["To Do", "In Progress", "Under Review", "Completed"].map((st) => (
+                                    <button
+                                        key={st}
+                                        type="button"
+                                        className={`dl-stage-pill ${currentStage === st ? "active" : ""}`}
+                                        onClick={() => updateStatus(st)}
+                                    >
+                                        {st}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
                     </div>
 
                     {deadline.description && (
                         <div className="dl-section">
-                            <h3>Description</h3>
-                            <p>{deadline.description}</p>
+                            <h3>Description & Guidelines</h3>
+                            <p style={{ whiteSpace: "pre-wrap" }}>{deadline.description}</p>
+                        </div>
+                    )}
+
+                    {deadline.resourceLinks && deadline.resourceLinks.length > 0 && (
+                        <div className="dl-section">
+                            <h3>Project Resources & Attachments</h3>
+                            <div className="dl-resource-buttons-row">
+                                {deadline.resourceLinks.map((link, idx) => (
+                                    <a
+                                        key={idx}
+                                        href={link.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="dl-resource-btn"
+                                    >
+                                        🔗 {link.title} ↗
+                                    </a>
+                                ))}
+                            </div>
                         </div>
                     )}
 
@@ -144,7 +189,7 @@ function DeadlineDetailPage({ user, onLogout }) {
                     )}
 
                     <div className="dl-section">
-                        <h3>Subtasks</h3>
+                        <h3>Milestones & Subtasks</h3>
                         {deadline.subtasks.length === 0 ? (
                             <p style={{ fontSize: "13px", color: "#666" }}>No subtasks added.</p>
                         ) : (
@@ -164,9 +209,14 @@ function DeadlineDetailPage({ user, onLogout }) {
                             </div>
                         )}
                         {progress.total > 0 && (
-                            <p className="dl-progress-text">
-                                {progress.done}/{progress.total} completed ({progress.percent}%)
-                            </p>
+                            <div className="dl-progress-box">
+                                <div className="dl-progress-text">
+                                    {progress.done}/{progress.total} completed ({progress.percent}%)
+                                </div>
+                                <div className="dl-progress-track">
+                                    <div className="dl-progress-fill" style={{ width: `${progress.percent}%` }} />
+                                </div>
+                            </div>
                         )}
                     </div>
 

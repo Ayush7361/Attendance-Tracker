@@ -143,6 +143,12 @@ function DeadlinesPage({ user, onLogout }) {
                         Task List
                     </button>
                     <button
+                        className={"dl-tab" + (tab === "kanban" ? " active" : "")}
+                        onClick={() => setTab("kanban")}
+                    >
+                        📋 Kanban Board
+                    </button>
+                    <button
                         className={"dl-tab" + (tab === "overview" ? " active" : "")}
                         onClick={() => setTab("overview")}
                     >
@@ -150,7 +156,7 @@ function DeadlinesPage({ user, onLogout }) {
                     </button>
                 </div>
 
-                {tab === "list" && (
+                {(tab === "list" || tab === "kanban") && (
                     <>
                         <div className="dl-toolbar">
                             {DEADLINE_TYPES.map((t) => (
@@ -179,41 +185,108 @@ function DeadlinesPage({ user, onLogout }) {
                                 </select>
                             </label>
                         </div>
-
-                        <div className="dl-list">
-                            {deadlines.length === 0 && (
-                                <div className="dl-empty">No deadlines found. Add one to get started.</div>
-                            )}
-                            {deadlines.map((d) => {
-                                const status = getUrgencyStatus(d.dueDate, d.completed);
-                                const progress = getSubtaskProgress(d.subtasks);
-                                return (
-                                    <Link
-                                        to={"/deadlines/" + d._id}
-                                        key={d._id}
-                                        className={"dl-row" + (d.completed ? " completed" : "")}
-                                    >
-                                        <div className="dl-row-top">
-                                            <span className="dl-row-title">{d.title}</span>
-                                            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                                                {progress.total > 0 && (
-                                                    <span className="dl-progress-tag">
-                                                        {progress.done}/{progress.total}
-                                                    </span>
-                                                )}
-                                                <span className={"dl-badge " + status}>
-                                                    {getUrgencyLabel(d.dueDate, d.completed)}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="dl-row-meta">
-                                            {d.subject} · {d.type} · Due {formatDueDate(d.dueDate)}
-                                        </div>
-                                    </Link>
-                                );
-                            })}
-                        </div>
                     </>
+                )}
+
+                {tab === "list" && (
+                    <div className="dl-list">
+                        {deadlines.length === 0 && (
+                            <div className="dl-empty">No deadlines found. Add one to get started.</div>
+                        )}
+                        {deadlines.map((d) => {
+                            const status = getUrgencyStatus(d.dueDate, d.completed);
+                            const progress = getSubtaskProgress(d.subtasks);
+                            const stage = d.status || (d.completed ? "Completed" : "To Do");
+
+                            return (
+                                <Link
+                                    to={"/deadlines/" + d._id}
+                                    key={d._id}
+                                    className={"dl-row" + (d.completed ? " completed" : "")}
+                                >
+                                    <div className="dl-row-top">
+                                        <span className="dl-row-title">{d.title}</span>
+                                        <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
+                                            <span className="dl-stage-tag">{stage}</span>
+                                            {d.resourceLinks?.length > 0 && (
+                                                <span className="dl-resource-tag">🔗 {d.resourceLinks.length}</span>
+                                            )}
+                                            {progress.total > 0 && (
+                                                <span className="dl-progress-tag">
+                                                    {progress.done}/{progress.total}
+                                                </span>
+                                            )}
+                                            <span className={"dl-badge " + status}>
+                                                {getUrgencyLabel(d.dueDate, d.completed)}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="dl-row-meta">
+                                        {d.subject} · {d.type} · Due {formatDueDate(d.dueDate)}
+                                    </div>
+                                </Link>
+                            );
+                        })}
+                    </div>
+                )}
+
+                {tab === "kanban" && (
+                    <div className="dl-kanban-board">
+                        {["To Do", "In Progress", "Under Review", "Completed"].map((stageCol) => {
+                            const colDeadlines = deadlines.filter(
+                                (d) => (d.status || (d.completed ? "Completed" : "To Do")) === stageCol
+                            );
+
+                            return (
+                                <div className="dl-kanban-col" key={stageCol}>
+                                    <div className="dl-kanban-col-header">
+                                        <h4>{stageCol}</h4>
+                                        <span className="dl-kanban-count">{colDeadlines.length}</span>
+                                    </div>
+
+                                    <div className="dl-kanban-cards">
+                                        {colDeadlines.length === 0 ? (
+                                            <div className="dl-kanban-empty">Empty</div>
+                                        ) : (
+                                            colDeadlines.map((d) => {
+                                                const status = getUrgencyStatus(d.dueDate, d.completed);
+                                                const progress = getSubtaskProgress(d.subtasks);
+
+                                                return (
+                                                    <Link
+                                                        to={"/deadlines/" + d._id}
+                                                        key={d._id}
+                                                        className="dl-kanban-card"
+                                                    >
+                                                        <div className="kanban-card-top">
+                                                            <span className="kanban-card-title">{d.title}</span>
+                                                            <span className={`dl-badge ${status}`}>
+                                                                {formatDueDate(d.dueDate)}
+                                                            </span>
+                                                        </div>
+
+                                                        <div className="kanban-card-sub">{d.subject}</div>
+
+                                                        <div className="kanban-card-meta">
+                                                            <span className="kanban-type-tag">{d.type}</span>
+                                                            {d.resourceLinks?.length > 0 && (
+                                                                <span className="dl-resource-tag">🔗 {d.resourceLinks.length} links</span>
+                                                            )}
+                                                            {progress.total > 0 && (
+                                                                <span className="dl-progress-tag">
+                                                                    {progress.done}/{progress.total}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </Link>
+                                                );
+                                            })
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 )}
 
                 {tab === "overview" && <OverviewTab analytics={analytics} />}

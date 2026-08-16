@@ -66,7 +66,7 @@ async function getDeadline(req, res) {
 
 async function createDeadline(req, res) {
     try {
-        const { title, subject, type, dueDate, priority, description, estimatedHours, subtasks } = req.body;
+        const { title, subject, type, dueDate, priority, status, description, estimatedHours, subtasks, resourceLinks } = req.body;
 
         const deadline = await Deadline.create({
             userId: req.userId,
@@ -75,9 +75,11 @@ async function createDeadline(req, res) {
             type,
             dueDate,
             priority: priority || "Medium",
+            status: status || "To Do",
             description: description || "",
             estimatedHours: estimatedHours ?? null,
-            subtasks: subtasks || []
+            subtasks: subtasks || [],
+            resourceLinks: resourceLinks || []
         });
 
         res.status(201).json(deadline);
