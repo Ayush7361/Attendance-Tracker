@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AcademicHealthScore from "../components/AcademicHealthScore";
 import WorkloadForecast from "../components/WorkloadForecast";
+import StudyHeatmap from "../components/StudyHeatmap";
 import { getSchedule, getOverallSummary, getDay } from "../api/attendanceApi";
 import { getDeadlines, getDeadlineAnalytics, getWorkloadForecast } from "../api/deadlinesApi";
 import { getStudySessions } from "../api/studyApi";
@@ -346,6 +347,9 @@ function Hub({ user, onLogout }) {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Study Activity Heatmap & Streaks */}
+                        <StudyHeatmap sessions={sessions} />
 
                         {/* Workload forecast */}
                         <div className="hub-panel hub-forecast-panel">

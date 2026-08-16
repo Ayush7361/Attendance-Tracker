@@ -1,0 +1,328 @@
+/* ==========================================================================
+   STUDY HEATMAP & STREAK ENGINE STYLES
+   Sleek Dark Glassmorphic Design with Neon Emerald Tile Intensity
+   ========================================================================== */
+
+.study-heatmap-container {
+    background: rgba(30, 41, 59, 0.85);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    color: #f8fafc;
+}
+
+/* ── Header & Streak Pills ── */
+.heatmap-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.heatmap-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+    margin: 0 0 2px 0;
+}
+
+.heatmap-subtitle {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.heatmap-stat-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.heatmap-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    transition: transform 0.15s ease;
+}
+
+.heatmap-pill:hover {
+    transform: translateY(-2px);
+}
+
+.pill-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.pill-val {
+    display: block;
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.pill-lbl {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+}
+
+/* Pill themes */
+.pill-streak {
+    background: rgba(249, 115, 22, 0.12);
+    border: 1px solid rgba(249, 115, 22, 0.35);
+    color: #fb923c;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.15);
+}
+
+.pill-best {
+    background: rgba(234, 179, 8, 0.12);
+    border: 1px solid rgba(234, 179, 8, 0.35);
+    color: #facc15;
+    box-shadow: 0 4px 12px rgba(234, 179, 8, 0.15);
+}
+
+.pill-active {
+    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    color: #60a5fa;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.pill-total {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #34d399;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+/* ── Grid Section & Matrix ── */
+.heatmap-grid-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.heatmap-grid-scroll {
+    overflow-x: auto;
+    padding-bottom: 8px;
+    width: 100%;
+}
+
+.heatmap-months-row {
+    display: flex;
+    margin-bottom: 6px;
+}
+
+.day-label-spacer {
+    width: 34px;
+    flex-shrink: 0;
+}
+
+.month-label-col {
+    width: 17px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    pointer-events: none;
+    overflow: visible;
+    white-space: nowrap;
+}
+
+.heatmap-matrix {
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+}
+
+.day-labels-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 28px;
+    flex-shrink: 0;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #64748b;
+    text-align: right;
+    padding-right: 6px;
+}
+
+.day-labels-col span {
+    height: 13px;
+    line-height: 13px;
+}
+
+.weeks-container {
+    display: flex;
+    gap: 4px;
+}
+
+.heatmap-week-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* ── Heatmap Tiles ── */
+.heatmap-tile {
+    width: 13px;
+    height: 13px;
+    border-radius: 3px;
+    position: relative;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.heatmap-tile:hover {
+    transform: scale(1.35);
+    z-index: 20;
+}
+
+.tile-level-0 {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.tile-level-1 {
+    background: #064e3b;
+    border: 1px solid #047857;
+}
+
+.tile-level-2 {
+    background: #047857;
+    border: 1px solid #059669;
+    box-shadow: 0 0 4px rgba(4, 120, 87, 0.3);
+}
+
+.tile-level-3 {
+    background: #10b981;
+    border: 1px solid #34d399;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+}
+
+.tile-level-4 {
+    background: #34d399;
+    border: 1px solid #6ee7b7;
+    box-shadow: 0 0 12px rgba(52, 211, 153, 0.8), 0 0 4px #ffffff;
+}
+
+.tile-future {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.04);
+    opacity: 0.4;
+}
+
+.tile-today {
+    outline: 2px solid #60a5fa;
+    outline-offset: 1px;
+}
+
+/* ── Floating Tooltip ── */
+.tile-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    backdrop-filter: blur(12px);
+    border-radius: 8px;
+    padding: 8px 12px;
+    width: max-content;
+    max-width: 220px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    z-index: 50;
+    text-align: left;
+}
+
+.heatmap-tile:hover .tile-tooltip {
+    display: block;
+}
+
+.tooltip-date {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #94a3b8;
+    margin-bottom: 2px;
+}
+
+.tooltip-mins {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #34d399;
+}
+
+.tooltip-sub-list {
+    list-style: none;
+    margin: 6px 0 0 0;
+    padding: 4px 0 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.tooltip-sub-list li {
+    font-size: 0.72rem;
+    color: #cbd5e1;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+/* ── Footer & Legend ── */
+.heatmap-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.heatmap-footer-note {
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.heatmap-footer-note strong {
+    color: #34d399;
+}
+
+.heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.legend-lbl {
+    font-size: 0.72rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.legend-sample {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
