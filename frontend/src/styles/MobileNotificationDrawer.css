@@ -9,55 +9,106 @@
     align-items: center;
 }
 
-/* Bell Icon Header Button */
+/* Bell Icon Header Button - HIGH VISIBILITY */
 .mobile-bell-btn {
     position: relative;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 8px 14px;
+    height: 40px;
+    border-radius: 20px;
+    background: #1e293b;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
     color: #ffffff;
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 7px;
     cursor: pointer;
-    transition: background 0.15s ease, transform 0.15s ease;
+    font-weight: 700;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease;
 }
 
 .mobile-bell-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: scale(1.05);
+    background: #334155;
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
-.bell-icon {
-    font-size: 1.15rem;
-    line-height: 1;
+.mobile-bell-btn.has-unread {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    border-color: #f87171;
+    color: #ffffff;
+    box-shadow: 0 0 16px rgba(220, 38, 38, 0.55);
+    animation: alertGlow 2.5s infinite;
+}
+
+.mobile-bell-btn.has-unread:hover {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.7);
+}
+
+@keyframes alertGlow {
+    0%, 100% { box-shadow: 0 0 12px rgba(220, 38, 38, 0.45); }
+    50% { box-shadow: 0 0 20px rgba(248, 113, 113, 0.8); }
+}
+
+.bell-icon-svg {
+    display: block;
+    flex-shrink: 0;
+}
+
+.bell-btn-text {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
 }
 
 .bell-badge {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    background: #f87171;
-    color: #ffffff;
-    font-size: 0.7rem;
-    font-weight: 800;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
+    background: #ffffff;
+    color: #dc2626;
+    font-size: 0.75rem;
+    font-weight: 900;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #0f172a;
-    box-shadow: 0 0 8px rgba(248, 113, 113, 0.6);
-    animation: bellPulse 2s infinite;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes bellPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-    100% { transform: scale(1); }
+.perm-badge-tag {
+    background: #3b82f6;
+    color: #ffffff;
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
+}
+
+.alert-type-pill {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 3px 7px;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.pill-urgent {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.pill-info {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.4);
 }
 
 /* Slide-Up Overlay Sheet */

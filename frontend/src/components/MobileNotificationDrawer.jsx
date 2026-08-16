@@ -54,14 +54,17 @@ function MobileNotificationDrawer({ schedule, todayLogged, deadlines = [], event
 
     return (
         <div className="mobile-notif-wrapper">
-            {/* Header Bell Button */}
+            {/* Header Bell / Alert Button */}
             <button
                 type="button"
                 className={`mobile-bell-btn ${unreadCount > 0 ? "has-unread" : ""}`}
                 onClick={() => setIsOpen(true)}
-                title="Notifications"
+                title="Academic Alerts & Notifications"
             >
-                <span className="bell-icon">🔔</span>
+                <svg className="bell-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
+                </svg>
+                <span className="bell-btn-text">Alerts</span>
                 {unreadCount > 0 && <span className="bell-badge">{unreadCount}</span>}
             </button>
 
@@ -91,7 +94,7 @@ function MobileNotificationDrawer({ schedule, todayLogged, deadlines = [], event
                         {/* Phone Native Push Permission Banner */}
                         <div className="permission-banner-card">
                             <div className="perm-info">
-                                <span className="perm-icon">📱</span>
+                                <span className="perm-badge-tag">PUSH</span>
                                 <div>
                                     <h4>Phone Push Notifications</h4>
                                     <p>
@@ -116,7 +119,6 @@ function MobileNotificationDrawer({ schedule, todayLogged, deadlines = [], event
                         <div className="drawer-alerts-list">
                             {alerts.length === 0 ? (
                                 <div className="drawer-empty-box">
-                                    <span className="empty-icon">🎉</span>
                                     <p>All caught up! No active alerts right now.</p>
                                 </div>
                             ) : (
@@ -126,7 +128,9 @@ function MobileNotificationDrawer({ schedule, todayLogged, deadlines = [], event
                                         className={`drawer-alert-item ${item.urgent ? "urgent-item" : ""}`}
                                         onClick={() => handleNavigate(item.url)}
                                     >
-                                        <span className="alert-item-icon">{item.icon}</span>
+                                        <span className={`alert-type-pill ${item.urgent ? "pill-urgent" : "pill-info"}`}>
+                                            {item.urgent ? "URGENT" : "NOTICE"}
+                                        </span>
                                         <div className="alert-item-body">
                                             <h5 className="alert-item-title">{item.title}</h5>
                                             <p className="alert-item-msg">{item.message}</p>

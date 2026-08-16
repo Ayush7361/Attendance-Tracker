@@ -140,17 +140,14 @@ function UnifiedActivityForecast({ forecastData, sessions = [] }) {
                 {/* Compact Streak Pills */}
                 <div className="unified-streak-pills">
                     <div className="streak-pill pill-flame">
-                        <span className="streak-pill-icon">🔥</span>
                         <span className="streak-pill-val">{currentStreak}d Streak</span>
                     </div>
 
                     <div className="streak-pill pill-trophy">
-                        <span className="streak-pill-icon">🏆</span>
                         <span className="streak-pill-val">{longestStreak}d Best</span>
                     </div>
 
                     <div className="streak-pill pill-timer">
-                        <span className="streak-pill-icon">⏱️</span>
                         <span className="streak-pill-val">{formatMinsToHours(totalMins)} Total</span>
                     </div>
                 </div>
@@ -163,14 +160,14 @@ function UnifiedActivityForecast({ forecastData, sessions = [] }) {
                     className={`unified-tab-btn ${activeTab === "forecast" ? "active" : ""}`}
                     onClick={() => setActiveTab("forecast")}
                 >
-                    📅 Workload Forecast ({totalForecastHours}h)
+                    Workload Forecast ({totalForecastHours}h)
                 </button>
                 <button
                     type="button"
                     className={`unified-tab-btn ${activeTab === "focus" ? "active" : ""}`}
                     onClick={() => setActiveTab("focus")}
                 >
-                    🔥 Past 7 Days Focus
+                    Past 7 Days Focus
                 </button>
             </div>
 

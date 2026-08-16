@@ -26,7 +26,7 @@ export async function requestMobileNotificationPermission() {
         if (permission === "granted") {
             // Trigger confirmation notification
             sendNativePhoneNotification({
-                title: "🔔 Mobile Alerts Enabled!",
+                title: "Mobile Alerts Enabled!",
                 body: "You will now receive native alerts for class reminders, overdue deadlines, and exams.",
                 url: "/"
             });
@@ -107,7 +107,7 @@ export function generateAcademicAlerts({ schedule, todayLogged, deadlines = [], 
             alerts.push({
                 id: notifId,
                 type: "attendance",
-                icon: "📅",
+                icon: "attendance",
                 title: "Classes Today & Attendance Log",
                 message: todayLogged
                     ? `Logged: ${todayLogged.attendedClasses}/${todayLogged.totalClasses} classes attended today.`
@@ -125,20 +125,20 @@ export function generateAcademicAlerts({ schedule, todayLogged, deadlines = [], 
         due.setHours(0, 0, 0, 0);
         const diffDays = Math.round((due - today) / (1000 * 60 * 60 * 24));
 
-        let icon = "📝";
+        let icon = "deadline";
         let title = "";
         let urgent = false;
 
         if (diffDays < 0) {
-            icon = "🚨";
+            icon = "overdue";
             title = `Overdue: ${d.title}`;
             urgent = true;
         } else if (diffDays === 0) {
-            icon = "⏰";
+            icon = "dueToday";
             title = `Due Today: ${d.title}`;
             urgent = true;
         } else if (diffDays <= 3) {
-            icon = "📌";
+            icon = "deadline";
             title = `Due in ${diffDays}d: ${d.title}`;
         } else {
             return;
@@ -173,7 +173,7 @@ export function generateAcademicAlerts({ schedule, todayLogged, deadlines = [], 
                 alerts.push({
                     id: notifId,
                     type: "exam",
-                    icon: "🎓",
+                    icon: "exam",
                     title: `Upcoming Exam: ${ev.title}`,
                     message: diffDays === 0 ? "Scheduled for TODAY!" : `Scheduled in ${diffDays} day${diffDays === 1 ? "" : "s"}.`,
                     url: "/timeline",

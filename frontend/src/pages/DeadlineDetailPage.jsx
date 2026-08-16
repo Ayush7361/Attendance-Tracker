@@ -222,7 +222,7 @@ function DeadlineDetailPage({ user, onLogout }) {
 
                     <div className="dl-detail-actions">
                         <Link to={`/study?subject=${encodeURIComponent(deadline.subject)}`} className="dl-btn dl-btn-study">
-                            ⏱️ Start Study Session
+                            Start Study Session
                         </Link>
                         <button className="dl-btn" onClick={toggleComplete}>
                             {deadline.completed ? "Mark Incomplete" : "Mark Complete"}

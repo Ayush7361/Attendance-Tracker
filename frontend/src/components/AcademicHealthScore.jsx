@@ -53,11 +53,6 @@ function AcademicHealthScore({ score, components, belowAttendanceThreshold, atte
                 </div>
             </div>
 
-            {belowAttendanceThreshold && (
-                <div className="health-warning">
-                    Attendance is below {attendanceThreshold}% — you may need to improve to meet typical requirements.
-                </div>
-            )}
         </div>
     );
 }

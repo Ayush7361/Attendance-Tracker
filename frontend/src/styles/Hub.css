@@ -96,10 +96,15 @@
 }
 
 .pill-warn {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #fbbf24;
-    margin-top: 2px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    padding: 2px 7px;
+    border-radius: 6px;
+    margin-top: 4px;
+    display: inline-block;
 }
 
 .pill-sub {

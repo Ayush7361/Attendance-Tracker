@@ -293,7 +293,7 @@ function Hub({ user, onLogout }) {
                                                 No classes scheduled for today on your weekly timetable.
                                             </p>
                                             <Link to="/attendance" className="hub-classes-empty-link">
-                                                📅 Manage Timetable →
+                                                Manage Timetable →
                                             </Link>
                                         </div>
                                     ) : (
@@ -310,7 +310,7 @@ function Hub({ user, onLogout }) {
                                                             className="hub-class-study-link"
                                                             title={`Start study session for ${subject}`}
                                                         >
-                                                            ⏱️ Focus
+                                                            Focus
                                                         </Link>
                                                     </li>
                                                 ))}

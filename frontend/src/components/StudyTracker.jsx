@@ -286,7 +286,7 @@ function StudyTracker({ availableSubjects = [], deadlines = [], initialSubject =
 
                 return (
                     <div className="study-smart-banner">
-                        <div className="smart-crosslink-badge-pill">🔗 SMART CROSS-LINK</div>
+                        <div className="smart-crosslink-badge-pill">SMART CROSS-LINK</div>
                         <span className="study-smart-banner-text">
                             {dueThisWeek > 0 ? (
                                 <>You have <strong>{dueThisWeek} {dueThisWeek === 1 ? "assignment" : "assignments"} due this week</strong> for {selectedSubject}</>
