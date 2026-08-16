@@ -84,7 +84,7 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
             if (res.data && Array.isArray(res.data.subjects) && res.data.subjects.length > 0) {
                 setSubjectsList(res.data.subjects.map(s => ({
                     name: s.name,
-                    attended: s.status === "attended"
+                    status: s.status || "attended"
                 })));
             } else if (res.data) {
                 setSubjectsFromSchedule(date, res.data.totalClasses, res.data.attendedClasses);
@@ -103,18 +103,21 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         if (Array.isArray(scheduledSubjects) && scheduledSubjects.length > 0) {
             setSubjectsList(scheduledSubjects.map((subName) => ({
                 name: subName,
-                attended: false
+                status: "attended"
             })));
         } else if (typeof scheduledSubjects === "number" && scheduledSubjects > 0) {
             const list = [];
             for (let i = 1; i <= scheduledSubjects; i++) {
-                list.push({ name: `Class ${i}`, attended: false });
+                list.push({ name: `Class ${i}`, status: "attended" });
             }
             setSubjectsList(list);
         } else if (fallbackTotal && fallbackTotal > 0) {
             const list = [];
             for (let i = 1; i <= fallbackTotal; i++) {
-                list.push({ name: `Class ${i}`, attended: i <= (fallbackAttended || 0) });
+                list.push({
+                    name: `Class ${i}`,
+                    status: i <= (fallbackAttended || 0) ? "attended" : "missed"
+                });
             }
             setSubjectsList(list);
         } else {
@@ -122,9 +125,9 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         }
     }
 
-    function setSubjectAttended(index, isAttended) {
+    function setSubjectStatus(index, newStatus) {
         const updated = [...subjectsList];
-        updated[index] = { ...updated[index], attended: isAttended };
+        updated[index] = { ...updated[index], status: newStatus };
         setSubjectsList(updated);
     }
 
@@ -132,7 +135,7 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         e.preventDefault();
         const trimmed = customSubjectInput.trim();
         if (!trimmed) return;
-        setSubjectsList([...subjectsList, { name: trimmed, attended: true }]);
+        setSubjectsList([...subjectsList, { name: trimmed, status: "attended" }]);
         setCustomSubjectInput("");
     }
 
@@ -141,7 +144,10 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
     }
 
     const totalCount = subjectsList.length;
-    const attendedCount = subjectsList.filter(s => s.attended).length;
+    const attendedCount = subjectsList.filter(s => s.status === "attended").length;
+    const missedCount = subjectsList.filter(s => s.status === "missed").length;
+    const cancelledCount = subjectsList.filter(s => s.status === "cancelled").length;
+    const heldCount = totalCount - cancelledCount;
 
     async function handleSave() {
         if (!selectedDate) return;
@@ -151,12 +157,12 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
             const dateKey = formatDateKey(selectedDate);
             const formattedSubjects = subjectsList.map(s => ({
                 name: s.name,
-                status: s.attended ? "attended" : "missed"
+                status: s.status || "attended"
             }));
 
             await saveDay({
                 date: dateKey,
-                totalClasses: totalCount,
+                totalClasses: heldCount,
                 attendedClasses: attendedCount,
                 subjects: formattedSubjects
             });
@@ -179,12 +185,8 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         handleDayClick(today);
     }
 
-    function handleMarkAllAttended() {
-        setSubjectsList((prev) => prev.map((s) => ({ ...s, attended: true })));
-    }
-
-    function handleMarkAllMissed() {
-        setSubjectsList((prev) => prev.map((s) => ({ ...s, attended: false })));
+    function handleMarkAllStatus(status) {
+        setSubjectsList((prev) => prev.map((s) => ({ ...s, status })));
     }
 
     const { fullyAttended, partiallyMissed, noneAttended } = buildDayStatusModifiers();
@@ -225,11 +227,14 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
 
                         {subjectsList.length > 0 && (
                             <div className="checklist-quick-actions">
-                                <button type="button" className="quick-action-btn btn-all-attended" onClick={handleMarkAllAttended}>
-                                    ✓ Mark All Attended
+                                <button type="button" className="quick-action-btn btn-all-attended" onClick={() => handleMarkAllStatus("attended")}>
+                                    ✓ All Attended
                                 </button>
-                                <button type="button" className="quick-action-btn btn-all-missed" onClick={handleMarkAllMissed}>
-                                    ✕ Mark All Missed
+                                <button type="button" className="quick-action-btn btn-all-missed" onClick={() => handleMarkAllStatus("missed")}>
+                                    ✕ All Missed
+                                </button>
+                                <button type="button" className="quick-action-btn btn-all-cancelled" onClick={() => handleMarkAllStatus("cancelled")}>
+                                    🚫 All Cancelled
                                 </button>
                             </div>
                         )}
@@ -241,29 +246,39 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                             {subjectsList.map((sub, idx) => (
                                 <div
                                     key={idx}
-                                    className={`subject-row ${sub.attended ? "is-attended" : "is-missed"}`}
-                                    onClick={() => setSubjectAttended(idx, !sub.attended)}
+                                    className={`subject-row status-${sub.status || "attended"}`}
                                 >
                                     <span className="subject-name">{sub.name}</span>
-                                    <div className="row-controls">
+                                    <div className="status-pill-group">
                                         <button
                                             type="button"
-                                            className={`status-toggle ${sub.attended ? "attended" : "missed"}`}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setSubjectAttended(idx, !sub.attended);
-                                            }}
+                                            className={`pill-btn pill-attended ${sub.status === "attended" ? "active" : ""}`}
+                                            onClick={() => setSubjectStatus(idx, "attended")}
+                                            title="Attended class"
                                         >
-                                            {sub.attended ? "✓ Attended" : "✕ Missed"}
+                                            ✓ Attended
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`pill-btn pill-missed ${sub.status === "missed" ? "active" : ""}`}
+                                            onClick={() => setSubjectStatus(idx, "missed")}
+                                            title="Missed class"
+                                        >
+                                            ✕ Missed
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`pill-btn pill-cancelled ${sub.status === "cancelled" ? "active" : ""}`}
+                                            onClick={() => setSubjectStatus(idx, "cancelled")}
+                                            title="Class Cancelled (Excluded from attendance percentage)"
+                                        >
+                                            🚫 Cancelled
                                         </button>
                                         <button
                                             type="button"
                                             className="remove-row-btn"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleRemoveSubjectRow(idx);
-                                            }}
-                                            title="Remove"
+                                            onClick={() => handleRemoveSubjectRow(idx)}
+                                            title="Remove class"
                                         >
                                             ×
                                         </button>
@@ -284,9 +299,12 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                         </form>
 
                         <div className="checklist-stats">
-                            <div className="stat-pill">Total: <strong>{totalCount}</strong></div>
                             <div className="stat-pill pill-good">Attended: <strong>{attendedCount}</strong></div>
-                            <div className="stat-pill pill-bad">Missed: <strong>{totalCount - attendedCount}</strong></div>
+                            <div className="stat-pill pill-bad">Missed: <strong>{missedCount}</strong></div>
+                            {cancelledCount > 0 && (
+                                <div className="stat-pill pill-cancelled-stat">Cancelled: <strong>{cancelledCount}</strong></div>
+                            )}
+                            <div className="stat-pill">Held: <strong>{heldCount}</strong></div>
                         </div>
 
                         <button className="save-day-record-btn" onClick={handleSave} disabled={saving}>
