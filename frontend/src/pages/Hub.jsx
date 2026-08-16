@@ -268,27 +268,60 @@ function Hub({ user, onLogout }) {
                             />
 
                             <div className="hub-side-stack">
-                                <div className="hub-panel">
-                                    <h3 className="hub-panel-title">Today's Classes</h3>
+                                <div className="hub-panel hub-classes-panel">
+                                    <div className="hub-panel-header-row">
+                                        <h3 className="hub-panel-title">Classes Today</h3>
+                                        {todaysClasses.length > 0 && (
+                                            <span className="hub-class-count-badge">
+                                                {todaysClasses.length} {todaysClasses.length === 1 ? "class" : "classes"}
+                                            </span>
+                                        )}
+                                    </div>
+
                                     {todaysClasses.length === 0 ? (
-                                        <p className="hub-panel-empty">
-                                            No classes scheduled for today.
-                                            <Link to="/attendance"> Set up timetable →</Link>
-                                        </p>
+                                        <div className="hub-classes-empty-box">
+                                            <p className="hub-panel-empty">
+                                                No classes scheduled for today on your weekly timetable.
+                                            </p>
+                                            <Link to="/attendance" className="hub-classes-empty-link">
+                                                📅 Manage Timetable →
+                                            </Link>
+                                        </div>
                                     ) : (
-                                        <ul className="hub-class-list">
-                                            {todaysClasses.map((subject, i) => (
-                                                <li key={i} className="hub-class-item">
-                                                    <span className="hub-class-dot" />
-                                                    {subject}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-                                    {todayLogged && (
-                                        <p className="hub-attendance-logged">
-                                            Logged: {todayLogged.attendedClasses}/{todayLogged.totalClasses} attended
-                                        </p>
+                                        <>
+                                            <ul className="hub-class-list">
+                                                {todaysClasses.map((subject, i) => (
+                                                    <li key={i} className="hub-class-item">
+                                                        <div className="hub-class-left">
+                                                            <span className="hub-class-dot" />
+                                                            <span className="hub-class-name">{subject}</span>
+                                                        </div>
+                                                        <Link
+                                                            to={`/study?subject=${encodeURIComponent(subject)}`}
+                                                            className="hub-class-study-link"
+                                                            title={`Start study session for ${subject}`}
+                                                        >
+                                                            ⏱️ Focus
+                                                        </Link>
+                                                    </li>
+                                                ))}
+                                            </ul>
+
+                                            <div className="hub-attendance-crosslink-footer">
+                                                {todayLogged ? (
+                                                    <p className="hub-attendance-logged">
+                                                        ✓ Logged today: {todayLogged.attendedClasses}/{todayLogged.totalClasses} attended
+                                                    </p>
+                                                ) : (
+                                                    <p className="hub-attendance-unlogged">
+                                                        ⚠️ Today's attendance pending
+                                                    </p>
+                                                )}
+                                                <Link to="/attendance" className="hub-smart-attendance-btn">
+                                                    {todayLogged ? "Update Attendance Log" : "Log Today's Attendance →"}
+                                                </Link>
+                                            </div>
+                                        </>
                                     )}
                                 </div>
 

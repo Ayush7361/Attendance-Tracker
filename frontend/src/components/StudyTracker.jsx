@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 
 const DEFAULT_SUBJECTS = [
     "Mathematics",
@@ -19,9 +20,25 @@ function formatStartTime(date) {
     return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 }
 
-function StudyTracker({ availableSubjects = [], onSessionComplete }) {
+function isThisWeek(dateString) {
+    if (!dateString) return false;
+    const d = new Date(dateString);
+    const today = new Date();
+    const day = today.getDay();
+    const diffToMon = today.getDate() - day + (day === 0 ? -6 : 1);
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(diffToMon);
+    startOfWeek.setHours(0, 0, 0, 0);
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(endOfWeek.getDate() + 7);
+    return d >= startOfWeek && d < endOfWeek;
+}
+
+function StudyTracker({ availableSubjects = [], deadlines = [], initialSubject = "", onSessionComplete }) {
     const subjects = availableSubjects.length > 0 ? availableSubjects : DEFAULT_SUBJECTS;
-    const [selectedSubject, setSelectedSubject] = useState(subjects[0] || "General Study");
+    
+    const initialMatched = initialSubject && subjects.find(s => s.toLowerCase() === initialSubject.toLowerCase());
+    const [selectedSubject, setSelectedSubject] = useState(initialMatched || subjects[0] || "General Study");
 
     // Mode: "stopwatch" or "custom"
     const [mode, setMode] = useState("stopwatch");
@@ -40,10 +57,17 @@ function StudyTracker({ availableSubjects = [], onSessionComplete }) {
 
     // Synchronize subject selection
     useEffect(() => {
+        if (initialSubject) {
+            const matched = subjects.find(s => s.toLowerCase() === initialSubject.toLowerCase());
+            if (matched) {
+                setSelectedSubject(matched);
+                return;
+            }
+        }
         if (subjects.length > 0 && !subjects.includes(selectedSubject)) {
             setSelectedSubject(subjects[0]);
         }
-    }, [availableSubjects]);
+    }, [availableSubjects, initialSubject]);
 
     // Timer Interval Effect
     useEffect(() => {
@@ -249,6 +273,33 @@ function StudyTracker({ availableSubjects = [], onSessionComplete }) {
                     ))}
                 </select>
             </div>
+
+            {/* Smart Cross-Link Banner for Subject Deadlines */}
+            {(() => {
+                const subjectPending = deadlines.filter(
+                    (d) => !d.completed && d.subject && d.subject.trim().toLowerCase() === selectedSubject.trim().toLowerCase()
+                );
+                const dueThisWeek = subjectPending.filter((d) => isThisWeek(d.dueDate)).length;
+                const totalSubject = subjectPending.length;
+
+                if (totalSubject === 0) return null;
+
+                return (
+                    <div className="study-smart-banner">
+                        <div className="smart-crosslink-badge-pill">🔗 SMART CROSS-LINK</div>
+                        <span className="study-smart-banner-text">
+                            {dueThisWeek > 0 ? (
+                                <>You have <strong>{dueThisWeek} {dueThisWeek === 1 ? "assignment" : "assignments"} due this week</strong> for {selectedSubject}</>
+                            ) : (
+                                <>You have <strong>{totalSubject} upcoming {totalSubject === 1 ? "task" : "tasks"}</strong> for {selectedSubject}</>
+                            )}
+                        </span>
+                        <Link to="/deadlines" className="study-smart-banner-link">
+                            View Assignments →
+                        </Link>
+                    </div>
+                );
+            })()}
 
             {/* Status Pill Badge */}
             <div className={`hero-status-pill ${sessionState === "break" ? "break-pill" : ""}`}>

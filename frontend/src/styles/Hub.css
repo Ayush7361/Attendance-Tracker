@@ -210,10 +210,100 @@
 .hub-class-item {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
     font-size: 0.9rem;
     color: #e2e8f0;
     font-weight: 500;
+    padding: 4px 0;
+}
+
+.hub-panel-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.hub-class-count-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.15);
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+.hub-class-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.hub-class-study-link {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.12);
+    border: 1px solid rgba(52, 211, 153, 0.25);
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.hub-class-study-link:hover {
+    background: rgba(52, 211, 153, 0.25);
+    transform: translateY(-1px);
+}
+
+.hub-attendance-crosslink-footer {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hub-attendance-unlogged {
+    font-size: 0.8rem;
+    color: #fbbf24;
+    font-weight: 600;
+    margin: 0;
+}
+
+.hub-smart-attendance-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.hub-smart-attendance-btn:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.hub-classes-empty-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hub-classes-empty-link {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #34d399;
+    text-decoration: none;
 }
 
 .hub-class-dot {
@@ -225,7 +315,7 @@
 }
 
 .hub-attendance-logged {
-    margin-top: 12px;
+    margin: 0;
     font-size: 0.8rem;
     color: #34d399;
     font-weight: 600;

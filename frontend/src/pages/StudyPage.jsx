@@ -1,15 +1,21 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import StudyTracker from "../components/StudyTracker";
 import StudyStatsCard from "../components/StudyStatsCard";
 import StudyHistoryPanel from "../components/StudyHistoryPanel";
 import { getSchedule } from "../api/attendanceApi";
 import { getStudySessions, saveStudySession, deleteStudySession } from "../api/studyApi";
+import { getDeadlines } from "../api/deadlinesApi";
 import "../styles/Study.css";
 
 function StudyPage({ user, onLogout }) {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const initialSubject = queryParams.get("subject") || "";
+
     const [availableSubjects, setAvailableSubjects] = useState([]);
     const [sessions, setSessions] = useState([]);
+    const [deadlines, setDeadlines] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -41,6 +47,13 @@ function StudyPage({ user, onLogout }) {
             }
         } catch (err) {
             console.error("Failed to load schedule subjects for study tracker", err);
+        }
+
+        try {
+            const dlRes = await getDeadlines();
+            setDeadlines(dlRes.data || []);
+        } catch (err) {
+            console.error("Failed to load deadlines for study tracker", err);
         }
 
         try {
@@ -108,6 +121,8 @@ function StudyPage({ user, onLogout }) {
                 {/* Hero Active Session Card */}
                 <StudyTracker
                     availableSubjects={availableSubjects}
+                    deadlines={deadlines}
+                    initialSubject={initialSubject}
                     onSessionComplete={handleSessionComplete}
                 />
 

@@ -208,3 +208,75 @@
 }
 
 .dl-form input:focus, .dl-form select:focus, .dl-form textarea:focus { outline: none; border-color: #2f6b4f; }
+
+/* Smart Cross-Link Styles */
+.smart-crosslink-card {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(124, 58, 237, 0.15));
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.smart-crosslink-badge-pill {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.smart-crosslink-content {
+    flex: 1;
+    min-width: 220px;
+}
+
+.smart-crosslink-content h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #f3f4f6;
+    margin: 0 0 4px 0;
+}
+
+.smart-crosslink-content p {
+    font-size: 13px;
+    color: #d1d5db;
+    margin: 0;
+}
+
+.smart-crosslink-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #6366f1;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.smart-crosslink-link:hover {
+    background: #4f46e5;
+    transform: translateY(-1px);
+}
+
+.dl-btn-study {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    color: #ffffff !important;
+}
+
+.dl-btn-study:hover {
+    background: linear-gradient(135deg, #059669, #047857) !important;
+}

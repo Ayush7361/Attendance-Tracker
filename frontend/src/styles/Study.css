@@ -193,6 +193,51 @@
     min-height: 44px;
 }
 
+/* Smart Cross-Link Banner for Subject Deadlines */
+.study-smart-banner {
+    width: 100%;
+    max-width: 600px;
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(124, 58, 237, 0.1));
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.study-smart-banner-text {
+    font-size: 0.88rem;
+    color: #1e293b;
+    flex: 1;
+    min-width: 200px;
+    text-align: left;
+}
+
+.study-smart-banner-text strong {
+    color: #4f46e5;
+    font-weight: 700;
+}
+
+.study-smart-banner-link {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: #6366f1;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.15s ease;
+    white-space: nowrap;
+}
+
+.study-smart-banner-link:hover {
+    background: #4f46e5;
+}
+
 /* Status Pill Badge ("NOW STUDYING · [Subject]") */
 .hero-status-pill {
     font-size: 0.76rem;
