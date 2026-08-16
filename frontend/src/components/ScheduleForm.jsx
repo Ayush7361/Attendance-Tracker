@@ -15,6 +15,7 @@ function ScheduleForm({ schedule, onChange, onSave }) {
     const [subjectInput, setSubjectInput] = useState("");
 
     function getDaySubjects(dayKey) {
+        if (!schedule || typeof schedule !== "object") return [];
         const val = schedule[dayKey];
         if (Array.isArray(val)) {
             return val;
@@ -36,14 +37,22 @@ function ScheduleForm({ schedule, onChange, onSave }) {
 
         const currentList = getDaySubjects(activeDay);
         const updated = [...currentList, trimmed];
-        onChange(activeDay, updated);
+        const newSchedule = {
+            ...schedule,
+            [activeDay]: updated
+        };
+        if (onChange) onChange(newSchedule);
         setSubjectInput("");
     }
 
     function handleRemoveSubject(indexToRemove) {
         const currentList = getDaySubjects(activeDay);
         const updated = currentList.filter((_, idx) => idx !== indexToRemove);
-        onChange(activeDay, updated);
+        const newSchedule = {
+            ...schedule,
+            [activeDay]: updated
+        };
+        if (onChange) onChange(newSchedule);
     }
 
     const activeSubjects = getDaySubjects(activeDay);

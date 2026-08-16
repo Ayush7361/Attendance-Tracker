@@ -179,6 +179,14 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         handleDayClick(today);
     }
 
+    function handleMarkAllAttended() {
+        setSubjectsList((prev) => prev.map((s) => ({ ...s, attended: true })));
+    }
+
+    function handleMarkAllMissed() {
+        setSubjectsList((prev) => prev.map((s) => ({ ...s, attended: false })));
+    }
+
     const { fullyAttended, partiallyMissed, noneAttended } = buildDayStatusModifiers();
     const isTodaySelected = selectedDate && formatDateKey(selectedDate) === formatDateKey(new Date());
 
@@ -214,6 +222,17 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                                 {isTodaySelected && <span className="today-badge">Today</span>}
                             </h3>
                         </div>
+
+                        {subjectsList.length > 0 && (
+                            <div className="checklist-quick-actions">
+                                <button type="button" className="quick-action-btn btn-all-attended" onClick={handleMarkAllAttended}>
+                                    ✓ Mark All Attended
+                                </button>
+                                <button type="button" className="quick-action-btn btn-all-missed" onClick={handleMarkAllMissed}>
+                                    ✕ Mark All Missed
+                                </button>
+                            </div>
+                        )}
 
                         <div className="subjects-checklist">
                             {subjectsList.length === 0 && (
@@ -265,8 +284,9 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                         </form>
 
                         <div className="checklist-stats">
-                            <div className="stat-pill">Total Classes: <strong>{totalCount}</strong></div>
-                            <div className="stat-pill">Attended: <strong>{attendedCount}</strong></div>
+                            <div className="stat-pill">Total: <strong>{totalCount}</strong></div>
+                            <div className="stat-pill pill-good">Attended: <strong>{attendedCount}</strong></div>
+                            <div className="stat-pill pill-bad">Missed: <strong>{totalCount - attendedCount}</strong></div>
                         </div>
 
                         <button className="save-day-record-btn" onClick={handleSave} disabled={saving}>
