@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AcademicHealthScore from "../components/AcademicHealthScore";
 import UnifiedActivityForecast from "../components/UnifiedActivityForecast";
+import MobileNotificationDrawer from "../components/MobileNotificationDrawer";
 import { getSchedule, getOverallSummary, getDay } from "../api/attendanceApi";
 import { getDeadlines, getDeadlineAnalytics, getWorkloadForecast } from "../api/deadlinesApi";
 import { getStudySessions } from "../api/studyApi";
@@ -188,9 +189,17 @@ function Hub({ user, onLogout }) {
                         <p className="app-subtitle">Command Center</p>
                     </div>
                 </div>
-                <button className="logout-btn" onClick={onLogout}>
-                    Logout
-                </button>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <MobileNotificationDrawer
+                        schedule={schedule}
+                        todayLogged={todayLogged}
+                        deadlines={deadlines}
+                        events={events}
+                    />
+                    <button className="logout-btn" onClick={onLogout}>
+                        Logout
+                    </button>
+                </div>
             </header>
 
             <main className="hub-container">

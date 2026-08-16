@@ -1,0 +1,293 @@
+/* ==========================================================================
+   MOBILE NOTIFICATION DRAWER & PHONE ALERTS STYLES
+   Slide-Up Phone Bottom Sheet & Native Push Controls
+   ========================================================================== */
+
+.mobile-notif-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Bell Icon Header Button */
+.mobile-bell-btn {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.mobile-bell-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+}
+
+.bell-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.bell-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #f87171;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #0f172a;
+    box-shadow: 0 0 8px rgba(248, 113, 113, 0.6);
+    animation: bellPulse 2s infinite;
+}
+
+@keyframes bellPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+/* Slide-Up Overlay Sheet */
+.mobile-drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    animation: fadeInOverlay 0.2s ease-out;
+}
+
+@keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.mobile-drawer-sheet {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    width: 100%;
+    max-width: 540px;
+    max-height: 85vh;
+    padding: 16px 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.5);
+    animation: slideUpSheet 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    color: #f8fafc;
+}
+
+@keyframes slideUpSheet {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.drawer-handle {
+    width: 38px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    align-self: center;
+    margin-bottom: -4px;
+}
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.drawer-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 2px 0;
+}
+
+.drawer-subtitle {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.drawer-close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    color: #cbd5e1;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Phone Native Push Permission Card */
+.permission-banner-card {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(147, 51, 234, 0.15));
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    border-radius: 14px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.perm-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.perm-icon {
+    font-size: 1.5rem;
+}
+
+.perm-info h4 {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 2px 0;
+}
+
+.perm-info p {
+    font-size: 0.78rem;
+    color: #cbd5e1;
+    margin: 0;
+}
+
+.perm-enable-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: #ffffff;
+    border: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+/* Notification Items List */
+.drawer-alerts-list {
+    overflow-y: auto;
+    max-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 4px;
+}
+
+.drawer-empty-box {
+    text-align: center;
+    padding: 30px 10px;
+    color: #94a3b8;
+    font-size: 0.88rem;
+}
+
+.empty-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.drawer-alert-item {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.drawer-alert-item:hover {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.urgent-item {
+    border-color: rgba(248, 113, 113, 0.4);
+    background: rgba(248, 113, 113, 0.08);
+}
+
+.alert-item-icon {
+    font-size: 1.35rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.alert-item-body {
+    flex: 1;
+}
+
+.alert-item-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 2px 0;
+}
+
+.alert-item-msg {
+    font-size: 0.78rem;
+    color: #cbd5e1;
+    margin: 0;
+}
+
+.alert-dismiss-btn {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+.alert-dismiss-btn:hover {
+    color: #f87171;
+}
+
+/* Footer Actions */
+.drawer-footer-actions {
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.clear-all-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.clear-all-btn:hover {
+    color: #f87171;
+}
