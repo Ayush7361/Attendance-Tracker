@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import {
     initServiceWorker,
@@ -68,12 +69,10 @@ function MobileNotificationDrawer({ schedule, todayLogged, deadlines = [], event
                 {unreadCount > 0 && <span className="bell-badge">{unreadCount}</span>}
             </button>
 
-            {/* Slide-Up Phone Sheet Drawer Overlay */}
-            {isOpen && (
+            {/* Central Popup Modal (Portaled to document.body) */}
+            {isOpen && createPortal(
                 <div className="mobile-drawer-overlay" onClick={() => setIsOpen(false)}>
                     <div className="mobile-drawer-sheet" onClick={(e) => e.stopPropagation()}>
-                        <div className="drawer-handle" />
-
                         {/* Sheet Header */}
                         <div className="drawer-header">
                             <div>
@@ -161,7 +160,8 @@ function MobileNotificationDrawer({ schedule, todayLogged, deadlines = [], event
                             </div>
                         )}
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );
