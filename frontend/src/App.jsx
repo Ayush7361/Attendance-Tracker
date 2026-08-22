@@ -14,6 +14,8 @@ import MobileNav from "./components/MobileNav";
 import { logoutUser } from "./api/authApi";
 import "./App.css";
 
+import GlobalMiniTimer from "./components/GlobalMiniTimer";
+
 function App() {
     const { user, logout } = useAuth();
     const [showRegister, setShowRegister] = useState(false);
@@ -33,6 +35,7 @@ function App() {
 
     return (
         <>
+            <GlobalMiniTimer />
             <Routes>
                 <Route path="/" element={<Hub user={user} onLogout={handleLogout} />} />
                 <Route path="/attendance" element={<AttendancePage user={user} onLogout={handleLogout} />} />

@@ -62,6 +62,7 @@ function Hub({ user, onLogout }) {
     const [forecast, setForecast] = useState(null);
     const [sessions, setSessions] = useState([]);
     const [events, setEvents] = useState([]);
+    const [showAnalytics, setShowAnalytics] = useState(false);
 
     useEffect(() => {
         loadDashboard();
@@ -267,100 +268,85 @@ function Hub({ user, onLogout }) {
                             </Link>
                         </div>
 
-                        {/* Health score + main panels */}
-                        <div className="hub-command-grid">
-                            <AcademicHealthScore
-                                score={healthScore}
-                                components={healthScore.components}
-                                belowAttendanceThreshold={healthScore.belowAttendanceThreshold}
-                                attendanceThreshold={healthScore.attendanceThreshold}
-                            />
-
-                            <div className="hub-side-stack">
-                                <div className="hub-panel hub-classes-panel">
-                                    <div className="hub-panel-header-row">
-                                        <h3 className="hub-panel-title">Classes Today</h3>
-                                        {todaysClasses.length > 0 && (
-                                            <span className="hub-class-count-badge">
-                                                {todaysClasses.length} {todaysClasses.length === 1 ? "class" : "classes"}
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    {todaysClasses.length === 0 ? (
-                                        <div className="hub-classes-empty-box">
-                                            <p className="hub-panel-empty">
-                                                No classes scheduled for today on your weekly timetable.
-                                            </p>
-                                            <Link to="/attendance" className="hub-classes-empty-link">
-                                                Manage Timetable →
-                                            </Link>
-                                        </div>
-                                    ) : (
-                                        <>
-                                            <ul className="hub-class-list">
-                                                {todaysClasses.map((subject, i) => (
-                                                    <li key={i} className="hub-class-item">
-                                                        <div className="hub-class-left">
-                                                            <span className="hub-class-dot" />
-                                                            <span className="hub-class-name">{subject}</span>
-                                                        </div>
-                                                        <Link
-                                                            to={`/study?subject=${encodeURIComponent(subject)}`}
-                                                            className="hub-class-study-link"
-                                                            title={`Start study session for ${subject}`}
-                                                        >
-                                                            Focus
-                                                        </Link>
-                                                    </li>
-                                                ))}
-                                            </ul>
-
-                                            <div className="hub-attendance-crosslink-footer">
-                                                {todayLogged ? (
-                                                    <p className="hub-attendance-logged">
-                                                        ✓ Logged today: {todayLogged.attendedClasses}/{todayLogged.totalClasses} attended
-                                                    </p>
-                                                ) : (
-                                                    <p className="hub-attendance-unlogged">
-                                                        ⚠️ Today's attendance pending
-                                                    </p>
-                                                )}
-                                                <Link to="/attendance" className="hub-smart-attendance-btn">
-                                                    {todayLogged ? "Update Attendance Log" : "Log Today's Attendance →"}
-                                                </Link>
-                                            </div>
-                                        </>
+                        {/* Action Center: Classes Today & Coming Up */}
+                        <div className="hub-command-grid hub-action-center-grid">
+                            <div className="hub-panel hub-classes-panel">
+                                <div className="hub-panel-header-row">
+                                    <h3 className="hub-panel-title">Classes Today</h3>
+                                    {todaysClasses.length > 0 && (
+                                        <span className="hub-class-count-badge">
+                                            {todaysClasses.length} {todaysClasses.length === 1 ? "class" : "classes"}
+                                        </span>
                                     )}
                                 </div>
 
-                                <div className="hub-panel">
-                                    <h3 className="hub-panel-title">Coming Up</h3>
-                                    {upcomingDeadlines.length === 0 && !nextExam ? (
-                                        <p className="hub-panel-empty">No upcoming deadlines. You're clear!</p>
-                                    ) : (
-                                        <ul className="hub-upcoming-list">
-                                            {upcomingDeadlines.map((d) => (
-                                                <li key={d._id}>
-                                                    <Link to={`/deadlines/${d._id}`} className="hub-upcoming-item">
-                                                        <span className="hub-upcoming-title">{d.title}</span>
-                                                        <span className={`hub-upcoming-badge ${getUrgencyStatus(d.dueDate, false)}`}>
-                                                            {formatDueDate(d.dueDate)}
-                                                        </span>
+                                {todaysClasses.length === 0 ? (
+                                    <div className="hub-classes-empty-box">
+                                        <p className="hub-panel-empty">
+                                            No classes scheduled for today on your weekly timetable.
+                                        </p>
+                                        <Link to="/attendance" className="hub-classes-empty-link">
+                                            Manage Timetable →
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <ul className="hub-class-list">
+                                            {todaysClasses.map((subject, i) => (
+                                                <li key={i} className="hub-class-item">
+                                                    <div className="hub-class-left">
+                                                        <span className="hub-class-dot" />
+                                                        <span className="hub-class-name">{subject}</span>
+                                                    </div>
+                                                    <Link
+                                                        to={`/study?subject=${encodeURIComponent(subject)}`}
+                                                        className="hub-class-study-link"
+                                                        title={`Start study session for ${subject}`}
+                                                    >
+                                                        Focus
                                                     </Link>
                                                 </li>
                                             ))}
                                         </ul>
-                                    )}
-                                </div>
+
+                                        <div className="hub-attendance-crosslink-footer">
+                                            {todayLogged ? (
+                                                <p className="hub-attendance-logged">
+                                                    ✓ Logged today: {todayLogged.attendedClasses}/{todayLogged.totalClasses} attended
+                                                </p>
+                                            ) : (
+                                                <p className="hub-attendance-unlogged">
+                                                    ⚠️ Today's attendance pending
+                                                </p>
+                                            )}
+                                            <Link to="/attendance" className="hub-smart-attendance-btn">
+                                                {todayLogged ? "Update Attendance Log" : "Log Today's Attendance →"}
+                                            </Link>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+
+                            <div className="hub-panel">
+                                <h3 className="hub-panel-title">Coming Up</h3>
+                                {upcomingDeadlines.length === 0 && !nextExam ? (
+                                    <p className="hub-panel-empty">No upcoming deadlines. You're clear!</p>
+                                ) : (
+                                    <ul className="hub-upcoming-list">
+                                        {upcomingDeadlines.map((d) => (
+                                            <li key={d._id}>
+                                                <Link to={`/deadlines/${d._id}`} className="hub-upcoming-item">
+                                                    <span className="hub-upcoming-title">{d.title}</span>
+                                                    <span className={`hub-upcoming-badge ${getUrgencyStatus(d.dueDate, false)}`}>
+                                                        {formatDueDate(d.dueDate)}
+                                                    </span>
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                             </div>
                         </div>
-
-                        {/* Unified Activity & Workload Forecast */}
-                        <UnifiedActivityForecast
-                            forecastData={forecast}
-                            sessions={sessions}
-                        />
 
                         {/* Module navigation */}
                         <div className="hub-section-label">Modules</div>
@@ -400,6 +386,36 @@ function Hub({ user, onLogout }) {
                                 <p>Subject-tagged focus timer, cycle tracking, and daily analytics.</p>
                                 <span className="hub-card-link">Open →</span>
                             </Link>
+                        </div>
+
+                        {/* Collapsible Performance Insights & Workload Analytics */}
+                        <div className="hub-analytics-collapsible card-panel" style={{ marginTop: "12px" }}>
+                            <button
+                                type="button"
+                                className="analytics-toggle-btn"
+                                onClick={() => setShowAnalytics(!showAnalytics)}
+                            >
+                                <div className="toggle-left">
+                                    <span>📊 Performance Insights & Workload Analytics</span>
+                                    <span className="toggle-sub">Health Score & Workload Pace Forecast</span>
+                                </div>
+                                <span className={`toggle-arrow ${showAnalytics ? "open" : ""}`}>▾</span>
+                            </button>
+
+                            {showAnalytics && (
+                                <div className="analytics-expand-body" style={{ marginTop: "18px", display: "flex", flexDirection: "column", gap: "20px" }}>
+                                    <AcademicHealthScore
+                                        score={healthScore}
+                                        components={healthScore.components}
+                                        belowAttendanceThreshold={healthScore.belowAttendanceThreshold}
+                                        attendanceThreshold={healthScore.attendanceThreshold}
+                                    />
+                                    <UnifiedActivityForecast
+                                        forecastData={forecast}
+                                        sessions={sessions}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </>
                 )}

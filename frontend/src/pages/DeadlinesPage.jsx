@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getDeadlines, getDeadlineAnalytics, getDeadlineSubjects } from "../api/deadlinesApi";
+import { getSemesterEvents, createSemesterEvent, deleteSemesterEvent } from "../api/semesterApi";
 import {
     DEADLINE_TYPES,
     getUrgencyStatus,
@@ -9,8 +10,11 @@ import {
     getSubtaskProgress,
     STATUS_LABELS
 } from "../utils/deadlineUtils";
+import { downloadICS } from "../utils/icsExport";
 import MobileNotificationDrawer from "../components/MobileNotificationDrawer";
+import { useToast } from "../context/ToastContext";
 import "../styles/Deadlines.css";
+import "../styles/Timeline.css";
 
 function OverviewTab({ analytics }) {
     if (!analytics) return <p className="dl-empty">Loading analytics...</p>;
@@ -62,7 +66,119 @@ function OverviewTab({ analytics }) {
     );
 }
 
+function TimelineTab() {
+    const { showToast } = useToast();
+    const [events, setEvents] = useState([]);
+    const [title, setTitle] = useState("");
+    const [date, setDate] = useState("");
+    const [type, setType] = useState("Semester Event");
+
+    useEffect(() => {
+        loadEvents();
+    }, []);
+
+    async function loadEvents() {
+        try {
+            const res = await getSemesterEvents();
+            setEvents(res.data || []);
+        } catch (err) {
+            console.error("Failed to load events", err);
+        }
+    }
+
+    async function handleAdd(e) {
+        e.preventDefault();
+        if (!title.trim() || !date) return;
+        try {
+            await createSemesterEvent({ title: title.trim(), date, type });
+            setTitle("");
+            setDate("");
+            loadEvents();
+            if (showToast) showToast("Semester event added!", "success");
+        } catch (err) {
+            console.error("Failed to add event", err);
+        }
+    }
+
+    async function handleDelete(id) {
+        try {
+            await deleteSemesterEvent(id);
+            loadEvents();
+            if (showToast) showToast("Event removed", "info");
+        } catch (err) {
+            console.error("Failed to delete event", err);
+        }
+    }
+
+    return (
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div className="card-panel">
+                <h3 className="panel-heading">+ Add Semester Event / Exam</h3>
+                <form onSubmit={handleAdd} className="tl-form-row">
+                    <input
+                        type="text"
+                        placeholder="Event Title (e.g. Midterm Exams)"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="tl-input"
+                        required
+                    />
+                    <input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        className="tl-input"
+                        required
+                    />
+                    <select value={type} onChange={(e) => setType(e.target.value)} className="tl-select">
+                        <option value="Semester Event">Semester Event</option>
+                        <option value="Exam">Exam / Quiz</option>
+                        <option value="Important Date">Important Date</option>
+                    </select>
+                    <button type="submit" className="tl-btn-add">+ Add</button>
+                </form>
+            </div>
+
+            <div className="card-panel">
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+                    <h3 className="panel-heading" style={{ margin: 0 }}>Upcoming Milestones</h3>
+                    <button
+                        type="button"
+                        className="dl-btn"
+                        onClick={() => downloadICS(events, "semester_timeline.ics")}
+                        style={{ fontSize: "0.8rem", padding: "6px 12px" }}
+                    >
+                        📅 Export Timeline (.ics)
+                    </button>
+                </div>
+
+                <div className="tl-event-list">
+                    {events.length === 0 ? (
+                        <p className="tl-empty">No semester events logged yet.</p>
+                    ) : (
+                        events.map((ev) => (
+                            <div key={ev._id} className="tl-event-card">
+                                <div className="tl-event-info">
+                                    <div className="tl-event-top">
+                                        <span className="tl-event-title">{ev.title}</span>
+                                        <span className="tl-type-badge badge-semester">{ev.type}</span>
+                                    </div>
+                                    <div className="tl-event-meta">Date: {ev.date}</div>
+                                </div>
+                                <button type="button" className="tl-delete-btn" onClick={() => handleDelete(ev._id)}>
+                                    ✕
+                                </button>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
 function DeadlinesPage({ user, onLogout }) {
+    const { showToast } = useToast();
     const [tab, setTab] = useState("list");
     const [typeFilter, setTypeFilter] = useState("All");
     const [subjectFilter, setSubjectFilter] = useState("All");
@@ -111,6 +227,15 @@ function DeadlinesPage({ user, onLogout }) {
         }
     }
 
+    function handleExportCalendar() {
+        if (deadlines.length === 0) {
+            if (showToast) showToast("No deadlines available to export", "info");
+            return;
+        }
+        downloadICS(deadlines, "my_deadlines.ics");
+        if (showToast) showToast("Downloaded my_deadlines.ics", "success");
+    }
+
     return (
         <div className="app-layout deadlines-page">
             <header className="app-header">
@@ -131,12 +256,15 @@ function DeadlinesPage({ user, onLogout }) {
                 <Link to="/" className="back-link">← Back to Dashboard</Link>
 
                 <div className="page-header-box">
-                    <h2 className="page-title">Deadlines & Tasks</h2>
-                    <p className="page-subtitle">Subtask checklists, urgency filters, and workload analytics.</p>
+                    <h2 className="page-title">Deadlines & Academic Hub</h2>
+                    <p className="page-subtitle">Tasks, subtask checklists, calendar export, and semester timeline.</p>
                 </div>
 
-                <div className="dl-toolbar">
+                <div className="dl-toolbar" style={{ justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
                     <Link to="/deadlines/new" className="dl-btn dl-btn-primary">+ Add Deadline</Link>
+                    <button type="button" className="dl-btn" onClick={handleExportCalendar}>
+                        📅 Export to Calendar (.ics)
+                    </button>
                 </div>
 
                 <div className="dl-tabs">
@@ -151,6 +279,12 @@ function DeadlinesPage({ user, onLogout }) {
                         onClick={() => setTab("kanban")}
                     >
                         📋 Kanban Board
+                    </button>
+                    <button
+                        className={"dl-tab" + (tab === "timeline" ? " active" : "")}
+                        onClick={() => setTab("timeline")}
+                    >
+                        📅 Semester Timeline
                     </button>
                     <button
                         className={"dl-tab" + (tab === "overview" ? " active" : "")}
@@ -292,6 +426,8 @@ function DeadlinesPage({ user, onLogout }) {
                         })}
                     </div>
                 )}
+
+                {tab === "timeline" && <TimelineTab />}
 
                 {tab === "overview" && <OverviewTab analytics={analytics} />}
             </main>

@@ -749,3 +749,65 @@
 .hub-card:hover .hub-card-link {
     color: #6ee7b7;
 }
+
+/* Collapsible Performance Analytics Section */
+.analytics-toggle-btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 6px 0;
+    text-align: left;
+}
+
+.toggle-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.toggle-left > span:first-child {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.toggle-sub {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.toggle-arrow {
+    font-size: 1.2rem;
+    color: #34d399;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle-arrow.open {
+    transform: rotate(180deg);
+}
+
+.analytics-expand-body {
+    animation: fadeInExpand 0.3s ease;
+}
+
+@keyframes fadeInExpand {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.hub-card:hover .hub-card-link {
+    color: #6ee7b7;
+}

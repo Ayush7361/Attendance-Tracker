@@ -1,0 +1,114 @@
+.global-mini-timer {
+    position: fixed;
+    top: 76px;
+    right: 20px;
+    z-index: 990;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 12px rgba(16, 185, 129, 0.2);
+    border-radius: 999px;
+    padding: 6px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    animation: miniTimerPop 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 768px) {
+    .global-mini-timer {
+        top: auto;
+        bottom: 84px;
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
+        width: calc(100% - 32px);
+        max-width: 440px;
+        justify-content: space-between;
+        padding: 8px 16px;
+    }
+}
+
+@keyframes miniTimerPop {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.mini-timer-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mini-timer-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+    animation: timerPulse 1.5s infinite;
+}
+
+@keyframes timerPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.3); }
+}
+
+.mini-timer-subject {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #94a3b8;
+    max-width: 110px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mini-timer-clock {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #ffffff;
+    font-family: monospace;
+    letter-spacing: 0.05em;
+}
+
+.mini-timer-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mini-timer-btn {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f8fafc;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.mini-timer-btn:hover {
+    background: rgba(16, 185, 129, 0.3);
+    color: #ffffff;
+}
+
+.mini-timer-link {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #34d399;
+    text-decoration: none;
+}
+
+.mini-timer-link:hover {
+    text-decoration: underline;
+}
