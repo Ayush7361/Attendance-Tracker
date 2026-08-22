@@ -10,6 +10,7 @@ import DeadlineDetailPage from "./pages/DeadlineDetailPage";
 import DeadlineFormPage from "./pages/DeadlineFormPage";
 import AcademicTimelinePage from "./pages/AcademicTimelinePage";
 import StudyPage from "./pages/StudyPage";
+import MobileNav from "./components/MobileNav";
 import { logoutUser } from "./api/authApi";
 import "./App.css";
 
@@ -31,16 +32,19 @@ function App() {
     }
 
     return (
-        <Routes>
-            <Route path="/" element={<Hub user={user} onLogout={handleLogout} />} />
-            <Route path="/attendance" element={<AttendancePage user={user} onLogout={handleLogout} />} />
-            <Route path="/deadlines" element={<DeadlinesPage user={user} onLogout={handleLogout} />} />
-            <Route path="/deadlines/new" element={<DeadlineFormPage user={user} onLogout={handleLogout} />} />
-            <Route path="/deadlines/:id/edit" element={<DeadlineFormPage user={user} onLogout={handleLogout} />} />
-            <Route path="/deadlines/:id" element={<DeadlineDetailPage user={user} onLogout={handleLogout} />} />
-            <Route path="/timeline" element={<AcademicTimelinePage user={user} onLogout={handleLogout} />} />
-            <Route path="/study" element={<StudyPage user={user} onLogout={handleLogout} />} />
-        </Routes>
+        <>
+            <Routes>
+                <Route path="/" element={<Hub user={user} onLogout={handleLogout} />} />
+                <Route path="/attendance" element={<AttendancePage user={user} onLogout={handleLogout} />} />
+                <Route path="/deadlines" element={<DeadlinesPage user={user} onLogout={handleLogout} />} />
+                <Route path="/deadlines/new" element={<DeadlineFormPage user={user} onLogout={handleLogout} />} />
+                <Route path="/deadlines/:id/edit" element={<DeadlineFormPage user={user} onLogout={handleLogout} />} />
+                <Route path="/deadlines/:id" element={<DeadlineDetailPage user={user} onLogout={handleLogout} />} />
+                <Route path="/timeline" element={<AcademicTimelinePage user={user} onLogout={handleLogout} />} />
+                <Route path="/study" element={<StudyPage user={user} onLogout={handleLogout} />} />
+            </Routes>
+            <MobileNav />
+        </>
     );
 }
 

@@ -645,7 +645,8 @@
 /* Mobile Breakpoints */
 @media (max-width: 600px) {
     .study-hero-card {
-        padding: 26px 18px;
+        padding: 20px 14px;
+        border-radius: 16px;
     }
 
     .hero-card-header {
@@ -671,11 +672,22 @@
     }
 
     .hero-timer-display {
-        font-size: 3.2rem;
+        font-size: 3rem;
+    }
+
+    .hero-action-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .hero-action-buttons button {
+        width: 100%;
     }
 
     .study-cards-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
     }
 
     .history-filter-bar {
@@ -686,3 +698,4 @@
         width: 100%;
     }
 }
+

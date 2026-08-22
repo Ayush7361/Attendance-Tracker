@@ -706,9 +706,31 @@
 
 /* Mobile Breakpoints */
 @media (max-width: 768px) {
+    .month-picker-bar {
+        padding: 12px 14px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .card {
+        padding: 14px 12px;
+        border-radius: 14px;
+    }
+
+    .card-value {
+        font-size: 1.6rem;
+    }
+
     .calendar-body {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 14px;
+    }
+
+    .card-panel {
+        padding: 14px 16px;
     }
 
     .add-extra-subject-form,
@@ -728,4 +750,14 @@
     .reset-btn {
         width: 100%;
     }
+
+    .subject-row {
+        padding: 12px 14px;
+    }
+
+    .status-toggle {
+        padding: 6px 12px;
+        font-size: 0.78rem;
+    }
 }
+

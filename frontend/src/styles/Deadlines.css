@@ -550,3 +550,31 @@
     padding: 2px 6px;
     border-radius: 4px;
 }
+
+@media (max-width: 640px) {
+    .dl-header-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .dl-filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .dl-search-input {
+        width: 100%;
+    }
+
+    .dl-item-card {
+        padding: 14px 12px;
+    }
+
+    .dl-item-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+}
