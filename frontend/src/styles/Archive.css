@@ -1,0 +1,164 @@
+.archive-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.archive-stat-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: rgba(15, 23, 42, 0.6);
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.archive-stat-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #94a3b8;
+}
+
+.archive-stat-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.value-cgpa {
+    color: #f59e0b;
+}
+
+.archive-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+}
+
+.archive-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.archive-field label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+}
+
+.archive-input {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(15, 23, 42, 0.8);
+    color: #ffffff;
+    font-size: 0.88rem;
+    outline: none;
+    min-height: 44px;
+}
+
+.archive-input:focus {
+    border-color: #f59e0b;
+}
+
+.archive-submit-btn {
+    padding: 12px 20px;
+    border-radius: 10px;
+    background: #f59e0b;
+    color: #0f172a;
+    border: none;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    margin-top: 4px;
+    min-height: 46px;
+    transition: background 0.15s ease;
+}
+
+.archive-submit-btn:hover {
+    background: #d97706;
+    color: #ffffff;
+}
+
+.archive-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.archive-item-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.archive-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.archive-item-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.archive-item-year {
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.archive-delete-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.archive-delete-btn:hover {
+    color: #ef4444;
+}
+
+.archive-item-metrics {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.archive-metric-badge {
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+.badge-gpa {
+    background: rgba(245, 158, 11, 0.18);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-att {
+    background: rgba(16, 185, 129, 0.18);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-study {
+    background: rgba(99, 102, 241, 0.18);
+    color: #818cf8;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.archive-item-notes {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    font-style: italic;
+}

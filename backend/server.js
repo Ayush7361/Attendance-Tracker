@@ -10,6 +10,8 @@ const dayRoutes = require("./routes/dayRoutes");
 const deadlineRoutes = require("./routes/deadlineRoutes");
 const semesterRoutes = require("./routes/semesterRoutes");
 const studyRoutes = require("./routes/studyRoutes");
+const gpaRoutes = require("./routes/gpaRoutes");
+const archiveRoutes = require("./routes/archiveRoutes");
 
 const app = express();
 
@@ -26,6 +28,8 @@ app.use("/api/days", dayRoutes);
 app.use("/api/deadlines", deadlineRoutes);
 app.use("/api/semester-events", semesterRoutes);
 app.use("/api/study-sessions", studyRoutes);
+app.use("/api/gpa", gpaRoutes);
+app.use("/api/archive", archiveRoutes);
 
 const PORT = process.env.PORT || 5000;
 

@@ -349,7 +349,7 @@ function Hub({ user, onLogout }) {
                         </div>
 
                         {/* Module navigation */}
-                        <div className="hub-section-label">Modules</div>
+                        <div className="hub-section-label">Modules & Services</div>
                         <div className="hub-grid hub-grid-compact">
                             <Link to="/attendance" className="hub-card">
                                 <div className="hub-card-header">
@@ -365,16 +365,34 @@ function Hub({ user, onLogout }) {
                                     <span className="hub-card-tag tag-deadlines">Tasks</span>
                                     <h2>Deadlines & Tasks</h2>
                                 </div>
-                                <p>Subtask checklists, urgency filters, and workload analytics.</p>
+                                <p>Subtask checklists, urgency filters, and calendar export.</p>
                                 <span className="hub-card-link">Open →</span>
                             </Link>
 
-                            <Link to="/timeline" className="hub-card">
+                            <Link to="/gpa" className="hub-card">
                                 <div className="hub-card-header">
-                                    <span className="hub-card-tag tag-timeline">Timeline</span>
-                                    <h2>Academic Timeline</h2>
+                                    <span className="hub-card-tag" style={{ background: "rgba(129, 140, 248, 0.2)", color: "#818cf8" }}>GPA</span>
+                                    <h2>GPA & Marks Predictor</h2>
                                 </div>
-                                <p>Semester events, exam schedules, and key academic dates.</p>
+                                <p>Dynamic credits, internal scores, and final exam target calculator.</p>
+                                <span className="hub-card-link">Open →</span>
+                            </Link>
+
+                            <Link to="/schedule" className="hub-card">
+                                <div className="hub-card-header">
+                                    <span className="hub-card-tag" style={{ background: "rgba(52, 211, 153, 0.2)", color: "#34d399" }}>Routine</span>
+                                    <h2>Weekly Class Routine</h2>
+                                </div>
+                                <p>Interactive 7-day visual timetable grid for classes and labs.</p>
+                                <span className="hub-card-link">Open →</span>
+                            </Link>
+
+                            <Link to="/archive" className="hub-card">
+                                <div className="hub-card-header">
+                                    <span className="hub-card-tag tag-timeline">Archive</span>
+                                    <h2>Semester Archive</h2>
+                                </div>
+                                <p>Historical term records, CGPA trends, and academic growth.</p>
                                 <span className="hub-card-link">Open →</span>
                             </Link>
 
@@ -383,7 +401,7 @@ function Hub({ user, onLogout }) {
                                     <span className="hub-card-tag tag-study">Study</span>
                                     <h2>Study Sessions</h2>
                                 </div>
-                                <p>Subject-tagged focus timer, cycle tracking, and daily analytics.</p>
+                                <p>Subject focus timer, Pomodoro cycles, and session logs.</p>
                                 <span className="hub-card-link">Open →</span>
                             </Link>
                         </div>

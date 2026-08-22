@@ -51,6 +51,19 @@ function MobileNav() {
             </NavLink>
 
             <NavLink
+                to="/gpa"
+                className={({ isActive }) =>
+                    `mobile-nav-item ${isActive ? "active" : ""}`
+                }
+            >
+                <svg className="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                    <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                </svg>
+                <span className="mobile-nav-label">GPA</span>
+            </NavLink>
+
+            <NavLink
                 to="/study"
                 className={({ isActive }) =>
                     `mobile-nav-item ${isActive ? "active" : ""}`
@@ -60,20 +73,6 @@ function MobileNav() {
                     <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
                 </svg>
                 <span className="mobile-nav-label">Study</span>
-            </NavLink>
-
-            <NavLink
-                to="/timeline"
-                className={({ isActive }) =>
-                    `mobile-nav-item ${isActive ? "active" : ""}`
-                }
-            >
-                <svg className="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="12" y1="20" x2="12" y2="10" />
-                    <line x1="18" y1="20" x2="18" y2="4" />
-                    <line x1="6" y1="20" x2="6" y2="16" />
-                </svg>
-                <span className="mobile-nav-label">Timeline</span>
             </NavLink>
         </nav>
     );

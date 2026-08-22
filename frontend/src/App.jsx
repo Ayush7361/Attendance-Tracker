@@ -10,11 +10,13 @@ import DeadlineDetailPage from "./pages/DeadlineDetailPage";
 import DeadlineFormPage from "./pages/DeadlineFormPage";
 import AcademicTimelinePage from "./pages/AcademicTimelinePage";
 import StudyPage from "./pages/StudyPage";
+import GpaPage from "./pages/GpaPage";
+import RoutinePage from "./pages/RoutinePage";
+import ArchivePage from "./pages/ArchivePage";
 import MobileNav from "./components/MobileNav";
+import GlobalMiniTimer from "./components/GlobalMiniTimer";
 import { logoutUser } from "./api/authApi";
 import "./App.css";
-
-import GlobalMiniTimer from "./components/GlobalMiniTimer";
 
 function App() {
     const { user, logout } = useAuth();
@@ -45,6 +47,9 @@ function App() {
                 <Route path="/deadlines/:id" element={<DeadlineDetailPage user={user} onLogout={handleLogout} />} />
                 <Route path="/timeline" element={<AcademicTimelinePage user={user} onLogout={handleLogout} />} />
                 <Route path="/study" element={<StudyPage user={user} onLogout={handleLogout} />} />
+                <Route path="/gpa" element={<GpaPage user={user} onLogout={handleLogout} />} />
+                <Route path="/schedule" element={<RoutinePage user={user} onLogout={handleLogout} />} />
+                <Route path="/archive" element={<ArchivePage user={user} onLogout={handleLogout} />} />
             </Routes>
             <MobileNav />
         </>
