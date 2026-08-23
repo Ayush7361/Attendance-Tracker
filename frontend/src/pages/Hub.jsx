@@ -352,16 +352,16 @@ function Hub({ user, onLogout }) {
                             </div>
                         </div>
 
-                        {/* Tiered Module Navigation */}
+                        {/* Academic Modules Navigation */}
                         <div className="hub-module-header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginTop: "12px" }}>
-                            <div className="hub-section-label" style={{ margin: 0 }}>Modules & Tools</div>
+                            <div className="hub-section-label" style={{ margin: 0 }}>Academic Modules</div>
                             <div className="hub-level-pills" style={{ display: "flex", gap: "6px" }}>
                                 <button
                                     type="button"
                                     className={`level-pill-btn ${moduleLevelFilter === "all" ? "active" : ""}`}
                                     onClick={() => setModuleLevelFilter("all")}
                                 >
-                                    All Tools
+                                    All Modules
                                 </button>
                                 <button
                                     type="button"
@@ -375,15 +375,15 @@ function Hub({ user, onLogout }) {
                                     className={`level-pill-btn ${moduleLevelFilter === "advanced" ? "active" : ""}`}
                                     onClick={() => setModuleLevelFilter("advanced")}
                                 >
-                                    🎓 Advanced Suite
+                                    🎓 Academic Planning
                                 </button>
                             </div>
                         </div>
 
-                        {/* Level 1: Daily Essentials */}
+                        {/* Daily Essentials */}
                         {(moduleLevelFilter === "all" || moduleLevelFilter === "essentials") && (
                             <div className="hub-level-group" style={{ marginTop: "10px" }}>
-                                <div className="hub-level-title">⚡ Level 1: Daily Essentials</div>
+                                <div className="hub-level-title">⚡ Daily Essentials</div>
                                 <div className="hub-grid hub-grid-compact">
                                     <Link to="/attendance" className="hub-card">
                                         <div className="hub-card-header">
@@ -424,10 +424,10 @@ function Hub({ user, onLogout }) {
                             </div>
                         )}
 
-                        {/* Level 2: Advanced Academic Suite */}
+                        {/* Academic Planning & Records */}
                         {(moduleLevelFilter === "all" || moduleLevelFilter === "advanced") && (
                             <div className="hub-level-group" style={{ marginTop: "16px" }}>
-                                <div className="hub-level-title">🎓 Level 2: Advanced Academic Suite</div>
+                                <div className="hub-level-title">🎓 Academic Planning & Records</div>
                                 <div className="hub-grid hub-grid-compact">
                                     <Link to="/gpa" className="hub-card">
                                         <div className="hub-card-header">
