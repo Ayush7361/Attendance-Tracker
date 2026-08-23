@@ -3,6 +3,10 @@
     display: none;
 }
 
+.mobile-more-overlay {
+    display: none;
+}
+
 @media (max-width: 768px) {
     .mobile-nav {
         display: flex;
@@ -10,10 +14,10 @@
         bottom: 12px;
         left: 50%;
         transform: translateX(-50%);
-        width: calc(100% - 24px);
-        max-width: 480px;
+        width: calc(100% - 20px);
+        max-width: 520px;
         height: 62px;
-        background: rgba(15, 23, 42, 0.88);
+        background: rgba(15, 23, 42, 0.92);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.16);
@@ -22,7 +26,8 @@
         z-index: 999;
         justify-content: space-around;
         align-items: center;
-        padding: 0 8px;
+        padding: 0 4px;
+        overflow: hidden;
     }
 
     .mobile-nav-item {
@@ -35,26 +40,32 @@
         height: 100%;
         text-decoration: none;
         color: #94a3b8;
-        font-size: 0.72rem;
+        font-size: 0.7rem;
         font-weight: 600;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         border-radius: 14px;
         position: relative;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
     }
 
     .mobile-nav-icon {
-        width: 20px;
-        height: 20px;
+        width: 19px;
+        height: 19px;
         transition: transform 0.2s ease, stroke 0.2s ease;
     }
 
     .mobile-nav-label {
         letter-spacing: -0.01em;
         line-height: 1;
+        white-space: nowrap;
     }
 
-    .mobile-nav-item:hover {
+    .mobile-nav-item:hover, .mobile-nav-item:focus {
         color: #cbd5e1;
+        outline: none;
     }
 
     .mobile-nav-item.active {
@@ -70,10 +81,135 @@
         content: "";
         position: absolute;
         bottom: 5px;
-        width: 16px;
+        width: 14px;
         height: 3px;
         background: #10b981;
         border-radius: 99px;
         box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+    }
+
+    /* More Suite Drawer Overlay & Sheet */
+    .mobile-more-overlay {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.78);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 99998;
+        align-items: flex-end;
+        justify-content: center;
+        animation: fadeInMore 0.2s ease-out;
+    }
+
+    @keyframes fadeInMore {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .mobile-more-sheet {
+        width: 100%;
+        max-width: 520px;
+        background: #1e293b;
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border-bottom: none;
+        border-radius: 24px 24px 0 0;
+        padding: 20px 20px 84px;
+        box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.6);
+        animation: slideUpSheet 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUpSheet {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+
+    .more-sheet-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .more-sheet-title {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin: 0;
+    }
+
+    .more-sheet-sub {
+        font-size: 0.78rem;
+        color: #94a3b8;
+        margin: 2px 0 0 0;
+    }
+
+    .more-close-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255, 255, 255, 0.08);
+        color: #cbd5e1;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .more-sheet-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .more-sheet-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background: rgba(30, 41, 59, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        text-decoration: none;
+        transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    .more-sheet-item:active, .more-sheet-item:hover {
+        background: rgba(51, 65, 85, 0.9);
+        transform: scale(0.98);
+    }
+
+    .more-item-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .more-item-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .more-item-title {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #ffffff;
+        line-height: 1.2;
+    }
+
+    .more-item-desc {
+        font-size: 0.72rem;
+        color: #94a3b8;
+        margin-top: 2px;
     }
 }

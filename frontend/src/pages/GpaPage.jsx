@@ -15,6 +15,73 @@ const GRADE_POINTS = {
     "D": 4
 };
 
+const GRADE_MIN_PCT = {
+    "A+": 90,
+    "A": 80,
+    "B+": 70,
+    "B": 60,
+    "C+": 50,
+    "C": 40,
+    "D": 35
+};
+
+function getHighestAchievableGrade(sub) {
+    const totalInternal = Math.max(1, Number(sub.totalInternal) || 50);
+    const internalMarks = Math.max(0, Number(sub.internalMarks) || 0);
+    const totalFinal = Math.max(1, Number(sub.finalExamWeight) || 50);
+
+    const maxTotalMarks = internalMarks + totalFinal;
+    const maxTotalPct = (maxTotalMarks / (totalInternal + totalFinal)) * 100;
+
+    const grades = ["A+", "A", "B+", "B", "C+", "C", "D"];
+    for (const g of grades) {
+        if (maxTotalPct >= GRADE_MIN_PCT[g]) {
+            return g;
+        }
+    }
+    return "F";
+}
+
+function calculateSubjectPrediction(sub) {
+    const internalMarks = Math.max(0, Number(sub.internalMarks) || 0);
+    const totalInternal = Math.max(1, Number(sub.totalInternal) || 50);
+    const totalFinal = Math.max(1, Number(sub.finalExamWeight) || 50);
+    const targetGrade = sub.targetGrade || "A";
+
+    const targetMinPct = GRADE_MIN_PCT[targetGrade] || 80;
+    const totalSubjectMax = totalInternal + totalFinal;
+    const neededTotalMarks = Math.ceil((targetMinPct / 100) * totalSubjectMax);
+    const neededFinalMarks = neededTotalMarks - internalMarks;
+
+    const maxAchievable = getHighestAchievableGrade(sub);
+
+    if (neededFinalMarks > totalFinal) {
+        return {
+            status: "unachievable",
+            needed: neededFinalMarks,
+            totalFinal,
+            maxAchievable,
+            message: `Unachievable (Requires ${neededFinalMarks} / ${totalFinal} marks). Max achievable grade with current internal score (${internalMarks}/${totalInternal}) is ${maxAchievable}.`
+        };
+    } else if (neededFinalMarks <= 0) {
+        return {
+            status: "achieved",
+            needed: 0,
+            totalFinal,
+            message: `Target Secured! Internal marks (${internalMarks}/${totalInternal}) already meet the ${targetMinPct}% threshold.`
+        };
+    } else {
+        const finalExamNeededPct = Math.round((neededFinalMarks / totalFinal) * 100);
+        return {
+            status: "needed",
+            needed: neededFinalMarks,
+            totalFinal,
+            finalExamNeededPct,
+            message: `Needed in Final Exam: ${neededFinalMarks} / ${totalFinal} (${finalExamNeededPct}%)`
+        };
+    }
+}
+
 function GpaPage({ user, onLogout }) {
     const { showToast } = useToast();
     const [targetGpa, setTargetGpa] = useState(8.5);
@@ -76,7 +143,7 @@ function GpaPage({ user, onLogout }) {
         });
     }
 
-    // Calculation logic
+    // Calculations
     const totalCredits = subjects.reduce((sum, s) => sum + (Number(s.credits) || 0), 0);
 
     let totalWeightedPoints = 0;
@@ -85,18 +152,22 @@ function GpaPage({ user, onLogout }) {
         totalWeightedPoints += pts * (Number(s.credits) || 0);
     });
 
-    const projectedSgpa = totalCredits > 0 ? (totalWeightedPoints / totalCredits).toFixed(2) : "0.00";
+    const projectedSgpaNum = totalCredits > 0 ? totalWeightedPoints / totalCredits : 0;
+    const projectedSgpa = projectedSgpaNum.toFixed(2);
+    const isTargetAchieved = projectedSgpaNum >= targetGpa;
 
     return (
         <div className="app-layout gpa-page">
             <header className="app-header">
-                <div className="header-brand">
-                    <div className="brand-badge" style={{ background: "#818cf8" }}>GPA</div>
-                    <div>
-                        <h1 className="app-title">GPA & Marks Predictor</h1>
-                        <p className="app-subtitle">Welcome back, {user.username}</p>
+                <Link to="/" className="header-brand-link" title="Return to Dashboard">
+                    <div className="header-brand">
+                        <div className="brand-badge" style={{ background: "#818cf8" }}>GPA</div>
+                        <div>
+                            <h1 className="app-title">GPA & Marks Predictor</h1>
+                            <p className="app-subtitle">Welcome back, {user.username}</p>
+                        </div>
                     </div>
-                </div>
+                </Link>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                     <MobileNotificationDrawer />
                     <button className="logout-btn" onClick={onLogout}>Logout</button>
@@ -108,7 +179,7 @@ function GpaPage({ user, onLogout }) {
 
                 <div className="page-header-box">
                     <h2 className="page-title">GPA & Marks Predictor</h2>
-                    <p className="page-subtitle">Configure subjects, adjust credit weights, and calculate required final exam scores.</p>
+                    <p className="page-subtitle">Configure subjects, set internal scores, and dynamically calculate target final exam marks.</p>
                 </div>
 
                 <div className="gpa-summary-card card-panel">
@@ -134,8 +205,31 @@ function GpaPage({ user, onLogout }) {
                         </div>
                         <div className="gpa-stat-box">
                             <span className="gpa-stat-label">Projected SGPA</span>
-                            <span className="gpa-stat-value value-projected">{projectedSgpa}</span>
+                            <span className={`gpa-stat-value ${isTargetAchieved ? "value-projected" : "value-warn"}`}>
+                                {projectedSgpa}
+                            </span>
                         </div>
+                    </div>
+
+                    <div className="gpa-status-banner" style={{
+                        marginTop: "16px",
+                        padding: "10px 14px",
+                        borderRadius: "10px",
+                        background: isTargetAchieved ? "rgba(16, 185, 129, 0.15)" : "rgba(245, 158, 11, 0.15)",
+                        border: `1px solid ${isTargetAchieved ? "rgba(16, 185, 129, 0.3)" : "rgba(245, 158, 11, 0.3)"}`,
+                        color: isTargetAchieved ? "#a7f3d0" : "#fef08a",
+                        fontSize: "0.85rem",
+                        fontWeight: "600",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px"
+                    }}>
+                        <span>{isTargetAchieved ? "✓" : "⚠️"}</span>
+                        <span>
+                            {isTargetAchieved
+                                ? `Your target grades will achieve an SGPA of ${projectedSgpa} (meets/exceeds target ${targetGpa}).`
+                                : `Projected SGPA (${projectedSgpa}) is below your target (${targetGpa}). Raise target grades on core subjects.`}
+                        </span>
                     </div>
                 </div>
 
@@ -153,14 +247,10 @@ function GpaPage({ user, onLogout }) {
                         <div className="card-panel gpa-empty">No subjects added yet. Click "+ Add Subject" above.</div>
                     ) : (
                         subjects.map((sub, idx) => {
-                            const internalPct = sub.totalInternal > 0 ? (sub.internalMarks / sub.totalInternal) * 100 : 0;
-                            const targetGradePts = GRADE_POINTS[sub.targetGrade] || 8;
-                            // Estimate final exam score needed (assuming final is out of 50)
-                            const targetMinTotalPct = targetGradePts * 10 - 5; // e.g. 9*10 - 5 = 85%
-                            const neededFinalMarks = Math.max(
-                                0,
-                                Math.ceil(targetMinTotalPct - sub.internalMarks)
-                            );
+                            const prediction = calculateSubjectPrediction(sub);
+                            const internalMarks = Number(sub.internalMarks) || 0;
+                            const totalInternal = Number(sub.totalInternal) || 50;
+                            const internalPct = totalInternal > 0 ? (internalMarks / totalInternal) * 100 : 0;
 
                             return (
                                 <div key={idx} className="gpa-subject-card card-panel">
@@ -195,6 +285,7 @@ function GpaPage({ user, onLogout }) {
                                                 <option value={3}>3 Credits</option>
                                                 <option value={4}>4 Credits (Core)</option>
                                                 <option value={5}>5 Credits</option>
+                                                <option value={6}>6 Credits</option>
                                             </select>
                                         </div>
 
@@ -203,6 +294,8 @@ function GpaPage({ user, onLogout }) {
                                             <div className="gpa-inline-inputs">
                                                 <input
                                                     type="number"
+                                                    min="0"
+                                                    max={totalInternal}
                                                     value={sub.internalMarks}
                                                     onChange={(e) => handleSubjectChange(idx, "internalMarks", Number(e.target.value))}
                                                     className="gpa-num-input"
@@ -210,11 +303,25 @@ function GpaPage({ user, onLogout }) {
                                                 <span>/</span>
                                                 <input
                                                     type="number"
+                                                    min="1"
                                                     value={sub.totalInternal}
                                                     onChange={(e) => handleSubjectChange(idx, "totalInternal", Number(e.target.value))}
                                                     className="gpa-num-input"
                                                 />
                                             </div>
+                                        </div>
+
+                                        <div className="gpa-field-group">
+                                            <label>Final Exam Max Marks</label>
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                value={sub.finalExamWeight || 50}
+                                                onChange={(e) => handleSubjectChange(idx, "finalExamWeight", Number(e.target.value))}
+                                                className="gpa-num-input"
+                                                style={{ width: "100%" }}
+                                                placeholder="e.g. 50"
+                                            />
                                         </div>
 
                                         <div className="gpa-field-group">
@@ -224,22 +331,23 @@ function GpaPage({ user, onLogout }) {
                                                 onChange={(e) => handleSubjectChange(idx, "targetGrade", e.target.value)}
                                                 className="gpa-select"
                                             >
-                                                <option value="A+">A+ (10.0 Pts)</option>
-                                                <option value="A">A (9.0 Pts)</option>
-                                                <option value="B+">B+ (8.0 Pts)</option>
-                                                <option value="B">B (7.0 Pts)</option>
-                                                <option value="C+">C+ (6.0 Pts)</option>
-                                                <option value="C">C (5.0 Pts)</option>
+                                                <option value="A+">A+ (90% / 10.0 Pts)</option>
+                                                <option value="A">A (80% / 9.0 Pts)</option>
+                                                <option value="B+">B+ (70% / 8.0 Pts)</option>
+                                                <option value="B">B (60% / 7.0 Pts)</option>
+                                                <option value="C+">C+ (50% / 6.0 Pts)</option>
+                                                <option value="C">C (40% / 5.0 Pts)</option>
+                                                <option value="D">D (35% / 4.0 Pts)</option>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div className="gpa-prediction-footer">
-                                        <span className="gpa-predict-badge">
-                                            Needed in Final Exam: <strong>{neededFinalMarks} / 50</strong>
-                                        </span>
+                                        <div className={`gpa-predict-badge badge-${prediction.status}`}>
+                                            {prediction.message}
+                                        </div>
                                         <span className="gpa-predict-sub">
-                                            Internal: {sub.internalMarks}/{sub.totalInternal} ({internalPct.toFixed(0)}%)
+                                            Internal: {internalMarks}/{totalInternal} ({internalPct.toFixed(0)}%)
                                         </span>
                                     </div>
                                 </div>

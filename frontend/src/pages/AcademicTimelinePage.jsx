@@ -89,13 +89,15 @@ function AcademicTimelinePage({ user, onLogout }) {
     return (
         <div className="app-layout timeline-page">
             <header className="app-header">
-                <div className="header-brand">
-                    <div className="brand-badge brand-timeline">TL</div>
-                    <div>
-                        <h1 className="app-title">Academic Timeline</h1>
-                        <p className="app-subtitle">Welcome back, {user.username}</p>
+                <Link to="/" className="header-brand-link" title="Return to Dashboard">
+                    <div className="header-brand">
+                        <div className="brand-badge brand-timeline">TL</div>
+                        <div>
+                            <h1 className="app-title">Academic Timeline</h1>
+                            <p className="app-subtitle">Welcome back, {user.username}</p>
+                        </div>
                     </div>
-                </div>
+                </Link>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                     <MobileNotificationDrawer events={events} />
                     <button className="logout-btn" onClick={onLogout}>Logout</button>

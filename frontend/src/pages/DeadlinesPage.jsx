@@ -239,13 +239,15 @@ function DeadlinesPage({ user, onLogout }) {
     return (
         <div className="app-layout deadlines-page">
             <header className="app-header">
-                <div className="header-brand">
-                    <div className="brand-badge brand-deadlines">DL</div>
-                    <div>
-                        <h1 className="app-title">Deadlines & Tasks</h1>
-                        <p className="app-subtitle">Welcome back, {user.username}</p>
+                <Link to="/" className="header-brand-link" title="Return to Dashboard">
+                    <div className="header-brand">
+                        <div className="brand-badge brand-deadlines">DL</div>
+                        <div>
+                            <h1 className="app-title">Deadlines & Tasks</h1>
+                            <p className="app-subtitle">Welcome back, {user.username}</p>
+                        </div>
                     </div>
-                </div>
+                </Link>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                     <MobileNotificationDrawer deadlines={deadlines} />
                     <button className="logout-btn" onClick={onLogout}>Logout</button>

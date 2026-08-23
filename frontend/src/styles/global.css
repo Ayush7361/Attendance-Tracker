@@ -82,6 +82,20 @@ body {
     }
 }
 
+.header-brand-link {
+    text-decoration: none;
+    color: inherit;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.header-brand-link:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+}
+
 .header-brand {
     display: flex;
     align-items: center;

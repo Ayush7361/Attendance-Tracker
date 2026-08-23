@@ -142,13 +142,15 @@ function AttendancePage({ user, onLogout }) {
     return (
         <div className="app-layout attendance-layout">
             <header className="app-header">
-                <div className="header-brand">
-                    <div className="brand-badge">AT</div>
-                    <div>
-                        <h1 className="app-title">Attendance</h1>
-                        <p className="app-subtitle">Welcome back, {user.username}</p>
+                <Link to="/" className="header-brand-link" title="Return to Dashboard">
+                    <div className="header-brand">
+                        <div className="brand-badge">AT</div>
+                        <div>
+                            <h1 className="app-title">Attendance</h1>
+                            <p className="app-subtitle">Welcome back, {user.username}</p>
+                        </div>
                     </div>
-                </div>
+                </Link>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                     <MobileNotificationDrawer schedule={schedule} />
                     <button className="logout-btn" onClick={onLogout}>

@@ -52,24 +52,29 @@ function daysUntil(dateStr) {
     return Math.round((target - today) / (1000 * 60 * 60 * 24));
 }
 
+let hubCache = null;
+
 function Hub({ user, onLogout }) {
-    const [loading, setLoading] = useState(true);
-    const [schedule, setSchedule] = useState(null);
-    const [todayLogged, setTodayLogged] = useState(null);
-    const [attendance, setAttendance] = useState({ total: 0, attended: 0 });
-    const [deadlines, setDeadlines] = useState([]);
-    const [analytics, setAnalytics] = useState(null);
-    const [forecast, setForecast] = useState(null);
-    const [sessions, setSessions] = useState([]);
-    const [events, setEvents] = useState([]);
+    const [schedule, setSchedule] = useState(() => hubCache?.schedule || null);
+    const [todayLogged, setTodayLogged] = useState(() => hubCache?.todayLogged || null);
+    const [attendance, setAttendance] = useState(() => hubCache?.attendance || { total: 0, attended: 0 });
+    const [deadlines, setDeadlines] = useState(() => hubCache?.deadlines || []);
+    const [analytics, setAnalytics] = useState(() => hubCache?.analytics || null);
+    const [forecast, setForecast] = useState(() => hubCache?.forecast || null);
+    const [sessions, setSessions] = useState(() => hubCache?.sessions || []);
+    const [events, setEvents] = useState(() => hubCache?.events || []);
+    const [loading, setLoading] = useState(() => !hubCache);
     const [showAnalytics, setShowAnalytics] = useState(false);
+    const [moduleLevelFilter, setModuleLevelFilter] = useState("all");
 
     useEffect(() => {
         loadDashboard();
     }, []);
 
     async function loadDashboard() {
-        setLoading(true);
+        if (!hubCache) {
+            setLoading(true);
+        }
         const today = formatTodayKey();
 
         const results = await Promise.allSettled([
@@ -83,37 +88,34 @@ function Hub({ user, onLogout }) {
             getSemesterEvents()
         ]);
 
-        if (results[0].status === "fulfilled" && results[0].value.data) {
-            setSchedule(results[0].value.data);
-        }
+        const nextSchedule = (results[0].status === "fulfilled" && results[0].value.data) ? results[0].value.data : schedule;
+        const nextTodayLogged = (results[1].status === "fulfilled") ? (results[1].value.data || null) : todayLogged;
+        const nextAttendance = (results[2].status === "fulfilled" && results[2].value.data) ? results[2].value.data : attendance;
+        const nextDeadlines = (results[3].status === "fulfilled") ? (results[3].value.data || []) : deadlines;
+        const nextAnalytics = (results[4].status === "fulfilled") ? results[4].value.data : analytics;
+        const nextForecast = (results[5].status === "fulfilled") ? results[5].value.data : forecast;
+        const nextSessions = (results[6].status === "fulfilled") ? (results[6].value || []) : sessions;
+        const nextEvents = (results[7].status === "fulfilled") ? (results[7].value.data || []) : events;
 
-        if (results[1].status === "fulfilled") {
-            setTodayLogged(results[1].value.data || null);
-        }
+        if (results[0].status === "fulfilled" && results[0].value.data) setSchedule(results[0].value.data);
+        if (results[1].status === "fulfilled") setTodayLogged(results[1].value.data || null);
+        if (results[2].status === "fulfilled" && results[2].value.data) setAttendance(results[2].value.data);
+        if (results[3].status === "fulfilled") setDeadlines(results[3].value.data || []);
+        if (results[4].status === "fulfilled") setAnalytics(results[4].value.data);
+        if (results[5].status === "fulfilled") setForecast(results[5].value.data);
+        if (results[6].status === "fulfilled") setSessions(results[6].value || []);
+        if (results[7].status === "fulfilled") setEvents(results[7].value.data || []);
 
-        if (results[2].status === "fulfilled" && results[2].value.data) {
-            setAttendance(results[2].value.data);
-        }
-
-        if (results[3].status === "fulfilled") {
-            setDeadlines(results[3].value.data || []);
-        }
-
-        if (results[4].status === "fulfilled") {
-            setAnalytics(results[4].value.data);
-        }
-
-        if (results[5].status === "fulfilled") {
-            setForecast(results[5].value.data);
-        }
-
-        if (results[6].status === "fulfilled") {
-            setSessions(results[6].value || []);
-        }
-
-        if (results[7].status === "fulfilled") {
-            setEvents(results[7].value.data || []);
-        }
+        hubCache = {
+            schedule: nextSchedule,
+            todayLogged: nextTodayLogged,
+            attendance: nextAttendance,
+            deadlines: nextDeadlines,
+            analytics: nextAnalytics,
+            forecast: nextForecast,
+            sessions: nextSessions,
+            events: nextEvents
+        };
 
         setLoading(false);
     }
@@ -183,13 +185,15 @@ function Hub({ user, onLogout }) {
     return (
         <div className="hub-wrapper">
             <header className="hub-header">
-                <div className="header-brand">
-                    <div className="brand-badge">SD</div>
-                    <div>
-                        <h1 className="app-title">Study Dashboard</h1>
-                        <p className="app-subtitle">Command Center</p>
+                <Link to="/" className="header-brand-link" title="Return to Dashboard">
+                    <div className="header-brand">
+                        <div className="brand-badge">SD</div>
+                        <div>
+                            <h1 className="app-title">Study Dashboard</h1>
+                            <p className="app-subtitle">Command Center</p>
+                        </div>
                     </div>
-                </div>
+                </Link>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                     <MobileNotificationDrawer
                         schedule={schedule}
@@ -348,63 +352,112 @@ function Hub({ user, onLogout }) {
                             </div>
                         </div>
 
-                        {/* Module navigation */}
-                        <div className="hub-section-label">Modules & Services</div>
-                        <div className="hub-grid hub-grid-compact">
-                            <Link to="/attendance" className="hub-card">
-                                <div className="hub-card-header">
-                                    <span className="hub-card-tag tag-attendance">Attendance</span>
-                                    <h2>Attendance Tracker</h2>
-                                </div>
-                                <p>Daily class logs, subject schedules, and percentage targets.</p>
-                                <span className="hub-card-link">Open →</span>
-                            </Link>
-
-                            <Link to="/deadlines" className="hub-card">
-                                <div className="hub-card-header">
-                                    <span className="hub-card-tag tag-deadlines">Tasks</span>
-                                    <h2>Deadlines & Tasks</h2>
-                                </div>
-                                <p>Subtask checklists, urgency filters, and calendar export.</p>
-                                <span className="hub-card-link">Open →</span>
-                            </Link>
-
-                            <Link to="/gpa" className="hub-card">
-                                <div className="hub-card-header">
-                                    <span className="hub-card-tag" style={{ background: "rgba(129, 140, 248, 0.2)", color: "#818cf8" }}>GPA</span>
-                                    <h2>GPA & Marks Predictor</h2>
-                                </div>
-                                <p>Dynamic credits, internal scores, and final exam target calculator.</p>
-                                <span className="hub-card-link">Open →</span>
-                            </Link>
-
-                            <Link to="/schedule" className="hub-card">
-                                <div className="hub-card-header">
-                                    <span className="hub-card-tag" style={{ background: "rgba(52, 211, 153, 0.2)", color: "#34d399" }}>Routine</span>
-                                    <h2>Weekly Class Routine</h2>
-                                </div>
-                                <p>Interactive 7-day visual timetable grid for classes and labs.</p>
-                                <span className="hub-card-link">Open →</span>
-                            </Link>
-
-                            <Link to="/archive" className="hub-card">
-                                <div className="hub-card-header">
-                                    <span className="hub-card-tag tag-timeline">Archive</span>
-                                    <h2>Semester Archive</h2>
-                                </div>
-                                <p>Historical term records, CGPA trends, and academic growth.</p>
-                                <span className="hub-card-link">Open →</span>
-                            </Link>
-
-                            <Link to="/study" className="hub-card">
-                                <div className="hub-card-header">
-                                    <span className="hub-card-tag tag-study">Study</span>
-                                    <h2>Study Sessions</h2>
-                                </div>
-                                <p>Subject focus timer, Pomodoro cycles, and session logs.</p>
-                                <span className="hub-card-link">Open →</span>
-                            </Link>
+                        {/* Tiered Module Navigation */}
+                        <div className="hub-module-header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginTop: "12px" }}>
+                            <div className="hub-section-label" style={{ margin: 0 }}>Modules & Tools</div>
+                            <div className="hub-level-pills" style={{ display: "flex", gap: "6px" }}>
+                                <button
+                                    type="button"
+                                    className={`level-pill-btn ${moduleLevelFilter === "all" ? "active" : ""}`}
+                                    onClick={() => setModuleLevelFilter("all")}
+                                >
+                                    All Tools
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`level-pill-btn ${moduleLevelFilter === "essentials" ? "active" : ""}`}
+                                    onClick={() => setModuleLevelFilter("essentials")}
+                                >
+                                    ⚡ Daily Essentials
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`level-pill-btn ${moduleLevelFilter === "advanced" ? "active" : ""}`}
+                                    onClick={() => setModuleLevelFilter("advanced")}
+                                >
+                                    🎓 Advanced Suite
+                                </button>
+                            </div>
                         </div>
+
+                        {/* Level 1: Daily Essentials */}
+                        {(moduleLevelFilter === "all" || moduleLevelFilter === "essentials") && (
+                            <div className="hub-level-group" style={{ marginTop: "10px" }}>
+                                <div className="hub-level-title">⚡ Level 1: Daily Essentials</div>
+                                <div className="hub-grid hub-grid-compact">
+                                    <Link to="/attendance" className="hub-card">
+                                        <div className="hub-card-header">
+                                            <span className="hub-card-tag tag-attendance">Attendance</span>
+                                            <h2>Attendance Tracker</h2>
+                                        </div>
+                                        <p>Daily class logs, subject schedules, and safe bunk calculator.</p>
+                                        <span className="hub-card-link">Open →</span>
+                                    </Link>
+
+                                    <Link to="/schedule" className="hub-card">
+                                        <div className="hub-card-header">
+                                            <span className="hub-card-tag" style={{ background: "rgba(52, 211, 153, 0.2)", color: "#34d399" }}>Routine</span>
+                                            <h2>Weekly Class Routine</h2>
+                                        </div>
+                                        <p>Interactive 7-day visual timetable grid for classes and labs.</p>
+                                        <span className="hub-card-link">Open →</span>
+                                    </Link>
+
+                                    <Link to="/deadlines" className="hub-card">
+                                        <div className="hub-card-header">
+                                            <span className="hub-card-tag tag-deadlines">Tasks</span>
+                                            <h2>Deadlines & Tasks</h2>
+                                        </div>
+                                        <p>Subtask checklists, urgency filters, and calendar export.</p>
+                                        <span className="hub-card-link">Open →</span>
+                                    </Link>
+
+                                    <Link to="/study" className="hub-card">
+                                        <div className="hub-card-header">
+                                            <span className="hub-card-tag tag-study">Study</span>
+                                            <h2>Study Sessions</h2>
+                                        </div>
+                                        <p>Subject focus timer, Pomodoro cycles, and session logs.</p>
+                                        <span className="hub-card-link">Open →</span>
+                                    </Link>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Level 2: Advanced Academic Suite */}
+                        {(moduleLevelFilter === "all" || moduleLevelFilter === "advanced") && (
+                            <div className="hub-level-group" style={{ marginTop: "16px" }}>
+                                <div className="hub-level-title">🎓 Level 2: Advanced Academic Suite</div>
+                                <div className="hub-grid hub-grid-compact">
+                                    <Link to="/gpa" className="hub-card">
+                                        <div className="hub-card-header">
+                                            <span className="hub-card-tag" style={{ background: "rgba(129, 140, 248, 0.2)", color: "#818cf8" }}>GPA</span>
+                                            <h2>GPA & Marks Predictor</h2>
+                                        </div>
+                                        <p>Dynamic credits, internal scores, and final exam target calculator.</p>
+                                        <span className="hub-card-link">Open →</span>
+                                    </Link>
+
+                                    <Link to="/archive" className="hub-card">
+                                        <div className="hub-card-header">
+                                            <span className="hub-card-tag tag-timeline">Archive</span>
+                                            <h2>Semester Archive</h2>
+                                        </div>
+                                        <p>Historical term records, CGPA trends, and academic growth.</p>
+                                        <span className="hub-card-link">Open →</span>
+                                    </Link>
+
+                                    <Link to="/timeline" className="hub-card">
+                                        <div className="hub-card-header">
+                                            <span className="hub-card-tag tag-timeline">Timeline</span>
+                                            <h2>Academic Timeline</h2>
+                                        </div>
+                                        <p>Semester exam schedules, fee dates, and key milestones.</p>
+                                        <span className="hub-card-link">Open →</span>
+                                    </Link>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Collapsible Performance Insights & Workload Analytics */}
                         <div className="hub-analytics-collapsible card-panel" style={{ marginTop: "12px" }}>
