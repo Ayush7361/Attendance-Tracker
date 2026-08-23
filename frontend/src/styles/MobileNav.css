@@ -17,17 +17,19 @@
         width: calc(100% - 20px);
         max-width: 520px;
         height: 62px;
-        background: rgba(15, 23, 42, 0.92);
+        background: rgba(15, 23, 42, 0.94);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.18);
         border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.2) inset;
-        z-index: 999;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 1px rgba(255, 255, 255, 0.2) inset;
+        z-index: 999999;
         justify-content: space-around;
         align-items: center;
         padding: 0 4px;
         overflow: hidden;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
 
     .mobile-nav-item {
@@ -49,21 +51,25 @@
         border: none;
         cursor: pointer;
         padding: 0;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
 
     .mobile-nav-icon {
         width: 19px;
         height: 19px;
         transition: transform 0.2s ease, stroke 0.2s ease;
+        pointer-events: none;
     }
 
     .mobile-nav-label {
         letter-spacing: -0.01em;
         line-height: 1;
         white-space: nowrap;
+        pointer-events: none;
     }
 
-    .mobile-nav-item:hover, .mobile-nav-item:focus {
+    .mobile-nav-item:hover, .mobile-nav-item:focus, .mobile-nav-item:active {
         color: #cbd5e1;
         outline: none;
     }
@@ -99,10 +105,11 @@
         background: rgba(15, 23, 42, 0.78);
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
-        z-index: 99998;
+        z-index: 999998;
         align-items: flex-end;
         justify-content: center;
         animation: fadeInMore 0.2s ease-out;
+        touch-action: manipulation;
     }
 
     @keyframes fadeInMore {
@@ -177,6 +184,7 @@
         border-radius: 14px;
         text-decoration: none;
         transition: background 0.15s ease, transform 0.15s ease;
+        touch-action: manipulation;
     }
 
     .more-sheet-item:active, .more-sheet-item:hover {
@@ -193,11 +201,13 @@
         justify-content: center;
         font-size: 1.2rem;
         flex-shrink: 0;
+        pointer-events: none;
     }
 
     .more-item-info {
         display: flex;
         flex-direction: column;
+        pointer-events: none;
     }
 
     .more-item-title {

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -17,6 +17,16 @@ import MobileNav from "./components/MobileNav";
 import GlobalMiniTimer from "./components/GlobalMiniTimer";
 import { logoutUser } from "./api/authApi";
 import "./App.css";
+
+function ScrollToTop() {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }, [pathname]);
+
+    return null;
+}
 
 function App() {
     const { user, logout } = useAuth();
@@ -37,6 +47,7 @@ function App() {
 
     return (
         <>
+            <ScrollToTop />
             <GlobalMiniTimer />
             <Routes>
                 <Route path="/" element={<Hub user={user} onLogout={handleLogout} />} />
