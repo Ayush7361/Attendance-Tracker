@@ -14,10 +14,12 @@ function MobileNav() {
 
     function handleTabClick(path) {
         setShowMoreMenu(false);
-        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         if (location.pathname !== path) {
             navigate(path);
         }
+        // "instant" is not a supported ScrollBehavior value in Safari. It can
+        // throw before navigate() runs, which made every module tab unresponsive.
+        window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     }
 
     const currentPath = location.pathname;
