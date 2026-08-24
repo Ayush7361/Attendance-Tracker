@@ -5,6 +5,7 @@
                 url('/dashboard-bg.jpg') center/cover no-repeat fixed;
     display: flex;
     flex-direction: column;
+    padding-bottom: 96px;
 }
 
 @media (max-width: 768px) {
