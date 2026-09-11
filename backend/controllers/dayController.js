@@ -36,7 +36,6 @@ async function saveDay(req, res) {
                             ? existingRecord.subjects.find((es) => es.name.trim().toLowerCase() === subLower)
                             : null;
 
-                        // If there is no existing teacher record or student is attempting to alter the teacher-assigned status
                         if (!existingSub || existingSub.status !== s.status) {
                             return res.status(403).json({
                                 message: `Attendance for '${s.name}' is teacher-verified and cannot be self-reported.`
@@ -159,6 +158,59 @@ async function getMonthRecords(req, res) {
     }
 }
 
+async function getSubjectBreakdown(req, res) {
+    try {
+        const records = await DayRecord.find({ userId: req.userId });
+        const subjectMap = {};
+
+        for (let r of records) {
+            for (let s of r.subjects || []) {
+                const name = (s.name || "").trim();
+                if (!name) continue;
+
+                if (!subjectMap[name]) {
+                    subjectMap[name] = { total: 0, attended: 0, missed: 0, cancelled: 0 };
+                }
+
+                if (s.status === "attended") {
+                    subjectMap[name].attended++;
+                    subjectMap[name].total++;
+                } else if (s.status === "missed") {
+                    subjectMap[name].missed++;
+                    subjectMap[name].total++;
+                } else if (s.status === "cancelled") {
+                    subjectMap[name].cancelled++;
+                }
+            }
+        }
+
+        const result = Object.keys(subjectMap).map((name) => {
+            const stats = subjectMap[name];
+            const pct = stats.total > 0 ? (stats.attended / stats.total) * 100 : 0;
+
+            // Safe bunk & recovery formula for 75% target
+            const maxBunks = Math.max(0, Math.floor((stats.attended - 0.75 * stats.total) / 0.75));
+            const recoveryNeeded = stats.total > 0 && pct < 75 ? Math.max(0, Math.ceil((0.75 * stats.total - stats.attended) / 0.25)) : 0;
+
+            return {
+                subjectName: name,
+                total: stats.total,
+                attended: stats.attended,
+                missed: stats.missed,
+                cancelled: stats.cancelled,
+                percentage: Number(pct.toFixed(1)),
+                safeBunks: maxBunks,
+                recoveryNeeded
+            };
+        });
+
+        res.status(200).json(result);
+    } catch (err) {
+        console.error("Error fetching subject breakdown:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
 async function deleteRange(req, res) {
     try {
         const { start, end, all } = req.body || {};
@@ -184,5 +236,6 @@ module.exports = {
     getMonthSummary,
     getOverallSummary,
     getMonthRecords,
+    getSubjectBreakdown,
     deleteRange
 };

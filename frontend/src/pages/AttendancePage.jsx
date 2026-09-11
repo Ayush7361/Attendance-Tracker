@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import MonthSelector from "../components/MonthSelector";
 import SummaryCards from "../components/SummaryCards";
 import ProgressBar from "../components/ProgressBar";
+import SubjectBreakdownCard from "../components/SubjectBreakdownCard";
 import ScheduleForm from "../components/ScheduleForm";
 import AttendanceCalendar from "../components/AttendanceCalendar";
 import ResetSection from "../components/ResetSection";
@@ -198,6 +199,8 @@ function AttendancePage({ user, onLogout }) {
 
                 <SummaryCards total={monthSummary.total} attended={monthSummary.attended} percentage={percentage} targetThreshold={targetThreshold} />
                 <ProgressBar percentage={percentage} />
+
+                <SubjectBreakdownCard targetThreshold={targetThreshold} />
 
                 <AttendanceCalendar schedule={schedule} onDaySaved={handleDaySaved} />
 

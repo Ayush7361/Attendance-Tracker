@@ -21,8 +21,6 @@ async function seedData() {
                 role: "student"
             });
             console.log("Created student1");
-        } else {
-            console.log("student1 already exists");
         }
 
         let student2 = await User.findOne({ username: "student2" });
@@ -33,56 +31,60 @@ async function seedData() {
                 role: "student"
             });
             console.log("Created student2");
-        } else {
-            console.log("student2 already exists");
         }
 
-        // 2. Create or find Class IT-2
-        let classDoc = await Class.findOne({ name: "IT-2" });
-        if (!classDoc) {
-            classDoc = await Class.create({
-                name: "IT-2",
-                students: [student1._id, student2._id]
-            });
-            console.log("Created Class IT-2 with enrolled students");
-        } else {
-            // Update students array
-            classDoc.students = [student1._id, student2._id];
-            await classDoc.save();
-            console.log("Updated Class IT-2 roster");
-        }
-
-        // 3. Create or find Teacher
+        // 2. Create or find Teacher
         let teacher1 = await User.findOne({ username: "teacher1" });
         if (!teacher1) {
             teacher1 = await User.create({
                 username: "teacher1",
                 password: passwordHash,
-                role: "teacher",
-                teacherAssignments: [
-                    {
-                        subjectName: "Data Structures",
-                        classId: classDoc._id
-                    }
-                ]
+                role: "teacher"
             });
-            console.log("Created teacher1 assigned to Data Structures (IT-2)");
-        } else {
-            teacher1.role = "teacher";
-            teacher1.teacherAssignments = [
-                {
-                    subjectName: "Data Structures",
-                    classId: classDoc._id
-                }
-            ];
-            await teacher1.save();
-            console.log("Updated teacher1 assignments");
         }
+
+        // 3. Create or find Class IT-2 with Master Routine
+        let classDoc = await Class.findOne({ name: "IT-2" });
+        
+        const sampleRoutine = [
+            { day: "mon", subjectName: "Data Structures", teacherId: teacher1._id, periodNumber: 1, timeSlot: "09:00 - 10:00 AM" },
+            { day: "tue", subjectName: "Data Structures", teacherId: teacher1._id, periodNumber: 1, timeSlot: "10:00 - 11:00 AM" },
+            { day: "wed", subjectName: "Data Structures", teacherId: teacher1._id, periodNumber: 1, timeSlot: "09:00 - 10:00 AM" },
+            { day: "thu", subjectName: "Data Structures", teacherId: teacher1._id, periodNumber: 2, timeSlot: "11:00 - 12:00 PM" },
+            { day: "fri", subjectName: "Data Structures", teacherId: teacher1._id, periodNumber: 1, timeSlot: "09:00 - 10:00 AM" },
+            { day: "sat", subjectName: "Data Structures Lab", teacherId: teacher1._id, periodNumber: 1, timeSlot: "10:00 - 12:00 PM" }
+        ];
+
+        if (!classDoc) {
+            classDoc = await Class.create({
+                name: "IT-2",
+                students: [student1._id, student2._id],
+                routine: sampleRoutine
+            });
+            console.log("Created Class IT-2 with enrolled students and master routine");
+        } else {
+            classDoc.students = [student1._id, student2._id];
+            classDoc.routine = sampleRoutine;
+            await classDoc.save();
+            console.log("Updated Class IT-2 roster and master routine");
+        }
+
+        // Update teacher assignments
+        teacher1.role = "teacher";
+        teacher1.teacherAssignments = [
+            {
+                subjectName: "Data Structures",
+                classId: classDoc._id
+            }
+        ];
+        await teacher1.save();
+        console.log("Updated teacher1 assignments");
 
         console.log("\n================ SEED COMPLETE ================");
         console.log("Class: IT-2 (ID: " + classDoc._id + ")");
+        console.log("Master Routine: 6 weekly slots seeded (Mon-Sat)");
         console.log("Teacher: teacher1 / password123 (Role: teacher, Subject: Data Structures)");
-        console.log("Students: student1 / password123, student2 / password123 (Role: student)");
+        console.log("Students: student1 / password123, student2 / password123");
         console.log("===============================================\n");
 
         await mongoose.disconnect();

@@ -31,6 +31,10 @@ export function getMonthRecords(year, month) {
     return axios.get("/api/days/month-records", { params: { year, month } });
 }
 
+export function getSubjectBreakdown() {
+    return axios.get("/api/days/subject-breakdown");
+}
+
 export function deleteDayRange(start, end) {
     return axios.delete("/api/days", { data: { start, end } });
 }

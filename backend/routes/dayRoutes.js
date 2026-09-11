@@ -7,6 +7,7 @@ const {
     getMonthSummary,
     getOverallSummary,
     getMonthRecords,
+    getSubjectBreakdown,
     deleteRange
 } = require("../controllers/dayController");
 
@@ -15,6 +16,7 @@ router.get("/", authMiddleware, getDay);
 router.get("/summary/month", authMiddleware, getMonthSummary);
 router.get("/summary/overall", authMiddleware, getOverallSummary);
 router.get("/month-records", authMiddleware, getMonthRecords);
+router.get("/subject-breakdown", authMiddleware, getSubjectBreakdown);
 router.delete("/", authMiddleware, deleteRange);
 
 module.exports = router;
