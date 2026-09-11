@@ -1,0 +1,80 @@
+{"kind":"deck","id":"pr/qhofj4","name":"Deck"}
+{"kind":"layout","layoutId":"46d3c7e8-1778-44ea-a983-0fddf98e6b41","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"7ee9ac0e-4779-4bc5-931f-8e6c335bdb83","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/ffp7eh","slide":1,"title":"[Your Team Name]","textShapes":4}
+{"kind":"textbox","id":"sh/5grqlwna","slide":1,"text":"[Your Team Name]","textPreview":"[Your Team Name]","textChars":16,"textLines":1,"bbox":[300,500,320,28]}
+{"kind":"textbox","id":"sh/4fipsrmp","slide":1,"text":"Study Dashboard - a unified academic planning & performance companion","textPreview":"Study Dashboard - a unified academic planning & performance companion","textChars":69,"textLines":1,"bbox":[550,541,620,30]}
+{"kind":"textbox","id":"sh/vqpofm58","slide":1,"text":"[Add member names]","textPreview":"[Add member names]","textChars":18,"textLines":1,"bbox":[355,582,370,27]}
+{"kind":"textbox","id":"sh/upg7mh4n","slide":1,"text":"[Add college name]","textPreview":"[Add college name]","textChars":18,"textLines":1,"bbox":[255,622,330,27]}
+{"kind":"image","id":"im/3yhw7ytg","slide":1,"name":"","alt":"Build with Bharat template slide 1","bbox":[0,0,1280,720]}
+{"kind":"notes","id":"nt/ffp7eh","slide":1,"text":"[Sources]\nStudy Dashboard local project source: /Users/ayushranjan/study dashboard\nLive demo: https://attendance-tracker-pi-blue.vercel.app\nGitHub: https://github.com/Ayush7361/Attendance-Tracker"}
+{"kind":"slide","id":"sl/b60bps","slide":2,"title":"Students manage attendance, deadlines, study time, routines and grades in sep...","textShapes":5}
+{"kind":"textbox","id":"sh/0j6dwn6x","slide":2,"text":"Students manage attendance, deadlines, study time, routines and grades in separate tools - so priorities get missed.","textPreview":"Students manage attendance, deadlines, study time, routines and grades in separate tools - so priorities get missed.","textChars":116,"textLines":1,"bbox":[94,245,1080,68]}
+{"kind":"textbox","id":"sh/lkfep87i","slide":2,"text":"• Attendance data is often updated late, making shortages hard to spot.","textPreview":"• Attendance data is often updated late, making shortages hard to spot.","textChars":71,"textLines":1,"bbox":[112,350,990,66]}
+{"kind":"textbox","id":"sh/qdovqtov","slide":2,"text":"• Deadlines, academic events and study sessions lack one connected view.","textPreview":"• Deadlines, academic events and study sessions lack one connected view.","textChars":72,"textLines":1,"bbox":[112,408,990,66]}
+{"kind":"textbox","id":"sh/bexcjypg","slide":2,"text":"• Students need actionable insight, not another static timetable or checklist.","textPreview":"• Students need actionable insight, not another static timetable or checklist.","textChars":78,"textLines":1,"bbox":[112,466,990,66]}
+{"kind":"textbox","id":"sh/cf6ds361","slide":2,"text":"Opportunity: turn scattered academic activity into one clear daily plan.","textPreview":"Opportunity: turn scattered academic activity into one clear daily plan.","textChars":72,"textLines":1,"bbox":[112,552,940,30]}
+{"kind":"image","id":"im/ut47ad4b","slide":2,"name":"","alt":"Build with Bharat template slide 2","bbox":[0,0,1280,720]}
+{"kind":"notes","id":"nt/b60bps","slide":2,"text":"[Sources]\nStudy Dashboard local project source: /Users/ayushranjan/study dashboard\nLive demo: https://attendance-tracker-pi-blue.vercel.app\nGitHub: https://github.com/Ayush7361/Attendance-Tracker"}
+{"kind":"slide","id":"sl/itfqlt","slide":3,"title":"Study Dashboard is a personal academic operating system that brings daily dec...","textShapes":5}
+{"kind":"textbox","id":"sh/5c72ds3i","slide":3,"text":"Study Dashboard is a personal academic operating system that brings daily decisions into one place.","textPreview":"Study Dashboard is a personal academic operating system that brings daily decisions into one place.","textChars":99,"textLines":1,"bbox":[94,230,1040,64]}
+{"kind":"textbox","id":"sh/kby14n2d","slide":3,"text":"• Track daily attendance against a recurring weekly class schedule.","textPreview":"• Track daily attendance against a recurring weekly class schedule.","textChars":67,"textLines":1,"bbox":[112,345,990,68]}
+{"kind":"textbox","id":"sh/7ypkf2lo","slide":3,"text":"• Organize deadlines, subtasks, workload forecasts and semester events.","textPreview":"• Organize deadlines, subtasks, workload forecasts and semester events.","textChars":71,"textLines":1,"bbox":[112,405,990,68]}
+{"kind":"textbox","id":"sh/6xgj6xk3","slide":3,"text":"• Focus with a study timer, session history, GPA planning and health score.","textPreview":"• Focus with a study timer, session history, GPA planning and health score.","textChars":75,"textLines":1,"bbox":[112,465,990,68]}
+{"kind":"textbox","id":"sh/t072hs3u","slide":3,"text":"One dashboard. A clearer next step every day.","textPreview":"One dashboard. A clearer next step every day.","textChars":45,"textLines":1,"bbox":[112,550,840,32]}
+{"kind":"image","id":"im/rexk3uhk","slide":3,"name":"","alt":"Build with Bharat template slide 3","bbox":[0,0,1280,720]}
+{"kind":"notes","id":"nt/itfqlt","slide":3,"text":"[Sources]\nStudy Dashboard local project source: /Users/ayushranjan/study dashboard\nLive demo: https://attendance-tracker-pi-blue.vercel.app\nGitHub: https://github.com/Ayush7361/Attendance-Tracker"}
+{"kind":"slide","id":"sl/5salhv","slide":4,"title":"Plan","textShapes":12}
+{"kind":"textbox","id":"sh/4byxcbux","slide":4,"text":"Plan","textPreview":"Plan","textChars":4,"textLines":1,"bbox":[105,332,160,38]}
+{"kind":"textbox","id":"sh/5c7ylgv2","slide":4,"text":"Schedule classes\nAdd deadlines & events","textPreview":"Schedule classes | Add deadlines & events","textChars":39,"textLines":2,"bbox":[72,380,225,70]}
+{"kind":"textbox","id":"sh/6d0zelcn","slide":4,"text":"Track","textPreview":"Track","textChars":5,"textLines":1,"bbox":[380,332,160,38]}
+{"kind":"textbox","id":"sh/re9gn6d8","slide":4,"text":"Log attendance\nRun study sessions","textPreview":"Log attendance | Run study sessions","textChars":33,"textLines":2,"bbox":[346,380,225,70]}
+{"kind":"textbox","id":"sh/sfihgbut","slide":4,"text":"Analyze","textPreview":"Analyze","textChars":7,"textLines":1,"bbox":[660,332,170,38]}
+{"kind":"textbox","id":"sh/tgrypgve","slide":4,"text":"Forecast workload\nReview GPA & health","textPreview":"Forecast workload | Review GPA & health","textChars":37,"textLines":2,"bbox":[630,380,230,70]}
+{"kind":"textbox","id":"sh/mhwf2hcj","slide":4,"text":"Act","textPreview":"Act","textChars":3,"textLines":1,"bbox":[960,332,150,38]}
+{"kind":"textbox","id":"sh/7i5gbmd4","slide":4,"text":"Prioritize today\nStay ahead of risks","textPreview":"Prioritize today | Stay ahead of risks","textChars":36,"textLines":2,"bbox":[918,380,235,70]}
+{"kind":"textbox","id":"sh/32p8rmhw","slide":4,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[298,350,45,35]}
+{"kind":"textbox","id":"sh/i1g7ih0r","slide":4,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[580,350,45,35]}
+{"kind":"textbox","id":"sh/5o7qtwz2","slide":4,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[870,350,45,35]}
+{"kind":"textbox","id":"sh/4nypkrih","slide":4,"text":"All records are scoped to the signed-in user, keeping academic data private.","textPreview":"All records are scoped to the signed-in user, keeping academic data private.","textChars":76,"textLines":1,"bbox":[150,555,960,30]}
+{"kind":"image","id":"im/6x47adsv","slide":4,"name":"","alt":"Build with Bharat template slide 4","bbox":[0,0,1280,720]}
+{"kind":"notes","id":"nt/5salhv","slide":4,"text":"[Sources]\nStudy Dashboard local project source: /Users/ayushranjan/study dashboard\nLive demo: https://attendance-tracker-pi-blue.vercel.app\nGitHub: https://github.com/Ayush7361/Attendance-Tracker"}
+{"kind":"slide","id":"sl/5vyqup","slide":5,"title":"A modular MERN architecture keeps the experience fast, private and deployable.","textShapes":7}
+{"kind":"textbox","id":"sh/5wbixcni","slide":5,"text":"A modular MERN architecture keeps the experience fast, private and deployable.","textPreview":"A modular MERN architecture keeps the experience fast, private and deployable.","textChars":78,"textLines":1,"bbox":[94,230,1080,42]}
+{"kind":"textbox","id":"sh/4v2147mx","slide":5,"text":"FRONTEND","textPreview":"FRONTEND","textChars":8,"textLines":1,"bbox":[130,342,260,32]}
+{"kind":"textbox","id":"sh/ryt0zm5o","slide":5,"text":"React 19 • Vite\nReact Router • Axios\nResponsive web UI","textPreview":"React 19 • Vite | React Router • Axios | Responsive web UI","textChars":54,"textLines":3,"bbox":[100,388,320,100]}
+{"kind":"textbox","id":"sh/qxkj6h43","slide":5,"text":"BACKEND","textPreview":"BACKEND","textChars":7,"textLines":1,"bbox":[500,342,260,32]}
+{"kind":"textbox","id":"sh/d0bi1cne","slide":5,"text":"Node.js • Express\nJWT authentication\nREST API","textPreview":"Node.js • Express | JWT authentication | REST API","textChars":45,"textLines":3,"bbox":[470,388,320,100]}
+{"kind":"textbox","id":"sh/cz218rmt","slide":5,"text":"DATA & DEPLOYMENT","textPreview":"DATA & DEPLOYMENT","textChars":17,"textLines":1,"bbox":[840,342,310,32]}
+{"kind":"textbox","id":"sh/z2d03m5k","slide":5,"text":"MongoDB Atlas • Mongoose\nVercel frontend\nRender backend","textPreview":"MongoDB Atlas • Mongoose | Vercel frontend | Render backend","textChars":55,"textLines":3,"bbox":[835,388,320,100]}
+{"kind":"image","id":"im/re9wzits","slide":5,"name":"","alt":"Build with Bharat template slide 5","bbox":[0,0,1280,720]}
+{"kind":"notes","id":"nt/5vyqup","slide":5,"text":"[Sources]\nStudy Dashboard local project source: /Users/ayushranjan/study dashboard\nLive demo: https://attendance-tracker-pi-blue.vercel.app\nGitHub: https://github.com/Ayush7361/Attendance-Tracker"}
+{"kind":"slide","id":"sl/cc1u6v","slide":6,"title":"Not just a tracker: an integrated system that connects academic signals to ac...","textShapes":5}
+{"kind":"textbox","id":"sh/ls3i1wby","slide":6,"text":"Not just a tracker: an integrated system that connects academic signals to action.","textPreview":"Not just a tracker: an integrated system that connects academic signals to action.","textChars":82,"textLines":1,"bbox":[94,230,1080,42]}
+{"kind":"textbox","id":"sh/0ru1srud","slide":6,"text":"• Unified view: attendance, tasks, routine, study sessions, GPA and semester history.","textPreview":"• Unified view: attendance, tasks, routine, study sessions, GPA and semester history.","textChars":85,"textLines":1,"bbox":[120,335,1000,60]}
+{"kind":"textbox","id":"sh/b210v2tw","slide":6,"text":"• Actionable guidance: workload forecast, deadline insights and academic health score.","textPreview":"• Actionable guidance: workload forecast, deadline insights and academic health score.","textChars":86,"textLines":1,"bbox":[120,387,1000,60]}
+{"kind":"textbox","id":"sh/q1szmxcb","slide":6,"text":"• Resilient experience: study sessions fall back to local storage when the API is unavailable.","textPreview":"• Resilient experience: study sessions fall back to local storage when the API is unavailable.","textChars":94,"textLines":1,"bbox":[120,439,1000,60]}
+{"kind":"textbox","id":"sh/d4jixcb2","slide":6,"text":"• Student-first privacy: account-based records with protected API routes.","textPreview":"• Student-first privacy: account-based records with protected API routes.","textChars":73,"textLines":1,"bbox":[120,491,1000,60]}
+{"kind":"image","id":"im/v2ls3mxg","slide":6,"name":"","alt":"Build with Bharat template slide 6","bbox":[0,0,1280,720]}
+{"kind":"notes","id":"nt/cc1u6v","slide":6,"text":"[Sources]\nStudy Dashboard local project source: /Users/ayushranjan/study dashboard\nLive demo: https://attendance-tracker-pi-blue.vercel.app\nGitHub: https://github.com/Ayush7361/Attendance-Tracker"}
+{"kind":"slide","id":"sl/dj7bym","slide":7,"title":"Built with widely adopted web technologies and designed for practical student...","textShapes":10}
+{"kind":"textbox","id":"sh/6ho7ilw3","slide":7,"text":"Built with widely adopted web technologies and designed for practical student workflows.","textPreview":"Built with widely adopted web technologies and designed for practical student workflows.","textChars":88,"textLines":1,"bbox":[94,230,1080,42]}
+{"kind":"textbox","id":"sh/7ixorqdo","slide":7,"text":"FEASIBILITY","textPreview":"FEASIBILITY","textChars":11,"textLines":1,"bbox":[150,335,365,35]}
+{"kind":"textbox","id":"sh/gnqpove5","slide":7,"text":"• Existing working full-stack app","textPreview":"• Existing working full-stack app","textChars":33,"textLines":1,"bbox":[115,390,420,55]}
+{"kind":"textbox","id":"sh/hoz6x0vq","slide":7,"text":"• Cloud-ready deployment","textPreview":"• Cloud-ready deployment","textChars":24,"textLines":1,"bbox":[115,437,420,55]}
+{"kind":"textbox","id":"sh/ul87mlwf","slide":7,"text":"• Modular APIs enable future features","textPreview":"• Modular APIs enable future features","textChars":37,"textLines":1,"bbox":[115,484,420,55]}
+{"kind":"textbox","id":"sh/fmhovqdk","slide":7,"text":"POSITIONING","textPreview":"POSITIONING","textChars":11,"textLines":1,"bbox":[760,335,365,35]}
+{"kind":"textbox","id":"sh/wrm5cre1","slide":7,"text":"• Calendar apps: dates, but limited academic insight","textPreview":"• Calendar apps: dates, but limited academic insight","textChars":52,"textLines":1,"bbox":[700,390,430,55]}
+{"kind":"textbox","id":"sh/xsv6lwfm","slide":7,"text":"• To-do apps: tasks, but no attendance or GPA link","textPreview":"• To-do apps: tasks, but no attendance or GPA link","textChars":50,"textLines":1,"bbox":[700,437,430,55]}
+{"kind":"textbox","id":"sh/503e9872","slide":7,"text":"• Study apps: focus, but not a full academic picture","textPreview":"• Study apps: focus, but not a full academic picture","textChars":52,"textLines":1,"bbox":[700,484,430,55]}
+{"kind":"textbox","id":"sh/kzuxgn6h","slide":7,"text":"Our edge: a single student workspace that connects planning, progress and performance.","textPreview":"Our edge: a single student workspace that connects planning, progress and performance.","textChars":86,"textLines":1,"bbox":[160,565,960,29]}
+{"kind":"image","id":"im/kril8bex","slide":7,"name":"","alt":"Build with Bharat template slide 7","bbox":[0,0,1280,720]}
+{"kind":"notes","id":"nt/dj7bym","slide":7,"text":"[Sources]\nStudy Dashboard local project source: /Users/ayushranjan/study dashboard\nLive demo: https://attendance-tracker-pi-blue.vercel.app\nGitHub: https://github.com/Ayush7361/Attendance-Tracker"}
+{"kind":"slide","id":"sl/cshwvh","slide":8,"title":"PROJECT LINKS","textShapes":5}
+{"kind":"textbox","id":"sh/y5w7mdwv","slide":8,"text":"PROJECT LINKS","textPreview":"PROJECT LINKS","textChars":13,"textLines":1,"bbox":[100,330,1050,35]}
+{"kind":"textbox","id":"sh/z65ovidg","slide":8,"text":"GitHub:  https://github.com/Ayush7361/Attendance-Tracker","textPreview":"GitHub:  https://github.com/Ayush7361/Attendance-Tracker","textChars":56,"textLines":1,"bbox":[110,392,970,34]}
+{"kind":"textbox","id":"sh/c3upk3e5","slide":8,"text":"Live demo:  https://attendance-tracker-pi-blue.vercel.app","textPreview":"Live demo:  https://attendance-tracker-pi-blue.vercel.app","textChars":57,"textLines":1,"bbox":[110,445,970,34]}
+{"kind":"textbox","id":"sh/x4n6t8va","slide":8,"text":"References: React, Vite, Express, MongoDB/Mongoose, Axios, React Router","textPreview":"References: React, Vite, Express, MongoDB/Mongoose, Axios, React Router","textChars":71,"textLines":1,"bbox":[110,498,970,34]}
+{"kind":"textbox","id":"sh/a1c7idwz","slide":8,"text":"Thank you","textPreview":"Thank you","textChars":9,"textLines":1,"bbox":[110,565,700,36]}
+{"kind":"image","id":"im/07ql4ja5","slide":8,"name":"","alt":"Build with Bharat template slide 8","bbox":[0,0,1280,720]}
+{"kind":"notes","id":"nt/cshwvh","slide":8,"text":"[Sources]\nStudy Dashboard local project source: /Users/ayushranjan/study dashboard\nLive demo: https://attendance-tracker-pi-blue.vercel.app\nGitHub: https://github.com/Ayush7361/Attendance-Tracker"}

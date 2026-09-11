@@ -4,6 +4,7 @@ import { useAuth } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Hub from "./pages/Hub";
+import TeacherDashboard from "./pages/TeacherDashboard";
 import AttendancePage from "./pages/AttendancePage";
 import DeadlinesPage from "./pages/DeadlinesPage";
 import DeadlineDetailPage from "./pages/DeadlineDetailPage";
@@ -42,6 +43,17 @@ function App() {
             <Register onSwitchToLogin={() => setShowRegister(false)} />
         ) : (
             <Login onSwitchToRegister={() => setShowRegister(true)} />
+        );
+    }
+
+    if (user.role === "teacher") {
+        return (
+            <>
+                <ScrollToTop />
+                <Routes>
+                    <Route path="*" element={<TeacherDashboard user={user} onLogout={handleLogout} />} />
+                </Routes>
+            </>
         );
     }
 

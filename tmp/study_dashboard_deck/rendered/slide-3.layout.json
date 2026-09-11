@@ -1,0 +1,395 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/itfqlt",
+    "id": "itfqlt",
+    "slide": 3,
+    "layoutId": "7ee9ac0e-4779-4bc5-931f-8e6c335bdb83",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "46d3c7e8-1778-44ea-a983-0fddf98e6b41",
+    "masterLayoutName": "Master",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "+mn-lt"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "7ee9ac0e-4779-4bc5-931f-8e6c335bdb83",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "46d3c7e8-1778-44ea-a983-0fddf98e6b41",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "46d3c7e8-1778-44ea-a983-0fddf98e6b41",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/rexk3uhk",
+      "id": "1",
+      "bbox": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "alt": "Build with Bharat template slide 3",
+      "contentType": "image/png",
+      "imageFit": "cover",
+      "asset": {
+        "assetId": "222c7bc4-7dfd-4730-b94f-a3a408d85e30",
+        "contentType": "image/png",
+        "byteLength": 862376
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5c72ds3i",
+      "id": "2",
+      "bbox": [
+        94,
+        230,
+        1040,
+        64
+      ],
+      "geometry": "rect",
+      "text": "Study Dashboard is a personal academic operating system that brings daily decisions into one place.",
+      "textPreview": "Study Dashboard is a personal academic operating system that brings daily decisions into one place.",
+      "resolvedFontSize": 30,
+      "resolvedTextStyle": {
+        "fontSize": 30,
+        "typeface": "+mn-lt",
+        "color": "#111111",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Study Dashboard is a personal academic operating system that brings"
+          },
+          {
+            "index": 2,
+            "text": "daily decisions into one place."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Study Dashboard is a personal academic operating system that brings daily decisions into one place.",
+          "resolvedTextStyle": {
+            "fontSize": 30,
+            "color": "#111111",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Study Dashboard is a personal academic operating system that brings daily decisions into one place.",
+              "fontSize": 30,
+              "color": "#111111",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kby14n2d",
+      "id": "3",
+      "bbox": [
+        112,
+        345,
+        990,
+        68
+      ],
+      "geometry": "rect",
+      "text": "• Track daily attendance against a recurring weekly class schedule.",
+      "textPreview": "• Track daily attendance against a recurring weekly class schedule.",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "fontSize": 22,
+        "typeface": "+mn-lt",
+        "color": "#111111",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "• Track daily attendance against a recurring weekly class schedule."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "• Track daily attendance against a recurring weekly class schedule.",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "color": "#111111",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• Track daily attendance against a recurring weekly class schedule.",
+              "fontSize": 22,
+              "color": "#111111",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7ypkf2lo",
+      "id": "4",
+      "bbox": [
+        112,
+        405,
+        990,
+        68
+      ],
+      "geometry": "rect",
+      "text": "• Organize deadlines, subtasks, workload forecasts and semester events.",
+      "textPreview": "• Organize deadlines, subtasks, workload forecasts and semester events.",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "fontSize": 22,
+        "typeface": "+mn-lt",
+        "color": "#111111",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "• Organize deadlines, subtasks, workload forecasts and semester events."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "• Organize deadlines, subtasks, workload forecasts and semester events.",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "color": "#111111",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• Organize deadlines, subtasks, workload forecasts and semester events.",
+              "fontSize": 22,
+              "color": "#111111",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6xgj6xk3",
+      "id": "5",
+      "bbox": [
+        112,
+        465,
+        990,
+        68
+      ],
+      "geometry": "rect",
+      "text": "• Focus with a study timer, session history, GPA planning and health score.",
+      "textPreview": "• Focus with a study timer, session history, GPA planning and health score.",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "fontSize": 22,
+        "typeface": "+mn-lt",
+        "color": "#111111",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "• Focus with a study timer, session history, GPA planning and health score."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "• Focus with a study timer, session history, GPA planning and health score.",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "color": "#111111",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• Focus with a study timer, session history, GPA planning and health score.",
+              "fontSize": 22,
+              "color": "#111111",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/t072hs3u",
+      "id": "6",
+      "bbox": [
+        112,
+        550,
+        840,
+        32
+      ],
+      "geometry": "rect",
+      "text": "One dashboard. A clearer next step every day.",
+      "textPreview": "One dashboard. A clearer next step every day.",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "+mn-lt",
+        "color": "#F4511E",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "One dashboard. A clearer next step every day."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "One dashboard. A clearer next step every day.",
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "color": "#F4511E",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "One dashboard. A clearer next step every day.",
+              "fontSize": 24,
+              "color": "#F4511E",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

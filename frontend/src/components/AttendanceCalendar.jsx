@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { getMonthRecords, getDay, saveDay } from "../api/attendanceApi";
+import { getCoveredSubjects } from "../api/teacherApi";
 
 const dayKeyByIndex = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
@@ -24,17 +25,30 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     const [subjectsList, setSubjectsList] = useState([]);
+    const [coveredSubjects, setCoveredSubjects] = useState([]);
     const [customSubjectInput, setCustomSubjectInput] = useState("");
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         loadMonthRecords();
+        loadCoveredSubjects();
     }, [visibleMonth]);
 
     useEffect(() => {
         const dateToLoad = selectedDate || new Date();
         handleDayClick(dateToLoad);
     }, [schedule]);
+
+    async function loadCoveredSubjects() {
+        try {
+            const list = await getCoveredSubjects();
+            if (Array.isArray(list)) {
+                setCoveredSubjects(list.map((s) => s.trim().toLowerCase()));
+            }
+        } catch (err) {
+            console.error("Failed to load teacher covered subjects", err);
+        }
+    }
 
     async function loadMonthRecords() {
         try {
@@ -47,8 +61,6 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
         }
     }
 
-    // Splits logged records into three buckets based on attendance ratio,
-    // so the calendar can show a different marker per day status.
     function buildDayStatusModifiers() {
         const fullyAttended = [];
         const partiallyMissed = [];
@@ -126,6 +138,10 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
     }
 
     function setSubjectStatus(index, newStatus) {
+        const sub = subjectsList[index];
+        if (sub && coveredSubjects.includes(sub.name.trim().toLowerCase())) {
+            return; // Block editing teacher covered subjects
+        }
         const updated = [...subjectsList];
         updated[index] = { ...updated[index], status: newStatus };
         setSubjectsList(updated);
@@ -140,6 +156,10 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
     }
 
     function handleRemoveSubjectRow(index) {
+        const sub = subjectsList[index];
+        if (sub && coveredSubjects.includes(sub.name.trim().toLowerCase())) {
+            return; // Block removing teacher covered subjects
+        }
         setSubjectsList(subjectsList.filter((_, idx) => idx !== index));
     }
 
@@ -173,7 +193,8 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                 onDaySaved();
             }
         } catch (err) {
-            alert("Failed to save day record.");
+            const msg = err.response?.data?.message || "Failed to save day record.";
+            alert(msg);
         } finally {
             setSaving(false);
         }
@@ -186,7 +207,14 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
     }
 
     function handleMarkAllStatus(status) {
-        setSubjectsList((prev) => prev.map((s) => ({ ...s, status })));
+        setSubjectsList((prev) =>
+            prev.map((s) => {
+                if (coveredSubjects.includes(s.name.trim().toLowerCase())) {
+                    return s; // Keep teacher subject untouched
+                }
+                return { ...s, status };
+            })
+        );
     }
 
     const { fullyAttended, partiallyMissed, noneAttended } = buildDayStatusModifiers();
@@ -243,48 +271,64 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                             {subjectsList.length === 0 && (
                                 <p className="empty-checklist">No classes scheduled for this day. Add one below.</p>
                             )}
-                            {subjectsList.map((sub, idx) => (
-                                <div
-                                    key={idx}
-                                    className={`subject-row status-${sub.status || "attended"}`}
-                                >
-                                    <span className="subject-name">{sub.name}</span>
-                                    <div className="status-pill-group">
-                                        <button
-                                            type="button"
-                                            className={`pill-btn pill-attended ${sub.status === "attended" ? "active" : ""}`}
-                                            onClick={() => setSubjectStatus(idx, "attended")}
-                                            title="Attended class"
-                                        >
-                                            ✓ Attended
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className={`pill-btn pill-missed ${sub.status === "missed" ? "active" : ""}`}
-                                            onClick={() => setSubjectStatus(idx, "missed")}
-                                            title="Missed class"
-                                        >
-                                            ✕ Missed
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className={`pill-btn pill-cancelled ${sub.status === "cancelled" ? "active" : ""}`}
-                                            onClick={() => setSubjectStatus(idx, "cancelled")}
-                                            title="Class Cancelled (Excluded from attendance percentage)"
-                                        >
-                                            🚫 Cancelled
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="remove-row-btn"
-                                            onClick={() => handleRemoveSubjectRow(idx)}
-                                            title="Remove class"
-                                        >
-                                            ×
-                                        </button>
+                            {subjectsList.map((sub, idx) => {
+                                const isTeacherCovered = coveredSubjects.includes((sub.name || "").trim().toLowerCase());
+                                return (
+                                    <div
+                                        key={idx}
+                                        className={`subject-row status-${sub.status || "attended"}`}
+                                        style={isTeacherCovered ? { opacity: 0.9, borderLeft: "3px solid #818cf8" } : {}}
+                                    >
+                                        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                            <span className="subject-name">{sub.name}</span>
+                                            {isTeacherCovered && (
+                                                <span style={{ fontSize: "0.75rem", background: "rgba(129, 140, 248, 0.2)", color: "#818cf8", padding: "2px 6px", borderRadius: "4px", fontWeight: "600" }}>
+                                                    🔒 Teacher Verified
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="status-pill-group">
+                                            <button
+                                                type="button"
+                                                disabled={isTeacherCovered}
+                                                className={`pill-btn pill-attended ${sub.status === "attended" ? "active" : ""}`}
+                                                onClick={() => setSubjectStatus(idx, "attended")}
+                                                title={isTeacherCovered ? "Marked by teacher" : "Attended class"}
+                                            >
+                                                ✓ Attended
+                                            </button>
+                                            <button
+                                                type="button"
+                                                disabled={isTeacherCovered}
+                                                className={`pill-btn pill-missed ${sub.status === "missed" ? "active" : ""}`}
+                                                onClick={() => setSubjectStatus(idx, "missed")}
+                                                title={isTeacherCovered ? "Marked by teacher" : "Missed class"}
+                                            >
+                                                ✕ Missed
+                                            </button>
+                                            <button
+                                                type="button"
+                                                disabled={isTeacherCovered}
+                                                className={`pill-btn pill-cancelled ${sub.status === "cancelled" ? "active" : ""}`}
+                                                onClick={() => setSubjectStatus(idx, "cancelled")}
+                                                title={isTeacherCovered ? "Marked by teacher" : "Class Cancelled"}
+                                            >
+                                                🚫 Cancelled
+                                            </button>
+                                            {!isTeacherCovered && (
+                                                <button
+                                                    type="button"
+                                                    className="remove-row-btn"
+                                                    onClick={() => handleRemoveSubjectRow(idx)}
+                                                    title="Remove class"
+                                                >
+                                                    ×
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
 
                         <form onSubmit={handleAddCustomSubject} className="add-extra-subject-form">

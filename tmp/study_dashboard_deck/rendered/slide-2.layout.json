@@ -1,0 +1,395 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/b60bps",
+    "id": "b60bps",
+    "slide": 2,
+    "layoutId": "7ee9ac0e-4779-4bc5-931f-8e6c335bdb83",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "46d3c7e8-1778-44ea-a983-0fddf98e6b41",
+    "masterLayoutName": "Master",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "+mn-lt"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "7ee9ac0e-4779-4bc5-931f-8e6c335bdb83",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "46d3c7e8-1778-44ea-a983-0fddf98e6b41",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "46d3c7e8-1778-44ea-a983-0fddf98e6b41",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/ut47ad4b",
+      "id": "1",
+      "bbox": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "alt": "Build with Bharat template slide 2",
+      "contentType": "image/png",
+      "imageFit": "cover",
+      "asset": {
+        "assetId": "a7b17945-6453-42ab-a408-3326a82ca4d8",
+        "contentType": "image/png",
+        "byteLength": 862337
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0j6dwn6x",
+      "id": "2",
+      "bbox": [
+        94,
+        245,
+        1080,
+        68
+      ],
+      "geometry": "rect",
+      "text": "Students manage attendance, deadlines, study time, routines and grades in separate tools - so priorities get missed.",
+      "textPreview": "Students manage attendance, deadlines, study time, routines and grades in separate tools - so priorities get missed.",
+      "resolvedFontSize": 30,
+      "resolvedTextStyle": {
+        "fontSize": 30,
+        "typeface": "+mn-lt",
+        "color": "#111111",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Students manage attendance, deadlines, study time, routines and grades"
+          },
+          {
+            "index": 2,
+            "text": "in separate tools - so priorities get missed."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Students manage attendance, deadlines, study time, routines and grades in separate tools - so priorities get missed.",
+          "resolvedTextStyle": {
+            "fontSize": 30,
+            "color": "#111111",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Students manage attendance, deadlines, study time, routines and grades in separate tools - so priorities get missed.",
+              "fontSize": 30,
+              "color": "#111111",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/lkfep87i",
+      "id": "3",
+      "bbox": [
+        112,
+        350,
+        990,
+        66
+      ],
+      "geometry": "rect",
+      "text": "• Attendance data is often updated late, making shortages hard to spot.",
+      "textPreview": "• Attendance data is often updated late, making shortages hard to spot.",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "fontSize": 22,
+        "typeface": "+mn-lt",
+        "color": "#111111",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "• Attendance data is often updated late, making shortages hard to spot."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "• Attendance data is often updated late, making shortages hard to spot.",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "color": "#111111",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• Attendance data is often updated late, making shortages hard to spot.",
+              "fontSize": 22,
+              "color": "#111111",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/qdovqtov",
+      "id": "4",
+      "bbox": [
+        112,
+        408,
+        990,
+        66
+      ],
+      "geometry": "rect",
+      "text": "• Deadlines, academic events and study sessions lack one connected view.",
+      "textPreview": "• Deadlines, academic events and study sessions lack one connected view.",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "fontSize": 22,
+        "typeface": "+mn-lt",
+        "color": "#111111",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "• Deadlines, academic events and study sessions lack one connected view."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "• Deadlines, academic events and study sessions lack one connected view.",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "color": "#111111",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• Deadlines, academic events and study sessions lack one connected view.",
+              "fontSize": 22,
+              "color": "#111111",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/bexcjypg",
+      "id": "5",
+      "bbox": [
+        112,
+        466,
+        990,
+        66
+      ],
+      "geometry": "rect",
+      "text": "• Students need actionable insight, not another static timetable or checklist.",
+      "textPreview": "• Students need actionable insight, not another static timetable or checklist.",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "fontSize": 22,
+        "typeface": "+mn-lt",
+        "color": "#111111",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "• Students need actionable insight, not another static timetable or checklist."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "• Students need actionable insight, not another static timetable or checklist.",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "color": "#111111",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• Students need actionable insight, not another static timetable or checklist.",
+              "fontSize": 22,
+              "color": "#111111",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cf6ds361",
+      "id": "6",
+      "bbox": [
+        112,
+        552,
+        940,
+        30
+      ],
+      "geometry": "rect",
+      "text": "Opportunity: turn scattered academic activity into one clear daily plan.",
+      "textPreview": "Opportunity: turn scattered academic activity into one clear daily plan.",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "fontSize": 22,
+        "typeface": "+mn-lt",
+        "color": "#F4511E",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Opportunity: turn scattered academic activity into one clear daily plan."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Opportunity: turn scattered academic activity into one clear daily plan.",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "color": "#F4511E",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Opportunity: turn scattered academic activity into one clear daily plan.",
+              "fontSize": 22,
+              "color": "#F4511E",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

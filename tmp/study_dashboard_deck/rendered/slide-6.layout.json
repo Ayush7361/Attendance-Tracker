@@ -1,0 +1,392 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/cc1u6v",
+    "id": "cc1u6v",
+    "slide": 6,
+    "layoutId": "7ee9ac0e-4779-4bc5-931f-8e6c335bdb83",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "46d3c7e8-1778-44ea-a983-0fddf98e6b41",
+    "masterLayoutName": "Master",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "+mn-lt"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "7ee9ac0e-4779-4bc5-931f-8e6c335bdb83",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "46d3c7e8-1778-44ea-a983-0fddf98e6b41",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "46d3c7e8-1778-44ea-a983-0fddf98e6b41",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/v2ls3mxg",
+      "id": "1",
+      "bbox": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "alt": "Build with Bharat template slide 6",
+      "contentType": "image/png",
+      "imageFit": "cover",
+      "asset": {
+        "assetId": "3e0debde-2765-42e0-abf3-bd8b09e1b72d",
+        "contentType": "image/png",
+        "byteLength": 867971
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ls3i1wby",
+      "id": "2",
+      "bbox": [
+        94,
+        230,
+        1080,
+        42
+      ],
+      "geometry": "rect",
+      "text": "Not just a tracker: an integrated system that connects academic signals to action.",
+      "textPreview": "Not just a tracker: an integrated system that connects academic signals to action.",
+      "resolvedFontSize": 28,
+      "resolvedTextStyle": {
+        "fontSize": 28,
+        "typeface": "+mn-lt",
+        "color": "#111111",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Not just a tracker: an integrated system that connects academic signals to"
+          },
+          {
+            "index": 2,
+            "text": "action."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Not just a tracker: an integrated system that connects academic signals to action.",
+          "resolvedTextStyle": {
+            "fontSize": 28,
+            "color": "#111111",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Not just a tracker: an integrated system that connects academic signals to action.",
+              "fontSize": 28,
+              "color": "#111111",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0ru1srud",
+      "id": "3",
+      "bbox": [
+        120,
+        335,
+        1000,
+        60
+      ],
+      "geometry": "rect",
+      "text": "• Unified view: attendance, tasks, routine, study sessions, GPA and semester history.",
+      "textPreview": "• Unified view: attendance, tasks, routine, study sessions, GPA and semester history.",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "+mn-lt",
+        "color": "#111111",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "• Unified view: attendance, tasks, routine, study sessions, GPA and semester history."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "• Unified view: attendance, tasks, routine, study sessions, GPA and semester history.",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "color": "#111111",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• Unified view: attendance, tasks, routine, study sessions, GPA and semester history.",
+              "fontSize": 21,
+              "color": "#111111",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/b210v2tw",
+      "id": "4",
+      "bbox": [
+        120,
+        387,
+        1000,
+        60
+      ],
+      "geometry": "rect",
+      "text": "• Actionable guidance: workload forecast, deadline insights and academic health score.",
+      "textPreview": "• Actionable guidance: workload forecast, deadline insights and academic health score.",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "+mn-lt",
+        "color": "#111111",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "• Actionable guidance: workload forecast, deadline insights and academic health score."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "• Actionable guidance: workload forecast, deadline insights and academic health score.",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "color": "#111111",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• Actionable guidance: workload forecast, deadline insights and academic health score.",
+              "fontSize": 21,
+              "color": "#111111",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/q1szmxcb",
+      "id": "5",
+      "bbox": [
+        120,
+        439,
+        1000,
+        60
+      ],
+      "geometry": "rect",
+      "text": "• Resilient experience: study sessions fall back to local storage when the API is unavailable.",
+      "textPreview": "• Resilient experience: study sessions fall back to local storage when the API is unavailable.",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "+mn-lt",
+        "color": "#111111",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "• Resilient experience: study sessions fall back to local storage when the API is unavailable."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "• Resilient experience: study sessions fall back to local storage when the API is unavailable.",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "color": "#111111",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• Resilient experience: study sessions fall back to local storage when the API is unavailable.",
+              "fontSize": 21,
+              "color": "#111111",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/d4jixcb2",
+      "id": "6",
+      "bbox": [
+        120,
+        491,
+        1000,
+        60
+      ],
+      "geometry": "rect",
+      "text": "• Student-first privacy: account-based records with protected API routes.",
+      "textPreview": "• Student-first privacy: account-based records with protected API routes.",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "+mn-lt",
+        "color": "#111111",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "• Student-first privacy: account-based records with protected API routes."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "• Student-first privacy: account-based records with protected API routes.",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "color": "#111111",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• Student-first privacy: account-based records with protected API routes.",
+              "fontSize": 21,
+              "color": "#111111",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

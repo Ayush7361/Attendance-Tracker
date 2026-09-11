@@ -12,6 +12,7 @@ const semesterRoutes = require("./routes/semesterRoutes");
 const studyRoutes = require("./routes/studyRoutes");
 const gpaRoutes = require("./routes/gpaRoutes");
 const archiveRoutes = require("./routes/archiveRoutes");
+const teacherRoutes = require("./routes/teacherRoutes");
 
 const app = express();
 
@@ -19,7 +20,7 @@ connectDB();
 
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:5174", "https://attendance-tracker-pi-blue.vercel.app"]
+    origin: ["http://localhost:5173", "http://localhost:5174", "https://attendance-tracker-pi-blue.vercel.app"]
 }));
 
 app.use("/api/auth", authRoutes);
@@ -30,6 +31,7 @@ app.use("/api/semester-events", semesterRoutes);
 app.use("/api/study-sessions", studyRoutes);
 app.use("/api/gpa", gpaRoutes);
 app.use("/api/archive", archiveRoutes);
+app.use("/api/teacher", teacherRoutes);
 
 const PORT = process.env.PORT || 5000;
 

@@ -1,10 +1,51 @@
 const mongoose = require("mongoose");
 const DayRecord = require("../models/DayRecord");
+const Class = require("../models/Class");
+const User = require("../models/User");
 
 async function saveDay(req, res) {
     try {
         const { date, totalClasses, attendedClasses, isHoliday, subjects } = req.body;
         const parsedDate = new Date(date);
+
+        // Server-side check for teacher-covered subjects
+        const studentClasses = await Class.find({ students: req.userId });
+        if (studentClasses && studentClasses.length > 0) {
+            const classIds = studentClasses.map((c) => c._id);
+            const teachers = await User.find({
+                role: "teacher",
+                "teacherAssignments.classId": { $in: classIds }
+            });
+
+            const coveredSubjects = new Set();
+            teachers.forEach((t) => {
+                (t.teacherAssignments || []).forEach((a) => {
+                    if (a.classId && classIds.some((cid) => cid.toString() === a.classId.toString())) {
+                        coveredSubjects.add(a.subjectName.trim().toLowerCase());
+                    }
+                });
+            });
+
+            if (coveredSubjects.size > 0 && Array.isArray(subjects)) {
+                const existingRecord = await DayRecord.findOne({ userId: req.userId, date: parsedDate });
+
+                for (let s of subjects) {
+                    const subLower = (s.name || "").trim().toLowerCase();
+                    if (coveredSubjects.has(subLower)) {
+                        const existingSub = existingRecord
+                            ? existingRecord.subjects.find((es) => es.name.trim().toLowerCase() === subLower)
+                            : null;
+
+                        // If there is no existing teacher record or student is attempting to alter the teacher-assigned status
+                        if (!existingSub || existingSub.status !== s.status) {
+                            return res.status(403).json({
+                                message: `Attendance for '${s.name}' is teacher-verified and cannot be self-reported.`
+                            });
+                        }
+                    }
+                }
+            }
+        }
 
         let finalTotal = Number(totalClasses) || 0;
         let finalAttended = Number(attendedClasses) || 0;
@@ -39,6 +80,7 @@ async function saveDay(req, res) {
         );
         res.status(200).json(record);
     } catch (err) {
+        console.error("Error in saveDay:", err);
         res.status(500).json({ message: "Server error" });
     }
 }
