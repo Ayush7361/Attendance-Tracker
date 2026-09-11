@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -46,17 +46,21 @@ function App() {
         );
     }
 
+    // Role Guard: Teacher account
     if (user.role === "teacher") {
         return (
             <>
                 <ScrollToTop />
                 <Routes>
-                    <Route path="*" element={<TeacherDashboard user={user} onLogout={handleLogout} />} />
+                    <Route path="/teacher" element={<TeacherDashboard user={user} onLogout={handleLogout} />} />
+                    <Route path="/teacher/routine" element={<TeacherDashboard user={user} onLogout={handleLogout} />} />
+                    <Route path="*" element={<Navigate to="/teacher" replace />} />
                 </Routes>
             </>
         );
     }
 
+    // Role Guard: Student account
     return (
         <>
             <ScrollToTop />
@@ -73,6 +77,8 @@ function App() {
                 <Route path="/gpa" element={<GpaPage user={user} onLogout={handleLogout} />} />
                 <Route path="/schedule" element={<RoutinePage user={user} onLogout={handleLogout} />} />
                 <Route path="/archive" element={<ArchivePage user={user} onLogout={handleLogout} />} />
+                <Route path="/teacher/*" element={<Navigate to="/" replace />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
             <MobileNav />
         </>

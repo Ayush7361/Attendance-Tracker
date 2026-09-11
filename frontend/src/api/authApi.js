@@ -1,7 +1,7 @@
 import axios from "../utils/axiosInstance";
 
-export function registerUser(username, password) {
-    return axios.post("/api/auth/register", { username, password });
+export function registerUser(username, password, role = "student") {
+    return axios.post("/api/auth/register", { username, password, role });
 }
 
 export function loginUser(username, password) {

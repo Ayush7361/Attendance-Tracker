@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
     getTeacherAssignments,
     getTodayTeacherSchedule,
@@ -31,7 +32,11 @@ function formatDateKey(date) {
 
 function TeacherDashboard({ user, onLogout }) {
     const { showToast } = useToast();
-    const [activeTab, setActiveTab] = useState("mark"); // "mark" | "routine"
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const isRoutineTab = location.pathname.includes("/routine");
+    const activeTab = isRoutineTab ? "routine" : "mark";
 
     const [assignments, setAssignments] = useState([]);
     const [selectedAssignmentIndex, setSelectedAssignmentIndex] = useState(0);
@@ -129,7 +134,6 @@ function TeacherDashboard({ user, onLogout }) {
             setClassName(data.name || "Class");
             setIsAlreadySubmitted(data.isAlreadySubmitted || false);
 
-            // If past record exists, keep absentees unchecked. Otherwise default-present.
             const presentSet = new Set();
             (data.students || []).forEach((s) => {
                 if (!s.isAbsent) {
@@ -197,7 +201,6 @@ function TeacherDashboard({ user, onLogout }) {
         }
     }
 
-    // Routine tab helpers
     async function loadRoutine(cid) {
         if (!cid) return;
         setLoadingRoutine(true);
@@ -260,13 +263,13 @@ function TeacherDashboard({ user, onLogout }) {
                 <div className="header-brand">
                     <div className="brand-badge" style={{ background: "#818cf8" }}>TP</div>
                     <div>
-                        <h1 className="app-title">Teacher Command Center</h1>
+                        <h1 className="app-title">Teacher Portal</h1>
                         <p className="app-subtitle">Welcome, {user.username} (Teacher)</p>
                     </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                     <span className="pill-badge" style={{ background: "rgba(129, 140, 248, 0.2)", color: "#818cf8", padding: "4px 10px", borderRadius: "12px", fontSize: "0.8rem", fontWeight: "600" }}>
-                        Teacher Role
+                        Teacher Portal
                     </span>
                     <button className="logout-btn" onClick={onLogout}>
                         Logout
@@ -280,7 +283,7 @@ function TeacherDashboard({ user, onLogout }) {
                     <button
                         type="button"
                         className={`action-btn ${activeTab === "mark" ? "btn-primary" : ""}`}
-                        onClick={() => setActiveTab("mark")}
+                        onClick={() => navigate("/teacher")}
                         style={{ flex: 1, padding: "12px", borderRadius: "8px", fontWeight: "700", border: "none", cursor: "pointer" }}
                     >
                         ⚡ Mark Attendance
@@ -288,7 +291,7 @@ function TeacherDashboard({ user, onLogout }) {
                     <button
                         type="button"
                         className={`action-btn ${activeTab === "routine" ? "btn-primary" : ""}`}
-                        onClick={() => setActiveTab("routine")}
+                        onClick={() => navigate("/teacher/routine")}
                         style={{ flex: 1, padding: "12px", borderRadius: "8px", fontWeight: "700", border: "none", cursor: "pointer" }}
                     >
                         🗓️ Master Class Routine
@@ -514,7 +517,6 @@ function TeacherDashboard({ user, onLogout }) {
                             </div>
                         )}
 
-                        {/* Add new routine slot form */}
                         <form onSubmit={handleAddRoutineSlot} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "10px", background: "rgba(15, 23, 42, 0.6)", padding: "16px", borderRadius: "10px", marginBottom: "20px" }}>
                             <div>
                                 <label style={{ fontSize: "0.75rem", color: "#94a3b8", fontWeight: "700" }}>Day</label>
@@ -558,7 +560,6 @@ function TeacherDashboard({ user, onLogout }) {
                             </div>
                         </form>
 
-                        {/* Routine slots display */}
                         {loadingRoutine ? (
                             <div style={{ textAlign: "center", padding: "20px", color: "#94a3b8" }}>Loading routine...</div>
                         ) : classRoutine.length === 0 ? (
