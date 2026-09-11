@@ -1,12 +1,14 @@
 const User = require("../models/User");
 const Class = require("../models/Class");
 const DayRecord = require("../models/DayRecord");
+const AttendanceAudit = require("../models/AttendanceAudit");
+const Notification = require("../models/Notification");
 
 const DAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
 async function getAssignments(req, res) {
     try {
-        const teacher = await User.findById(req.userId).populate("teacherAssignments.classId", "name");
+        const teacher = await User.findById(req.userId).populate("teacherAssignments.classId", "name joinCode");
         if (!teacher || teacher.role !== "teacher") {
             return res.status(403).json({ message: "Forbidden: Teacher account required" });
         }
@@ -16,7 +18,6 @@ async function getAssignments(req, res) {
     }
 }
 
-// Automatically returns today's scheduled classes and subjects for the teacher based on the Master Class Routine
 async function getTodaySchedule(req, res) {
     try {
         const teacher = await User.findById(req.userId);
@@ -26,9 +27,8 @@ async function getTodaySchedule(req, res) {
 
         const dateStr = req.query.date;
         const targetDate = dateStr ? new Date(dateStr) : new Date();
-        const dayKey = DAY_KEYS[targetDate.getDay()]; // e.g. "mon", "tue"
+        const dayKey = DAY_KEYS[targetDate.getDay()];
 
-        // Find all classes where teacher is assigned or has routine slots
         const assignedClassIds = (teacher.teacherAssignments || []).map((a) => a.classId);
         const classes = await Class.find({ _id: { $in: assignedClassIds } });
 
@@ -36,10 +36,9 @@ async function getTodaySchedule(req, res) {
 
         for (let c of classes) {
             const routineForDay = (c.routine || []).filter((r) => r.day === dayKey);
-            
+
             if (routineForDay.length > 0) {
                 for (let r of routineForDay) {
-                    // Check if teacher is assigned to this routine slot or assigned to the subject in general
                     const isTeacherForSlot =
                         (r.teacherId && r.teacherId.toString() === teacher._id.toString()) ||
                         (teacher.teacherAssignments || []).some(
@@ -60,7 +59,6 @@ async function getTodaySchedule(req, res) {
                     }
                 }
             } else {
-                // Fallback: If no routine slots defined yet, use flat teacherAssignments for this class
                 const flatAssignments = (teacher.teacherAssignments || []).filter(
                     (a) => a.classId.toString() === c._id.toString()
                 );
@@ -69,7 +67,7 @@ async function getTodaySchedule(req, res) {
                         classId: c._id,
                         className: c.name,
                         subjectName: fa.subjectName,
-                        timeSlot: "Scheduled Class",
+                        timeSlot: "Scheduled Period",
                         periodNumber: 1,
                         day: dayKey
                     });
@@ -111,7 +109,6 @@ async function getClassRoster(req, res) {
             return res.status(404).json({ message: "Class not found" });
         }
 
-        // If date and subjectName are provided, check existing DayRecord docs to pre-fill past attendance status for edits
         let existingStatuses = {};
         let isAlreadySubmitted = false;
 
@@ -140,7 +137,6 @@ async function getClassRoster(req, res) {
             return {
                 _id: s._id,
                 username: s.username,
-                // If past record exists and status is 'missed', isAbsent = true. Otherwise false (default present).
                 isAbsent: status === "missed"
             };
         });
@@ -148,6 +144,7 @@ async function getClassRoster(req, res) {
         res.status(200).json({
             _id: classDoc._id,
             name: classDoc.name,
+            joinCode: classDoc.joinCode,
             isAlreadySubmitted,
             students: rosterWithStatus
         });
@@ -191,6 +188,15 @@ async function submitAttendance(req, res) {
         const parsedDate = new Date(date);
         const absentSet = new Set((absentStudentIds || []).map((id) => id.toString()));
 
+        // Check if an existing audit record exists to identify CORRECTION action type
+        const previousAudit = await AttendanceAudit.findOne({
+            classId,
+            subjectName: subjectName.trim(),
+            date: parsedDate
+        });
+
+        const actionType = previousAudit ? "CORRECTION" : "INITIAL_SUBMISSION";
+
         for (let student of classDoc.students) {
             const isAbsent = absentSet.has(student._id.toString());
             const status = isAbsent ? "missed" : "attended";
@@ -233,7 +239,36 @@ async function submitAttendance(req, res) {
             dayRecord.attendedClasses = att;
 
             await dayRecord.save();
+
+            // Create notification for student
+            const dateFormatted = parsedDate.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+            const notifMsg = isAbsent
+                ? `Prof. ${teacher.username} marked you ABSENT for ${subjectName} on ${dateFormatted}.`
+                : `Prof. ${teacher.username} logged your attendance for ${subjectName} on ${dateFormatted}: PRESENT.`;
+
+            await Notification.create({
+                userId: student._id,
+                title: `Attendance Logged: ${subjectName}`,
+                message: notifMsg,
+                type: isAbsent ? "ATTENDANCE_WARNING" : "ATTENDANCE_LOGGED"
+            });
         }
+
+        // Create Attendance Audit log
+        const absentList = Array.from(absentSet);
+        const presentCount = classDoc.students.length - absentList.length;
+
+        await AttendanceAudit.create({
+            teacherId: teacher._id,
+            classId: classDoc._id,
+            subjectName: subjectName.trim(),
+            date: parsedDate,
+            totalStudents: classDoc.students.length,
+            presentCount,
+            absentCount: absentList.length,
+            absentStudentIds: absentList,
+            actionType
+        });
 
         res.status(200).json({
             message: "Attendance submitted successfully",
@@ -242,6 +277,126 @@ async function submitAttendance(req, res) {
     } catch (err) {
         console.error("Error submitting teacher attendance:", err);
         res.status(500).json({ message: "Server error submitting attendance" });
+    }
+}
+
+async function getClassAnalytics(req, res) {
+    try {
+        const { classId } = req.params;
+        const teacher = await User.findById(req.userId);
+        if (!teacher || teacher.role !== "teacher") {
+            return res.status(403).json({ message: "Forbidden: Teacher access required" });
+        }
+
+        const classDoc = await Class.findById(classId).populate("students", "username _id");
+        if (!classDoc) {
+            return res.status(404).json({ message: "Class not found" });
+        }
+
+        const studentIds = classDoc.students.map((s) => s._id);
+        const dayRecords = await DayRecord.find({ userId: { $in: studentIds } });
+
+        const studentStatsMap = {};
+        classDoc.students.forEach((s) => {
+            studentStatsMap[s._id.toString()] = {
+                username: s.username,
+                _id: s._id,
+                total: 0,
+                attended: 0
+            };
+        });
+
+        dayRecords.forEach((r) => {
+            const sid = r.userId.toString();
+            if (studentStatsMap[sid]) {
+                studentStatsMap[sid].total += r.totalClasses || 0;
+                studentStatsMap[sid].attended += r.attendedClasses || 0;
+            }
+        });
+
+        let totalClassHeld = 0;
+        let totalClassAttended = 0;
+        const atRiskStudents = [];
+
+        Object.values(studentStatsMap).forEach((st) => {
+            totalClassHeld += st.total;
+            totalClassAttended += st.attended;
+            const pct = st.total > 0 ? (st.attended / st.total) * 100 : 100;
+
+            if (st.total > 0 && pct < 75) {
+                atRiskStudents.push({
+                    _id: st._id,
+                    username: st.username,
+                    total: st.total,
+                    attended: st.attended,
+                    percentage: Number(pct.toFixed(1))
+                });
+            }
+        });
+
+        const classAveragePct = totalClassHeld > 0 ? (totalClassAttended / totalClassHeld) * 100 : 0;
+
+        res.status(200).json({
+            classId: classDoc._id,
+            className: classDoc.name,
+            totalStudents: classDoc.students.length,
+            classAveragePct: Number(classAveragePct.toFixed(1)),
+            atRiskCount: atRiskStudents.length,
+            atRiskStudents
+        });
+    } catch (err) {
+        console.error("Error fetching class analytics:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+async function getAuditHistory(req, res) {
+    try {
+        const teacher = await User.findById(req.userId);
+        if (!teacher || teacher.role !== "teacher") {
+            return res.status(403).json({ message: "Forbidden: Teacher access required" });
+        }
+
+        const audits = await AttendanceAudit.find({ teacherId: req.userId })
+            .populate("classId", "name")
+            .populate("absentStudentIds", "username")
+            .sort({ createdAt: -1 })
+            .limit(40);
+
+        res.status(200).json(audits);
+    } catch (err) {
+        console.error("Error fetching audit history:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+async function joinClassWithCode(req, res) {
+    try {
+        const { joinCode } = req.body;
+        if (!joinCode) {
+            return res.status(400).json({ message: "joinCode is required" });
+        }
+
+        const classDoc = await Class.findOne({ joinCode: joinCode.trim().toUpperCase() });
+        if (!classDoc) {
+            return res.status(404).json({ message: "Invalid Class Join Code" });
+        }
+
+        const isAlreadyEnrolled = classDoc.students.some((s) => s.toString() === req.userId);
+        if (isAlreadyEnrolled) {
+            return res.status(400).json({ message: "You are already enrolled in this class" });
+        }
+
+        classDoc.students.push(req.userId);
+        await classDoc.save();
+
+        res.status(200).json({
+            message: `Successfully joined ${classDoc.name}!`,
+            className: classDoc.name
+        });
+    } catch (err) {
+        console.error("Error joining class:", err);
+        res.status(500).json({ message: "Server error joining class" });
     }
 }
 
@@ -316,6 +471,9 @@ module.exports = {
     getTodaySchedule,
     getClassRoster,
     submitAttendance,
+    getClassAnalytics,
+    getAuditHistory,
+    joinClassWithCode,
     getClassRoutine,
     saveClassRoutine,
     getTeacherCoveredSubjectsForStudent

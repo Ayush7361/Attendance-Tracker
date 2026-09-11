@@ -7,6 +7,9 @@ const {
     getTodaySchedule,
     getClassRoster,
     submitAttendance,
+    getClassAnalytics,
+    getAuditHistory,
+    joinClassWithCode,
     getClassRoutine,
     saveClassRoutine,
     getTeacherCoveredSubjectsForStudent
@@ -16,10 +19,13 @@ router.get("/assignments", authMiddleware, requireTeacherRole, getAssignments);
 router.get("/today-schedule", authMiddleware, requireTeacherRole, getTodaySchedule);
 router.get("/class/:classId/roster", authMiddleware, requireTeacherRole, getClassRoster);
 router.post("/attendance", authMiddleware, requireTeacherRole, submitAttendance);
+router.get("/class/:classId/analytics", authMiddleware, requireTeacherRole, getClassAnalytics);
+router.get("/audit-history", authMiddleware, requireTeacherRole, getAuditHistory);
 router.get("/class/:classId/routine", authMiddleware, requireTeacherRole, getClassRoutine);
 router.post("/class/:classId/routine", authMiddleware, requireTeacherRole, saveClassRoutine);
 
-// Student helper route to get teacher-covered subjects
+// Student endpoints
+router.post("/class/join", authMiddleware, joinClassWithCode);
 router.get("/covered-subjects", authMiddleware, getTeacherCoveredSubjectsForStudent);
 
 module.exports = router;

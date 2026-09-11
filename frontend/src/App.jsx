@@ -53,6 +53,8 @@ function App() {
                 <ScrollToTop />
                 <Routes>
                     <Route path="/teacher" element={<TeacherDashboard user={user} onLogout={handleLogout} />} />
+                    <Route path="/teacher/analytics" element={<TeacherDashboard user={user} onLogout={handleLogout} />} />
+                    <Route path="/teacher/audit" element={<TeacherDashboard user={user} onLogout={handleLogout} />} />
                     <Route path="/teacher/routine" element={<TeacherDashboard user={user} onLogout={handleLogout} />} />
                     <Route path="*" element={<Navigate to="/teacher" replace />} />
                 </Routes>

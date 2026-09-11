@@ -12,7 +12,6 @@ async function seedData() {
 
         const passwordHash = await bcrypt.hash("password123", 10);
 
-        // 1. Create or find Students
         let student1 = await User.findOne({ username: "student1" });
         if (!student1) {
             student1 = await User.create({
@@ -33,7 +32,6 @@ async function seedData() {
             console.log("Created student2");
         }
 
-        // 2. Create or find Teacher
         let teacher1 = await User.findOne({ username: "teacher1" });
         if (!teacher1) {
             teacher1 = await User.create({
@@ -43,7 +41,6 @@ async function seedData() {
             });
         }
 
-        // 3. Create or find Class IT-2 with Master Routine
         let classDoc = await Class.findOne({ name: "IT-2" });
         
         const sampleRoutine = [
@@ -58,18 +55,19 @@ async function seedData() {
         if (!classDoc) {
             classDoc = await Class.create({
                 name: "IT-2",
+                joinCode: "IT2-894A",
                 students: [student1._id, student2._id],
                 routine: sampleRoutine
             });
-            console.log("Created Class IT-2 with enrolled students and master routine");
+            console.log("Created Class IT-2 with joinCode IT2-894A");
         } else {
+            classDoc.joinCode = "IT2-894A";
             classDoc.students = [student1._id, student2._id];
             classDoc.routine = sampleRoutine;
             await classDoc.save();
-            console.log("Updated Class IT-2 roster and master routine");
+            console.log("Updated Class IT-2 joinCode IT2-894A");
         }
 
-        // Update teacher assignments
         teacher1.role = "teacher";
         teacher1.teacherAssignments = [
             {
@@ -81,7 +79,7 @@ async function seedData() {
         console.log("Updated teacher1 assignments");
 
         console.log("\n================ SEED COMPLETE ================");
-        console.log("Class: IT-2 (ID: " + classDoc._id + ")");
+        console.log("Class: IT-2 (ID: " + classDoc._id + " | Join Code: IT2-894A)");
         console.log("Master Routine: 6 weekly slots seeded (Mon-Sat)");
         console.log("Teacher: teacher1 / password123 (Role: teacher, Subject: Data Structures)");
         console.log("Students: student1 / password123, student2 / password123");

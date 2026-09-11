@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import AcademicHealthScore from "../components/AcademicHealthScore";
 import UnifiedActivityForecast from "../components/UnifiedActivityForecast";
 import MobileNotificationDrawer from "../components/MobileNotificationDrawer";
+import ClassJoinModal from "../components/ClassJoinModal";
 import { getSchedule, getOverallSummary, getDay } from "../api/attendanceApi";
 import { getDeadlines, getDeadlineAnalytics, getWorkloadForecast } from "../api/deadlinesApi";
 import { getStudySessions } from "../api/studyApi";
@@ -66,6 +67,7 @@ function Hub({ user, onLogout }) {
     const [loading, setLoading] = useState(() => !hubCache);
     const [showAnalytics, setShowAnalytics] = useState(false);
     const [moduleLevelFilter, setModuleLevelFilter] = useState("all");
+    const [showJoinModal, setShowJoinModal] = useState(false);
 
     useEffect(() => {
         loadDashboard();
@@ -261,6 +263,14 @@ function Hub({ user, onLogout }) {
 
                         {/* Quick actions */}
                         <div className="hub-quick-actions">
+                            <button
+                                type="button"
+                                className="hub-action-btn"
+                                onClick={() => setShowJoinModal(true)}
+                                style={{ background: "rgba(129, 140, 248, 0.2)", color: "#818cf8", borderColor: "rgba(129, 140, 248, 0.4)" }}
+                            >
+                                🔑 Join Class
+                            </button>
                             <Link to="/attendance" className="hub-action-btn">
                                 {todayLogged ? "View Today's Log" : "Log Attendance"}
                             </Link>
@@ -271,6 +281,13 @@ function Hub({ user, onLogout }) {
                                 Add Deadline
                             </Link>
                         </div>
+
+                        {showJoinModal && (
+                            <ClassJoinModal
+                                onClose={() => setShowJoinModal(false)}
+                                onSuccess={loadDashboard}
+                            />
+                        )}
 
                         {/* Action Center: Classes Today & Coming Up */}
                         <div className="hub-command-grid hub-action-center-grid">

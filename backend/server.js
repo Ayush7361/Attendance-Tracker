@@ -13,6 +13,7 @@ const studyRoutes = require("./routes/studyRoutes");
 const gpaRoutes = require("./routes/gpaRoutes");
 const archiveRoutes = require("./routes/archiveRoutes");
 const teacherRoutes = require("./routes/teacherRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/api/study-sessions", studyRoutes);
 app.use("/api/gpa", gpaRoutes);
 app.use("/api/archive", archiveRoutes);
 app.use("/api/teacher", teacherRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 const PORT = process.env.PORT || 5000;
 

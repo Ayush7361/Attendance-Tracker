@@ -44,6 +44,29 @@ export async function submitTeacherAttendance(payload) {
     return res.data;
 }
 
+export async function getClassAnalytics(classId) {
+    const res = await axios.get(`${API_URL}/teacher/class/${classId}/analytics`, {
+        headers: getAuthHeader()
+    });
+    return res.data;
+}
+
+export async function getAuditHistory() {
+    const res = await axios.get(`${API_URL}/teacher/audit-history`, {
+        headers: getAuthHeader()
+    });
+    return res.data;
+}
+
+export async function joinClassWithCode(joinCode) {
+    const res = await axios.post(
+        `${API_URL}/teacher/class/join`,
+        { joinCode },
+        { headers: getAuthHeader() }
+    );
+    return res.data;
+}
+
 export async function getClassRoutine(classId) {
     const res = await axios.get(`${API_URL}/teacher/class/${classId}/routine`, {
         headers: getAuthHeader()

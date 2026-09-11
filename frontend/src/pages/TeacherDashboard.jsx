@@ -5,6 +5,8 @@ import {
     getTodayTeacherSchedule,
     getClassRoster,
     submitTeacherAttendance,
+    getClassAnalytics,
+    getAuditHistory,
     getClassRoutine,
     saveClassRoutine
 } from "../api/teacherApi";
@@ -35,8 +37,11 @@ function TeacherDashboard({ user, onLogout }) {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const isRoutineTab = location.pathname.includes("/routine");
-    const activeTab = isRoutineTab ? "routine" : "mark";
+    const path = location.pathname;
+    let activeTab = "mark";
+    if (path.includes("/analytics")) activeTab = "analytics";
+    else if (path.includes("/audit")) activeTab = "audit";
+    else if (path.includes("/routine")) activeTab = "routine";
 
     const [assignments, setAssignments] = useState([]);
     const [selectedAssignmentIndex, setSelectedAssignmentIndex] = useState(0);
@@ -47,6 +52,7 @@ function TeacherDashboard({ user, onLogout }) {
 
     const [roster, setRoster] = useState([]);
     const [className, setClassName] = useState("");
+    const [joinCode, setJoinCode] = useState("");
     const [isAlreadySubmitted, setIsAlreadySubmitted] = useState(false);
     const [presentStudentIds, setPresentStudentIds] = useState(new Set());
 
@@ -54,7 +60,15 @@ function TeacherDashboard({ user, onLogout }) {
     const [loadingRoster, setLoadingRoster] = useState(false);
     const [submitting, setSubmitting] = useState(false);
 
-    // Routine Feeder state
+    // Analytics state
+    const [analyticsData, setAnalyticsData] = useState(null);
+    const [loadingAnalytics, setLoadingAnalytics] = useState(false);
+
+    // Audit state
+    const [auditLogs, setAuditLogs] = useState([]);
+    const [loadingAudit, setLoadingAudit] = useState(false);
+
+    // Routine state
     const [routineClassId, setRoutineClassId] = useState("");
     const [classRoutine, setClassRoutine] = useState([]);
     const [loadingRoutine, setLoadingRoutine] = useState(false);
@@ -77,9 +91,18 @@ function TeacherDashboard({ user, onLogout }) {
             const cid = current.classId?._id || current.classId;
             if (cid) {
                 loadRoster(cid, selectedDate, current.subjectName);
+                if (activeTab === "analytics") {
+                    loadAnalytics(cid);
+                }
             }
         }
-    }, [assignments, selectedAssignmentIndex, selectedDate]);
+    }, [assignments, selectedAssignmentIndex, selectedDate, activeTab]);
+
+    useEffect(() => {
+        if (activeTab === "audit") {
+            loadAudits();
+        }
+    }, [activeTab]);
 
     async function loadTeacherData() {
         setLoadingAssignments(true);
@@ -132,6 +155,7 @@ function TeacherDashboard({ user, onLogout }) {
             const data = await getClassRoster(classId, dateStr, subjectName);
             setRoster(data.students || []);
             setClassName(data.name || "Class");
+            setJoinCode(data.joinCode || "");
             setIsAlreadySubmitted(data.isAlreadySubmitted || false);
 
             const presentSet = new Set();
@@ -145,6 +169,30 @@ function TeacherDashboard({ user, onLogout }) {
             console.error("Failed to load class roster:", err);
         } finally {
             setLoadingRoster(false);
+        }
+    }
+
+    async function loadAnalytics(classId) {
+        setLoadingAnalytics(true);
+        try {
+            const data = await getClassAnalytics(classId);
+            setAnalyticsData(data);
+        } catch (err) {
+            console.error("Failed to load analytics:", err);
+        } finally {
+            setLoadingAnalytics(false);
+        }
+    }
+
+    async function loadAudits() {
+        setLoadingAudit(true);
+        try {
+            const data = await getAuditHistory();
+            setAuditLogs(data || []);
+        } catch (err) {
+            console.error("Failed to load audit history:", err);
+        } finally {
+            setLoadingAudit(false);
         }
     }
 
@@ -190,7 +238,7 @@ function TeacherDashboard({ user, onLogout }) {
             const presentCount = roster.length - absentStudentIds.length;
             setIsAlreadySubmitted(true);
             if (showToast) {
-                showToast(`Attendance saved! ${presentCount}/${roster.length} present for ${subjectName}`, "success");
+                showToast(`Attendance & Audit Log saved! ${presentCount}/${roster.length} present for ${subjectName}`, "success");
             }
         } catch (err) {
             console.error("Failed to submit attendance:", err);
@@ -263,7 +311,7 @@ function TeacherDashboard({ user, onLogout }) {
                 <div className="header-brand">
                     <div className="brand-badge" style={{ background: "#818cf8" }}>TP</div>
                     <div>
-                        <h1 className="app-title">Teacher Portal</h1>
+                        <h1 className="app-title">Enterprise Teacher Suite</h1>
                         <p className="app-subtitle">Welcome, {user.username} (Teacher)</p>
                     </div>
                 </div>
@@ -277,35 +325,52 @@ function TeacherDashboard({ user, onLogout }) {
                 </div>
             </header>
 
-            <main className="container" style={{ maxWidth: "850px", marginTop: "24px" }}>
-                {/* Navigation Tabs */}
-                <div className="card-panel" style={{ display: "flex", gap: "12px", padding: "10px", marginBottom: "20px" }}>
+            <main className="container" style={{ maxWidth: "900px", marginTop: "24px" }}>
+                {/* Navigation Tab Suite */}
+                <div className="card-panel" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "8px", padding: "8px", marginBottom: "20px" }}>
                     <button
                         type="button"
                         className={`action-btn ${activeTab === "mark" ? "btn-primary" : ""}`}
                         onClick={() => navigate("/teacher")}
-                        style={{ flex: 1, padding: "12px", borderRadius: "8px", fontWeight: "700", border: "none", cursor: "pointer" }}
+                        style={{ padding: "10px", borderRadius: "8px", fontWeight: "700", border: "none", cursor: "pointer", fontSize: "0.9rem" }}
                     >
                         ⚡ Mark Attendance
                     </button>
                     <button
                         type="button"
+                        className={`action-btn ${activeTab === "analytics" ? "btn-primary" : ""}`}
+                        onClick={() => navigate("/teacher/analytics")}
+                        style={{ padding: "10px", borderRadius: "8px", fontWeight: "700", border: "none", cursor: "pointer", fontSize: "0.9rem" }}
+                    >
+                        📊 Class Risk Analytics
+                    </button>
+                    <button
+                        type="button"
+                        className={`action-btn ${activeTab === "audit" ? "btn-primary" : ""}`}
+                        onClick={() => navigate("/teacher/audit")}
+                        style={{ padding: "10px", borderRadius: "8px", fontWeight: "700", border: "none", cursor: "pointer", fontSize: "0.9rem" }}
+                    >
+                        📜 Audit History
+                    </button>
+                    <button
+                        type="button"
                         className={`action-btn ${activeTab === "routine" ? "btn-primary" : ""}`}
                         onClick={() => navigate("/teacher/routine")}
-                        style={{ flex: 1, padding: "12px", borderRadius: "8px", fontWeight: "700", border: "none", cursor: "pointer" }}
+                        style={{ padding: "10px", borderRadius: "8px", fontWeight: "700", border: "none", cursor: "pointer", fontSize: "0.9rem" }}
                     >
-                        🗓️ Master Class Routine
+                        🗓️ Master Routine
                     </button>
                 </div>
 
+                {/* TAB 1: MARK ATTENDANCE */}
                 {activeTab === "mark" && (
                     <>
                         <div className="page-header-box card-panel" style={{ marginBottom: "20px" }}>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
                                 <div>
-                                    <h2 className="page-title" style={{ margin: 0 }}>Digital Attendance Marking</h2>
+                                    <h2 className="page-title" style={{ margin: 0 }}>Digital Period Attendance</h2>
                                     <p className="page-subtitle" style={{ margin: "4px 0 0" }}>
-                                        Automated 1-click marking. Updates immediately sync to student dashboards.
+                                        Fast 1-click marking. Generates immutable audit logs & student alerts.
                                     </p>
                                 </div>
                                 {isAutoSelected && (
@@ -380,9 +445,16 @@ function TeacherDashboard({ user, onLogout }) {
                                 <div className="card-panel">
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "16px" }}>
                                         <div>
-                                            <h3 style={{ margin: 0, fontSize: "1.1rem" }}>
-                                                Roster for {className} ({subjectName})
-                                            </h3>
+                                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                                <h3 style={{ margin: 0, fontSize: "1.1rem" }}>
+                                                    Roster for {className} ({subjectName})
+                                                </h3>
+                                                {joinCode && (
+                                                    <span style={{ fontSize: "0.78rem", background: "rgba(129, 140, 248, 0.2)", color: "#818cf8", padding: "2px 8px", borderRadius: "6px", fontWeight: "700" }}>
+                                                        Join Code: {joinCode}
+                                                    </span>
+                                                )}
+                                            </div>
                                             <div style={{ fontSize: "0.85rem", marginTop: "4px" }}>
                                                 {isAlreadySubmitted ? (
                                                     <span style={{ color: "#818cf8", fontWeight: "600" }}>
@@ -408,7 +480,7 @@ function TeacherDashboard({ user, onLogout }) {
                                     {loadingRoster ? (
                                         <div style={{ padding: "20px", textAlign: "center", color: "#94a3b8" }}>Loading student roster...</div>
                                     ) : roster.length === 0 ? (
-                                        <div style={{ padding: "20px", textAlign: "center", color: "#94a3b8" }}>No enrolled students found.</div>
+                                        <div style={{ padding: "20px", textAlign: "center", color: "#94a3b8" }}>No enrolled students found. Share Join Code: {joinCode}</div>
                                     ) : (
                                         <div className="roster-list" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                                             {roster.map((student) => {
@@ -463,13 +535,13 @@ function TeacherDashboard({ user, onLogout }) {
                                             type="submit"
                                             className="save-day-record-btn"
                                             disabled={submitting || roster.length === 0}
-                                            style={{ width: "100%", maxWidth: "320px", padding: "12px 24px", fontSize: "1rem" }}
+                                            style={{ width: "100%", maxWidth: "340px", padding: "12px 24px", fontSize: "1rem" }}
                                         >
                                             {submitting
                                                 ? "Saving..."
                                                 : isAlreadySubmitted
-                                                ? "Update Past Attendance"
-                                                : "Submit Attendance (1-Click)"}
+                                                ? "Update Past Attendance Log"
+                                                : "Submit Period Attendance (1-Click)"}
                                         </button>
                                     </div>
                                 </div>
@@ -478,6 +550,140 @@ function TeacherDashboard({ user, onLogout }) {
                     </>
                 )}
 
+                {/* TAB 2: CLASS RISK ANALYTICS */}
+                {activeTab === "analytics" && (
+                    <div className="card-panel">
+                        <div style={{ marginBottom: "20px" }}>
+                            <h2 style={{ margin: 0, fontSize: "1.25rem" }}>Class Performance & At-Risk Analytics</h2>
+                            <p style={{ margin: "4px 0 0", fontSize: "0.88rem", color: "#94a3b8" }}>
+                                Monitor class attendance health and identify students falling below the 75% threshold.
+                            </p>
+                        </div>
+
+                        {loadingAnalytics ? (
+                            <div style={{ textAlign: "center", padding: "30px", color: "#94a3b8" }}>Calculating class analytics...</div>
+                        ) : !analyticsData ? (
+                            <div style={{ textAlign: "center", padding: "30px", color: "#94a3b8" }}>No analytics data available.</div>
+                        ) : (
+                            <>
+                                {/* Overview Metrics */}
+                                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px", marginBottom: "24px" }}>
+                                    <div style={{ background: "rgba(15, 23, 42, 0.6)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255, 255, 255, 0.1)" }}>
+                                        <span style={{ fontSize: "0.8rem", color: "#94a3b8", fontWeight: "700" }}>CLASS AVERAGE</span>
+                                        <div style={{ fontSize: "1.8rem", fontWeight: "800", color: analyticsData.classAveragePct >= 75 ? "#34d399" : "#f87171", marginTop: "4px" }}>
+                                            {analyticsData.classAveragePct}%
+                                        </div>
+                                    </div>
+
+                                    <div style={{ background: "rgba(15, 23, 42, 0.6)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255, 255, 255, 0.1)" }}>
+                                        <span style={{ fontSize: "0.8rem", color: "#94a3b8", fontWeight: "700" }}>TOTAL STUDENTS</span>
+                                        <div style={{ fontSize: "1.8rem", fontWeight: "800", color: "#ffffff", marginTop: "4px" }}>
+                                            {analyticsData.totalStudents}
+                                        </div>
+                                    </div>
+
+                                    <div style={{ background: "rgba(15, 23, 42, 0.6)", padding: "16px", borderRadius: "12px", border: analyticsData.atRiskCount > 0 ? "1px solid rgba(239, 68, 68, 0.4)" : "1px solid rgba(255, 255, 255, 0.1)" }}>
+                                        <span style={{ fontSize: "0.8rem", color: "#94a3b8", fontWeight: "700" }}>AT-RISK STUDENTS (&lt; 75%)</span>
+                                        <div style={{ fontSize: "1.8rem", fontWeight: "800", color: analyticsData.atRiskCount > 0 ? "#f87171" : "#34d399", marginTop: "4px" }}>
+                                            {analyticsData.atRiskCount}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* At-Risk Students List */}
+                                <h3 style={{ fontSize: "1.1rem", marginBottom: "12px" }}>At-Risk Student Flag List</h3>
+                                {analyticsData.atRiskStudents.length === 0 ? (
+                                    <div style={{ padding: "16px", background: "rgba(52, 211, 153, 0.1)", borderRadius: "10px", border: "1px solid rgba(52, 211, 153, 0.3)", color: "#34d399", fontWeight: "600" }}>
+                                        ✓ Outstanding! All students in {analyticsData.className} are maintaining attendance above 75%.
+                                    </div>
+                                ) : (
+                                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                        {analyticsData.atRiskStudents.map((st) => (
+                                            <div
+                                                key={st._id}
+                                                style={{
+                                                    display: "flex",
+                                                    justify: "space-between",
+                                                    alignItems: "center",
+                                                    padding: "12px 16px",
+                                                    borderRadius: "10px",
+                                                    background: "rgba(239, 68, 68, 0.08)",
+                                                    border: "1px solid rgba(239, 68, 68, 0.3)"
+                                                }}
+                                            >
+                                                <div>
+                                                    <span style={{ fontWeight: "700", color: "#ffffff", fontSize: "1rem" }}>{st.username}</span>
+                                                    <div style={{ fontSize: "0.8rem", color: "#94a3b8", marginTop: "2px" }}>
+                                                        Attended {st.attended} / {st.total} classes held
+                                                    </div>
+                                                </div>
+                                                <span style={{ padding: "4px 12px", borderRadius: "12px", background: "rgba(239, 68, 68, 0.2)", color: "#f87171", fontWeight: "800", fontSize: "0.9rem" }}>
+                                                    ⚠️ {st.percentage}%
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </div>
+                )}
+
+                {/* TAB 3: AUDIT HISTORY */}
+                {activeTab === "audit" && (
+                    <div className="card-panel">
+                        <div style={{ marginBottom: "20px" }}>
+                            <h2 style={{ margin: 0, fontSize: "1.25rem" }}>Attendance Audit Trail</h2>
+                            <p style={{ margin: "4px 0 0", fontSize: "0.88rem", color: "#94a3b8" }}>
+                                Immutable chronological log of all period submissions and past corrections.
+                            </p>
+                        </div>
+
+                        {loadingAudit ? (
+                            <div style={{ textAlign: "center", padding: "30px", color: "#94a3b8" }}>Loading audit logs...</div>
+                        ) : auditLogs.length === 0 ? (
+                            <div style={{ textAlign: "center", padding: "30px", color: "#94a3b8" }}>No audit logs recorded yet.</div>
+                        ) : (
+                            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                {auditLogs.map((log) => (
+                                    <div
+                                        key={log._id}
+                                        style={{
+                                            padding: "14px 16px",
+                                            borderRadius: "10px",
+                                            background: "rgba(15, 23, 42, 0.6)",
+                                            border: "1px solid rgba(255, 255, 255, 0.1)"
+                                        }}
+                                    >
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                                            <div>
+                                                <span style={{ fontWeight: "700", color: "#ffffff", fontSize: "0.98rem" }}>
+                                                    {log.subjectName} ({log.classId?.name || "Class"})
+                                                </span>
+                                                <span style={{ marginLeft: "8px", fontSize: "0.72rem", padding: "2px 8px", borderRadius: "6px", background: log.actionType === "CORRECTION" ? "rgba(129, 140, 248, 0.2)" : "rgba(16, 185, 129, 0.2)", color: log.actionType === "CORRECTION" ? "#818cf8" : "#34d399", fontWeight: "700" }}>
+                                                    {log.actionType}
+                                                </span>
+                                            </div>
+                                            <span style={{ fontSize: "0.78rem", color: "#94a3b8" }}>
+                                                {new Date(log.createdAt).toLocaleString()}
+                                            </span>
+                                        </div>
+                                        <div style={{ fontSize: "0.85rem", color: "#cbd5e1" }}>
+                                            Date: <strong>{new Date(log.date).toLocaleDateString()}</strong> | Present: <strong style={{ color: "#34d399" }}>{log.presentCount}</strong> | Absent: <strong style={{ color: "#f87171" }}>{log.absentCount}</strong>
+                                        </div>
+                                        {log.absentStudentIds && log.absentStudentIds.length > 0 && (
+                                            <div style={{ fontSize: "0.78rem", color: "#94a3b8", marginTop: "4px" }}>
+                                                Absentees: {log.absentStudentIds.map(s => s.username).join(", ")}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* TAB 4: MASTER ROUTINE */}
                 {activeTab === "routine" && (
                     <div className="card-panel">
                         <div style={{ marginBottom: "20px" }}>
@@ -509,7 +715,7 @@ function TeacherDashboard({ user, onLogout }) {
                                         const cid = asgn.classId?._id || asgn.classId;
                                         return (
                                             <option key={idx} value={cid}>
-                                                {asgn.classId?.name || "Class"}
+                                                {asgn.classId?.name || "Class"} {asgn.classId?.joinCode ? `(Join Code: ${asgn.classId.joinCode})` : ""}
                                             </option>
                                         );
                                     })}
@@ -563,7 +769,7 @@ function TeacherDashboard({ user, onLogout }) {
                         {loadingRoutine ? (
                             <div style={{ textAlign: "center", padding: "20px", color: "#94a3b8" }}>Loading routine...</div>
                         ) : classRoutine.length === 0 ? (
-                            <div style={{ textAlign: "center", padding: "20px", color: "#94a3b8" }}>No routine slots added yet. Use the form above to add slots.</div>
+                            <div style={{ textAlign: "center", padding: "20px", color: "#94a3b8" }}>No routine slots added yet.</div>
                         ) : (
                             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                                 {classRoutine.map((slot, idx) => (

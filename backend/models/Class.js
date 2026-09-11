@@ -30,6 +30,11 @@ const classSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    joinCode: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
     students: [
         {
             type: mongoose.Schema.Types.ObjectId,
