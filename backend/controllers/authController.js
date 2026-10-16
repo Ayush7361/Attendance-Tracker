@@ -2,11 +2,27 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+function validateCredentials(username, password) {
+    const name = String(username || "").trim();
+    const pass = String(password || "");
+    if (name.length < 3 || name.length > 32) {
+        return "Username must be 3–32 characters";
+    }
+    if (pass.length < 6) {
+        return "Password must be at least 6 characters";
+    }
+    return null;
+}
+
 async function register(req, res) {
     try {
         const { username, password, role } = req.body;
+        const validationError = validateCredentials(username, password);
+        if (validationError) {
+            return res.status(400).json({ message: validationError });
+        }
 
-        const existingUser = await User.findOne({ username });
+        const existingUser = await User.findOne({ username: username.trim() });
         if (existingUser) {
             return res.status(400).json({ message: "Username already taken" });
         }
@@ -14,7 +30,7 @@ async function register(req, res) {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = await User.create({
-            username,
+            username: username.trim(),
             password: hashedPassword,
             role: role === "teacher" ? "teacher" : "student"
         });
@@ -39,7 +55,7 @@ async function login(req, res) {
     try {
         const { username, password } = req.body;
 
-        const user = await User.findOne({ username }).populate("teacherAssignments.classId", "name");
+        const user = await User.findOne({ username: String(username || "").trim() }).populate("teacherAssignments.classId", "name");
         if (!user) {
             return res.status(400).json({ message: "Invalid credentials" });
         }

@@ -1,5 +1,15 @@
 require("dotenv").config();
 
+if (!process.env.JWT_SECRET) {
+    console.error("JWT_SECRET is not set. Add it to backend/.env before starting the server.");
+    process.exit(1);
+}
+
+if (!process.env.MONGO_URI) {
+    console.error("MONGO_URI is not set. Add it to backend/.env before starting the server.");
+    process.exit(1);
+}
+
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");

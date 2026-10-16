@@ -5,6 +5,7 @@ const { requireTeacherRole } = require("../middleware/authMiddleware");
 const {
     getAssignments,
     getTodaySchedule,
+    getTeacherUnifiedSchedule,
     getClassRoster,
     submitAttendance,
     getClassAnalytics,
@@ -17,6 +18,7 @@ const {
 
 router.get("/assignments", authMiddleware, requireTeacherRole, getAssignments);
 router.get("/today-schedule", authMiddleware, requireTeacherRole, getTodaySchedule);
+router.get("/week-schedule", authMiddleware, requireTeacherRole, getTeacherUnifiedSchedule);
 router.get("/class/:classId/roster", authMiddleware, requireTeacherRole, getClassRoster);
 router.post("/attendance", authMiddleware, requireTeacherRole, submitAttendance);
 router.get("/class/:classId/analytics", authMiddleware, requireTeacherRole, getClassAnalytics);

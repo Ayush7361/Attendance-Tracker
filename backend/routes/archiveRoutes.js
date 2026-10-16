@@ -12,7 +12,7 @@ router.get("/", authMiddleware, async (req, res) => {
         }
         res.json(record.semesters);
     } catch (err) {
-        res.status(500).json({ message: "Error loading archives", error: err.message });
+        res.status(500).json({ message: "Error loading archives" });
     }
 });
 
@@ -36,7 +36,7 @@ router.post("/", authMiddleware, async (req, res) => {
         await record.save();
         res.json(record.semesters);
     } catch (err) {
-        res.status(500).json({ message: "Error saving archive", error: err.message });
+        res.status(500).json({ message: "Error saving archive" });
     }
 });
 
@@ -50,7 +50,7 @@ router.delete("/:id", authMiddleware, async (req, res) => {
         }
         res.json(record ? record.semesters : []);
     } catch (err) {
-        res.status(500).json({ message: "Error deleting archive item", error: err.message });
+        res.status(500).json({ message: "Error deleting archive item" });
     }
 });
 

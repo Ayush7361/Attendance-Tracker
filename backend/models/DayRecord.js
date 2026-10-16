@@ -6,6 +6,11 @@ const subjectStatusSchema = new mongoose.Schema({
         type: String,
         enum: ["attended", "missed", "cancelled"],
         default: "attended"
+    },
+    source: {
+        type: String,
+        enum: ["self", "teacher"],
+        default: "self"
     }
 }, { _id: false });
 

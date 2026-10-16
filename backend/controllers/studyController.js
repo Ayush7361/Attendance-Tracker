@@ -12,16 +12,18 @@ async function getStudySessions(req, res) {
 
 async function saveStudySession(req, res) {
     try {
-        const { subject, duration, mode, date, completed, notes } = req.body;
-        if (!subject || duration === undefined) {
+        const { subject, duration, durationMinutes, mode, date, completed, notes } = req.body;
+        const minutes = Number(duration ?? durationMinutes);
+        if (!subject || !Number.isFinite(minutes) || minutes <= 0) {
             return res.status(400).json({ message: "Subject and duration are required" });
         }
 
+        const allowedModes = ["stopwatch", "custom", "pomodoro", "shortBreak", "longBreak"];
         const session = new StudySession({
             userId: req.userId,
             subject,
-            duration,
-            mode: mode || "stopwatch",
+            duration: minutes,
+            mode: allowedModes.includes(mode) ? mode : "stopwatch",
             date: date || new Date(),
             completed: completed !== undefined ? completed : true,
             notes: notes || ""

@@ -2,69 +2,62 @@ const mongoose = require("mongoose");
 const DayRecord = require("../models/DayRecord");
 const Class = require("../models/Class");
 const User = require("../models/User");
+const { parseDateKey, monthRangeUtc, isFutureDateKey } = require("../utils/dateKey");
+const { mergeStudentSubjects, recalcTotals } = require("../utils/attendanceMath");
+
+async function getCoveredSubjectSet(studentId) {
+    const studentClasses = await Class.find({ students: studentId });
+    if (!studentClasses.length) return new Set();
+
+    const classIds = studentClasses.map((c) => c._id);
+    const teachers = await User.find({
+        role: "teacher",
+        "teacherAssignments.classId": { $in: classIds }
+    });
+
+    const coveredSubjects = new Set();
+    teachers.forEach((t) => {
+        (t.teacherAssignments || []).forEach((a) => {
+            if (a.classId && classIds.some((cid) => cid.toString() === a.classId.toString())) {
+                coveredSubjects.add(a.subjectName.trim().toLowerCase());
+            }
+        });
+    });
+    return coveredSubjects;
+}
 
 async function saveDay(req, res) {
     try {
-        const { date, totalClasses, attendedClasses, isHoliday, subjects } = req.body;
-        const parsedDate = new Date(date);
-
-        // Server-side check for teacher-covered subjects
-        const studentClasses = await Class.find({ students: req.userId });
-        if (studentClasses && studentClasses.length > 0) {
-            const classIds = studentClasses.map((c) => c._id);
-            const teachers = await User.find({
-                role: "teacher",
-                "teacherAssignments.classId": { $in: classIds }
-            });
-
-            const coveredSubjects = new Set();
-            teachers.forEach((t) => {
-                (t.teacherAssignments || []).forEach((a) => {
-                    if (a.classId && classIds.some((cid) => cid.toString() === a.classId.toString())) {
-                        coveredSubjects.add(a.subjectName.trim().toLowerCase());
-                    }
-                });
-            });
-
-            if (coveredSubjects.size > 0 && Array.isArray(subjects)) {
-                const existingRecord = await DayRecord.findOne({ userId: req.userId, date: parsedDate });
-
-                for (let s of subjects) {
-                    const subLower = (s.name || "").trim().toLowerCase();
-                    if (coveredSubjects.has(subLower)) {
-                        const existingSub = existingRecord
-                            ? existingRecord.subjects.find((es) => es.name.trim().toLowerCase() === subLower)
-                            : null;
-
-                        if (!existingSub || existingSub.status !== s.status) {
-                            return res.status(403).json({
-                                message: `Attendance for '${s.name}' is teacher-verified and cannot be self-reported.`
-                            });
-                        }
-                    }
-                }
-            }
+        const { date, isHoliday, subjects } = req.body;
+        const parsedDate = parseDateKey(date);
+        if (!parsedDate) {
+            return res.status(400).json({ message: "A valid date is required" });
+        }
+        if (isFutureDateKey(date)) {
+            return res.status(400).json({ message: "Future classes cannot be logged as attendance" });
         }
 
-        let finalTotal = Number(totalClasses) || 0;
-        let finalAttended = Number(attendedClasses) || 0;
+        const coveredSubjects = await getCoveredSubjectSet(req.userId);
+        const existingRecord = await DayRecord.findOne({ userId: req.userId, date: parsedDate });
+
+        let nextSubjects = mergeStudentSubjects(
+            existingRecord?.subjects || [],
+            Array.isArray(subjects) ? subjects : [],
+            coveredSubjects
+        );
+
+        let finalTotal = 0;
+        let finalAttended = 0;
 
         if (isHoliday) {
-            finalTotal = 0;
-            finalAttended = 0;
-        } else if (Array.isArray(subjects) && subjects.length > 0) {
-            let tot = 0;
-            let att = 0;
-            for (let s of subjects) {
-                if (s.status !== "cancelled") {
-                    tot++;
-                    if (s.status === "attended") {
-                        att++;
-                    }
-                }
-            }
-            finalTotal = tot;
-            finalAttended = att;
+            nextSubjects = nextSubjects.filter((s) => s.source === "teacher");
+            const totals = recalcTotals(nextSubjects);
+            finalTotal = totals.totalClasses;
+            finalAttended = totals.attendedClasses;
+        } else {
+            const totals = recalcTotals(nextSubjects);
+            finalTotal = totals.totalClasses;
+            finalAttended = totals.attendedClasses;
         }
 
         const record = await DayRecord.findOneAndUpdate(
@@ -72,8 +65,8 @@ async function saveDay(req, res) {
             {
                 totalClasses: finalTotal,
                 attendedClasses: finalAttended,
-                isHoliday: Boolean(isHoliday),
-                subjects: Array.isArray(subjects) ? subjects : []
+                isHoliday: Boolean(isHoliday) && nextSubjects.every((s) => s.source !== "teacher"),
+                subjects: nextSubjects
             },
             { new: true, upsert: true }
         );
@@ -90,7 +83,10 @@ async function getDay(req, res) {
         if (!date) {
             return res.status(400).json({ message: "Date is required" });
         }
-        const parsedDate = new Date(date);
+        const parsedDate = parseDateKey(date);
+        if (!parsedDate) {
+            return res.status(400).json({ message: "A valid date is required" });
+        }
         const record = await DayRecord.findOne({ userId: req.userId, date: parsedDate });
         res.status(200).json(record || null);
     } catch (err) {
@@ -101,8 +97,7 @@ async function getDay(req, res) {
 async function getMonthSummary(req, res) {
     try {
         const { year, month } = req.query;
-        const start = new Date(year, month - 1, 1);
-        const end = new Date(year, month, 1);
+        const { start, end } = monthRangeUtc(year, month);
 
         const result = await DayRecord.aggregate([
             { $match: { userId: new mongoose.Types.ObjectId(req.userId), date: { $gte: start, $lt: end } } },
@@ -145,8 +140,7 @@ async function getOverallSummary(req, res) {
 async function getMonthRecords(req, res) {
     try {
         const { year, month } = req.query;
-        const start = new Date(year, month - 1, 1);
-        const end = new Date(year, month, 1);
+        const { start, end } = monthRangeUtc(year, month);
 
         const records = await DayRecord.find({
             userId: req.userId,
@@ -219,7 +213,7 @@ async function deleteRange(req, res) {
         } else if (start && end) {
             await DayRecord.deleteMany({
                 userId: req.userId,
-                date: { $gte: new Date(start), $lt: new Date(end) }
+                date: { $gte: parseDateKey(start), $lt: parseDateKey(end) }
             });
         } else {
             return res.status(400).json({ message: "Invalid parameters for deletion" });

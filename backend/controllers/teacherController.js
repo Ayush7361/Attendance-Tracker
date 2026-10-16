@@ -3,6 +3,16 @@ const Class = require("../models/Class");
 const DayRecord = require("../models/DayRecord");
 const AttendanceAudit = require("../models/AttendanceAudit");
 const Notification = require("../models/Notification");
+const { parseDateKey, isFutureDateKey, localDateKey } = require("../utils/dateKey");
+const { applyTeacherMark, recalcTotals, subjectKey } = require("../utils/attendanceMath");
+
+function isAssignedToClass(teacher, classId, subjectName) {
+    return (teacher.teacherAssignments || []).some((a) => {
+        if (!a.classId || a.classId.toString() !== classId.toString()) return false;
+        if (!subjectName) return true;
+        return subjectKey(a.subjectName) === subjectKey(subjectName);
+    });
+}
 
 const DAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
@@ -26,8 +36,9 @@ async function getTodaySchedule(req, res) {
         }
 
         const dateStr = req.query.date;
-        const targetDate = dateStr ? new Date(dateStr) : new Date();
-        const dayKey = DAY_KEYS[targetDate.getDay()];
+        const parsed = dateStr ? parseDateKey(dateStr) : parseDateKey(localDateKey());
+        const targetDate = parsed || new Date();
+        const dayKey = DAY_KEYS[new Date(targetDate).getUTCDay()];
 
         const assignedClassIds = (teacher.teacherAssignments || []).map((a) => a.classId);
         const classes = await Class.find({ _id: { $in: assignedClassIds } });
@@ -167,7 +178,10 @@ async function getClassRoster(req, res) {
         let isAlreadySubmitted = false;
 
         if (date && subjectName) {
-            const targetDate = new Date(date);
+            const targetDate = parseDateKey(date);
+            if (!targetDate) {
+                return res.status(400).json({ message: "A valid date is required" });
+            }
             const studentIds = classDoc.students.map((s) => s._id);
 
             const records = await DayRecord.find({
@@ -354,7 +368,14 @@ async function submitAttendance(req, res) {
             return res.status(404).json({ message: "Class not found" });
         }
 
-        const parsedDate = new Date(date);
+        if (isFutureDateKey(date)) {
+            return res.status(400).json({ message: "Cannot mark attendance for a future date" });
+        }
+
+        const parsedDate = parseDateKey(date);
+        if (!parsedDate) {
+            return res.status(400).json({ message: "A valid date is required" });
+        }
         const absentSet = new Set((absentStudentIds || []).map((id) => id.toString()));
 
         const previousAudit = await AttendanceAudit.findOne({
@@ -384,41 +405,27 @@ async function submitAttendance(req, res) {
                 });
             }
 
-            const existingIndex = dayRecord.subjects.findIndex(
-                (s) => s.name.trim().toLowerCase() === subjectName.trim().toLowerCase()
-            );
-
-            if (existingIndex >= 0) {
-                dayRecord.subjects[existingIndex].status = status;
-            } else {
-                dayRecord.subjects.push({ name: subjectName, status });
-            }
-
-            let tot = 0;
-            let att = 0;
-            for (let s of dayRecord.subjects) {
-                if (s.status !== "cancelled") {
-                    tot++;
-                    if (s.status === "attended") att++;
-                }
-            }
-
-            dayRecord.totalClasses = tot;
-            dayRecord.attendedClasses = att;
+            const marked = applyTeacherMark(dayRecord.subjects, subjectName, status);
+            dayRecord.subjects = marked.subjects;
+            const totals = recalcTotals(dayRecord.subjects);
+            dayRecord.totalClasses = totals.totalClasses;
+            dayRecord.attendedClasses = totals.attendedClasses;
 
             await dayRecord.save();
 
-            const dateFormatted = parsedDate.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-            const notifMsg = isAbsent
-                ? `Prof. ${teacher.username} marked you ABSENT for ${subjectName} on ${dateFormatted}.`
-                : `Prof. ${teacher.username} logged your attendance for ${subjectName} on ${dateFormatted}: PRESENT.`;
+            if (marked.changed) {
+                const dateFormatted = parsedDate.toISOString().slice(0, 10);
+                const notifMsg = isAbsent
+                    ? `${teacher.username} marked you absent for ${subjectName} on ${dateFormatted}.`
+                    : `${teacher.username} marked you present for ${subjectName} on ${dateFormatted}.`;
 
-            await Notification.create({
-                userId: student._id,
-                title: `Attendance Logged: ${subjectName}`,
-                message: notifMsg,
-                type: isAbsent ? "ATTENDANCE_WARNING" : "ATTENDANCE_LOGGED"
-            });
+                await Notification.create({
+                    userId: student._id,
+                    title: isAbsent ? `Absent: ${subjectName}` : `Present: ${subjectName}`,
+                    message: notifMsg,
+                    type: isAbsent ? "ATTENDANCE_WARNING" : "ATTENDANCE_LOGGED"
+                });
+            }
         }
 
         const absentList = Array.from(absentSet);
@@ -459,6 +466,17 @@ async function getClassAnalytics(req, res) {
             return res.status(404).json({ message: "Class not found" });
         }
 
+        const isAssigned = isAssignedToClass(teacher, classId);
+        if (!isAssigned) {
+            return res.status(403).json({ message: "Forbidden: You are not assigned to this class" });
+        }
+
+        const assignedSubjects = new Set(
+            (teacher.teacherAssignments || [])
+                .filter((a) => a.classId && a.classId.toString() === classId.toString())
+                .map((a) => subjectKey(a.subjectName))
+        );
+
         const studentIds = classDoc.students.map((s) => s._id);
         const dayRecords = await DayRecord.find({ userId: { $in: studentIds } });
 
@@ -474,9 +492,12 @@ async function getClassAnalytics(req, res) {
 
         dayRecords.forEach((r) => {
             const sid = r.userId.toString();
-            if (studentStatsMap[sid]) {
-                studentStatsMap[sid].total += r.totalClasses || 0;
-                studentStatsMap[sid].attended += r.attendedClasses || 0;
+            if (!studentStatsMap[sid]) return;
+            for (const sub of r.subjects || []) {
+                if (sub.status === "cancelled") continue;
+                if (assignedSubjects.size > 0 && !assignedSubjects.has(subjectKey(sub.name))) continue;
+                studentStatsMap[sid].total += 1;
+                if (sub.status === "attended") studentStatsMap[sid].attended += 1;
             }
         });
 
@@ -543,9 +564,14 @@ async function joinClassWithCode(req, res) {
             return res.status(400).json({ message: "joinCode is required" });
         }
 
+        const joiner = await User.findById(req.userId);
+        if (!joiner || joiner.role === "teacher") {
+            return res.status(403).json({ message: "Only student accounts can join a class" });
+        }
+
         const classDoc = await Class.findOne({ joinCode: joinCode.trim().toUpperCase() });
         if (!classDoc) {
-            return res.status(404).json({ message: "Invalid Class Join Code" });
+            return res.status(404).json({ message: "Invalid class join code" });
         }
 
         const isAlreadyEnrolled = classDoc.students.some((s) => s.toString() === req.userId);
@@ -569,6 +595,10 @@ async function joinClassWithCode(req, res) {
 async function getClassRoutine(req, res) {
     try {
         const { classId } = req.params;
+        const teacher = await User.findById(req.userId);
+        if (!teacher || teacher.role !== "teacher" || !isAssignedToClass(teacher, classId)) {
+            return res.status(403).json({ message: "Forbidden: You are not assigned to this class" });
+        }
         const classDoc = await Class.findById(classId);
         if (!classDoc) {
             return res.status(404).json({ message: "Class not found" });
@@ -586,6 +616,11 @@ async function saveClassRoutine(req, res) {
 
         if (!Array.isArray(routine)) {
             return res.status(400).json({ message: "Routine must be an array of slots" });
+        }
+
+        const teacher = await User.findById(req.userId);
+        if (!teacher || teacher.role !== "teacher" || !isAssignedToClass(teacher, classId)) {
+            return res.status(403).json({ message: "Forbidden: You are not assigned to this class" });
         }
 
         const classDoc = await Class.findById(classId);

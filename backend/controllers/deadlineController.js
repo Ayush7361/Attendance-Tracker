@@ -68,6 +68,11 @@ async function createDeadline(req, res) {
     try {
         const { title, subject, type, dueDate, priority, status, description, estimatedHours, subtasks, resourceLinks } = req.body;
 
+        if (!title || !subject || !type || !dueDate) {
+            return res.status(400).json({ message: "Title, subject, type, and due date are required" });
+        }
+
+        const nextStatus = status || "To Do";
         const deadline = await Deadline.create({
             userId: req.userId,
             title,
@@ -75,7 +80,8 @@ async function createDeadline(req, res) {
             type,
             dueDate,
             priority: priority || "Medium",
-            status: status || "To Do",
+            status: nextStatus,
+            completed: nextStatus === "Completed" || Boolean(req.body.completed),
             description: description || "",
             estimatedHours: estimatedHours ?? null,
             subtasks: subtasks || [],
@@ -90,9 +96,22 @@ async function createDeadline(req, res) {
 
 async function updateDeadline(req, res) {
     try {
+        const allowed = [
+            "title", "subject", "type", "dueDate", "priority", "status",
+            "description", "estimatedHours", "completed", "subtasks", "resourceLinks"
+        ];
+        const update = {};
+        for (const key of allowed) {
+            if (req.body[key] !== undefined) update[key] = req.body[key];
+        }
+        if (update.status === "Completed") update.completed = true;
+        if (update.status && update.status !== "Completed" && update.completed === undefined) {
+            update.completed = false;
+        }
+
         const deadline = await Deadline.findOneAndUpdate(
             { _id: req.params.id, userId: req.userId },
-            req.body,
+            update,
             { new: true, runValidators: true }
         );
 
