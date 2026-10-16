@@ -46,19 +46,10 @@ async function saveDay(req, res) {
             coveredSubjects
         );
 
-        let finalTotal = 0;
-        let finalAttended = 0;
-
         if (isHoliday) {
             nextSubjects = nextSubjects.filter((s) => s.source === "teacher");
-            const totals = recalcTotals(nextSubjects);
-            finalTotal = totals.totalClasses;
-            finalAttended = totals.attendedClasses;
-        } else {
-            const totals = recalcTotals(nextSubjects);
-            finalTotal = totals.totalClasses;
-            finalAttended = totals.attendedClasses;
         }
+        const { totalClasses: finalTotal, attendedClasses: finalAttended } = recalcTotals(nextSubjects);
 
         const record = await DayRecord.findOneAndUpdate(
             { userId: req.userId, date: parsedDate },

@@ -23,14 +23,18 @@ function mergeStudentSubjects(existingSubjects, incomingSubjects, coveredSet) {
 
     const merged = locked.map((s) => ({
         name: String(s.name || "").trim(),
+        classId: s.classId || null,
         status: normalizeStatus(s.status),
         source: "teacher"
     }));
 
+    const seenSelfSubjects = new Set();
     for (const s of incoming) {
         const name = String(s.name || "").trim();
-        if (!name) continue;
-        if (lockedNames.has(subjectKey(name))) continue;
+        const key = subjectKey(name);
+        if (!name || seenSelfSubjects.has(key)) continue;
+        seenSelfSubjects.add(key);
+        if (lockedNames.has(key)) continue;
         merged.push({
             name,
             status: normalizeStatus(s.status),
@@ -52,16 +56,23 @@ function recalcTotals(subjects) {
     return { totalClasses, attendedClasses };
 }
 
-function applyTeacherMark(existingSubjects, subjectName, status) {
+function applyTeacherMark(existingSubjects, subjectName, status, classId) {
     const subjects = Array.isArray(existingSubjects)
         ? existingSubjects.map((s) => ({
             name: s.name,
+            classId: s.classId || null,
             status: s.status,
             source: s.source || "self"
         }))
         : [];
     const key = subjectKey(subjectName);
-    const idx = subjects.findIndex((s) => subjectKey(s.name) === key);
+    const classKey = String(classId || "");
+    // Legacy self-records did not carry a class id.  A teacher may claim the
+    // matching legacy self entry once; subsequent class sessions stay scoped.
+    const idx = subjects.findIndex((s) =>
+        subjectKey(s.name) === key &&
+        (String(s.classId || "") === classKey || !s.classId)
+    );
     const previousStatus = idx >= 0 ? subjects[idx].status : null;
     const nextStatus = normalizeStatus(status);
 
@@ -69,9 +80,11 @@ function applyTeacherMark(existingSubjects, subjectName, status) {
         subjects[idx].status = nextStatus;
         subjects[idx].source = "teacher";
         subjects[idx].name = String(subjectName).trim();
+        subjects[idx].classId = classId;
     } else {
         subjects.push({
             name: String(subjectName).trim(),
+            classId,
             status: nextStatus,
             source: "teacher"
         });

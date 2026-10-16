@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const subjectStatusSchema = new mongoose.Schema({
     name: { type: String, required: true },
+    // Teacher marks are tied to a class as well as a subject.  This keeps two
+    // "Math" sessions from different classes from overwriting each other.
+    classId: { type: mongoose.Schema.Types.ObjectId, ref: "Class", default: null },
     status: {
         type: String,
         enum: ["attended", "missed", "cancelled"],

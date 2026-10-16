@@ -52,6 +52,11 @@ function run() {
     const same = applyTeacherMark(marked.subjects, "Math", "missed");
     assert.strictEqual(same.changed, false);
 
+    const classOne = applyTeacherMark([], "Math", "attended", "class-one");
+    const twoClasses = applyTeacherMark(classOne.subjects, "Math", "missed", "class-two");
+    assert.strictEqual(twoClasses.subjects.length, 2);
+    assert.strictEqual(recalcTotals(twoClasses.subjects).totalClasses, 2);
+
     assert.strictEqual(isTeacherLocked({ name: "Physics", source: "self" }, covered), true);
     assert.strictEqual(isTeacherLocked({ name: "Math", source: "self" }, covered), false);
 

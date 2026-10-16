@@ -3,6 +3,7 @@ const Class = require("../models/Class");
 const DayRecord = require("../models/DayRecord");
 const AttendanceAudit = require("../models/AttendanceAudit");
 const Notification = require("../models/Notification");
+const mongoose = require("mongoose");
 const { parseDateKey, isFutureDateKey, localDateKey } = require("../utils/dateKey");
 const { applyTeacherMark, recalcTotals, subjectKey } = require("../utils/attendanceMath");
 
@@ -161,9 +162,10 @@ async function getClassRoster(req, res) {
             return res.status(403).json({ message: "Forbidden: Teacher account required" });
         }
 
-        const isAssigned = (teacher.teacherAssignments || []).some(
-            (a) => a.classId && a.classId.toString() === classId
-        );
+        if (!mongoose.isValidObjectId(classId)) {
+            return res.status(400).json({ message: "A valid class id is required" });
+        }
+        const isAssigned = isAssignedToClass(teacher, classId, subjectName);
 
         if (!isAssigned) {
             return res.status(403).json({ message: "Forbidden: You are not assigned to this class" });
@@ -190,8 +192,9 @@ async function getClassRoster(req, res) {
             });
 
             for (let r of records) {
-                const sub = (r.subjects || []).find(
-                    (s) => s.name.trim().toLowerCase() === subjectName.trim().toLowerCase()
+                const sub = (r.subjects || []).find((s) =>
+                    subjectKey(s.name) === subjectKey(subjectName) &&
+                    String(s.classId || "") === String(classId)
                 );
                 if (sub) {
                     existingStatuses[r.userId.toString()] = sub.status;
@@ -344,6 +347,9 @@ async function submitAttendance(req, res) {
         if (!classId || !subjectName || !date) {
             return res.status(400).json({ message: "classId, subjectName, and date are required" });
         }
+        if (!mongoose.isValidObjectId(classId) || !String(subjectName).trim()) {
+            return res.status(400).json({ message: "A valid class and subject are required" });
+        }
 
         const teacher = await User.findById(req.userId);
         if (!teacher || teacher.role !== "teacher") {
@@ -376,7 +382,14 @@ async function submitAttendance(req, res) {
         if (!parsedDate) {
             return res.status(400).json({ message: "A valid date is required" });
         }
-        const absentSet = new Set((absentStudentIds || []).map((id) => id.toString()));
+        if (absentStudentIds !== undefined && !Array.isArray(absentStudentIds)) {
+            return res.status(400).json({ message: "absentStudentIds must be an array" });
+        }
+        const absentSet = new Set((absentStudentIds || []).map((id) => String(id)));
+        const enrolledIds = new Set(classDoc.students.map((student) => student._id.toString()));
+        if ([...absentSet].some((studentId) => !mongoose.isValidObjectId(studentId) || !enrolledIds.has(studentId))) {
+            return res.status(400).json({ message: "Attendance can only be marked for enrolled students" });
+        }
 
         const previousAudit = await AttendanceAudit.findOne({
             classId,
@@ -405,7 +418,7 @@ async function submitAttendance(req, res) {
                 });
             }
 
-            const marked = applyTeacherMark(dayRecord.subjects, subjectName, status);
+            const marked = applyTeacherMark(dayRecord.subjects, subjectName, status, classDoc._id);
             dayRecord.subjects = marked.subjects;
             const totals = recalcTotals(dayRecord.subjects);
             dayRecord.totalClasses = totals.totalClasses;

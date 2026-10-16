@@ -12,4 +12,16 @@ instance.interceptors.request.use((config) => {
     return config;
 });
 
+instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            window.dispatchEvent(new Event("study-dashboard:unauthorized"));
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default instance;

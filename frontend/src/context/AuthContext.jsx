@@ -1,12 +1,24 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(() => {
         const stored = localStorage.getItem("user");
-        return stored ? JSON.parse(stored) : null;
+        try {
+            return stored ? JSON.parse(stored) : null;
+        } catch {
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+            return null;
+        }
     });
+
+    useEffect(() => {
+        const handleUnauthorized = () => setUser(null);
+        window.addEventListener("study-dashboard:unauthorized", handleUnauthorized);
+        return () => window.removeEventListener("study-dashboard:unauthorized", handleUnauthorized);
+    }, []);
 
     function login(userData) {
         localStorage.setItem("token", userData.token);
@@ -27,6 +39,8 @@ export function AuthProvider({ children }) {
     );
 }
 
+// This hook is intentionally colocated with its provider for the small app context API.
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
     return useContext(AuthContext);
 }

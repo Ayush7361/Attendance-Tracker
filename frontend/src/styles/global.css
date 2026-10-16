@@ -91,7 +91,7 @@ body {
 .app-layout.study-layout,
 .app-layout.deadlines-layout {
     background: linear-gradient(180deg, rgba(15, 23, 42, 0.78) 0%, rgba(15, 23, 42, 0.92) 100%),
-                url('/bg-pink-desk.jpg') center/cover no-repeat fixed;
+                url('/dashboard-bg.jpg') center/cover no-repeat fixed;
 }
 
 .app-header {
@@ -349,4 +349,3 @@ body {
 .toast-close:hover {
     color: #ffffff;
 }
-

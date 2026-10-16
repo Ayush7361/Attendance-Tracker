@@ -26,12 +26,22 @@ const teacherRoutes = require("./routes/teacherRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "https://attendance-tracker-pi-blue.vercel.app",
+    ...String(process.env.CLIENT_ORIGIN || "").split(",").map((origin) => origin.trim()).filter(Boolean)
+];
 
 connectDB();
 
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:5173", "http://localhost:5174", "https://attendance-tracker-pi-blue.vercel.app"]
+    origin(origin, callback) {
+        // Requests without an Origin header include local scripts and health checks.
+        if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(new Error("Origin not allowed by CORS"));
+    }
 }));
 
 app.use("/api/auth", authRoutes);
@@ -44,6 +54,14 @@ app.use("/api/gpa", gpaRoutes);
 app.use("/api/archive", archiveRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/api/notifications", notificationRoutes);
+
+app.use((err, req, res, next) => {
+    if (err?.message === "Origin not allowed by CORS") {
+        return res.status(403).json({ message: "Origin is not allowed" });
+    }
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+});
 
 const PORT = process.env.PORT || 5000;
 

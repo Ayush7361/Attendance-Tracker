@@ -5,7 +5,7 @@ import "../styles/Auth.css";
 
 function Login({ onSwitchToRegister }) {
     const [username, setUsername] = useState("");
-    const [password, setPagitssword] = useState("");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const { login } = useAuth();
 
