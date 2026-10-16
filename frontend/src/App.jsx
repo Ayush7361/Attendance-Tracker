@@ -16,6 +16,7 @@ import RoutinePage from "./pages/RoutinePage";
 import ArchivePage from "./pages/ArchivePage";
 import MobileNav from "./components/MobileNav";
 import AppSidebar from "./components/AppSidebar";
+import StudentRouteNav from "./components/StudentRouteNav";
 import GlobalMiniTimer from "./components/GlobalMiniTimer";
 import { logoutUser } from "./api/authApi";
 import "./App.css";
@@ -70,6 +71,7 @@ function App() {
             <ScrollToTop />
             <AppSidebar user={user} onLogout={handleLogout} />
             <div className="student-shell-main">
+                <StudentRouteNav />
                 <GlobalMiniTimer />
                 <Routes>
                     <Route path="/" element={<Hub user={user} onLogout={handleLogout} />} />

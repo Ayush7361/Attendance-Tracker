@@ -1,0 +1,51 @@
+.student-route-nav {
+    display: none;
+}
+
+@media (max-width: 899px) {
+    .student-route-nav {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 10px 12px;
+        background: rgba(15, 23, 42, 0.96);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .student-route-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .student-route-link {
+        flex: 0 0 auto;
+        min-height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 11px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        color: #cbd5e1;
+        background: rgba(30, 41, 59, 0.72);
+        font-size: 0.78rem;
+        font-weight: 700;
+        line-height: 1;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .student-route-link:hover,
+    .student-route-link:focus-visible {
+        color: #ffffff;
+        border-color: rgba(52, 211, 153, 0.56);
+        outline: none;
+    }
+
+    .student-route-link.active {
+        color: #ecfdf5;
+        border-color: rgba(52, 211, 153, 0.72);
+        background: rgba(16, 185, 129, 0.24);
+    }
+}
