@@ -66,7 +66,46 @@ function run() {
     assert.ok(key >= range.start && key < range.end);
     assert.strictEqual(isFutureDateKey(localDateKey()), false);
 
-    console.log("attendance math tests passed");
+    // Timezone grace check: tomorrow relative to UTC is allowed, but 3 days later is rejected
+    const farFuture = new Date();
+    farFuture.setDate(farFuture.getDate() + 3);
+    assert.strictEqual(isFutureDateKey(farFuture), true);
+
+    // Attendance Viability Math assertions
+    function computeViability(total, attended, targetPct) {
+        const targetDec = targetPct / 100;
+        const pct = total > 0 ? (attended / total) * 100 : 0;
+        const isSafe = pct >= targetPct;
+        let safeBunks = 0;
+        let recoveryNeeded = 0;
+        if (total > 0) {
+            if (isSafe) {
+                safeBunks = Math.max(0, Math.floor((attended - targetDec * total) / targetDec));
+            } else {
+                const num = targetDec * total - attended;
+                const den = 1 - targetDec;
+                recoveryNeeded = den > 0 ? Math.ceil(num / den) : 0;
+            }
+        }
+        return { isSafe, safeBunks, recoveryNeeded };
+    }
+
+    const v1 = computeViability(10, 9, 75);
+    assert.strictEqual(v1.isSafe, true);
+    assert.strictEqual(v1.safeBunks, 2);
+    assert.strictEqual(v1.recoveryNeeded, 0);
+
+    const v2 = computeViability(10, 6, 75);
+    assert.strictEqual(v2.isSafe, false);
+    assert.strictEqual(v2.safeBunks, 0);
+    assert.strictEqual(v2.recoveryNeeded, 6);
+
+    const v3 = computeViability(10, 8, 85);
+    assert.strictEqual(v3.isSafe, false);
+    assert.strictEqual(v3.safeBunks, 0);
+    assert.strictEqual(v3.recoveryNeeded, 4);
+
+    console.log("attendance math and viability tests passed");
 }
 
 run();

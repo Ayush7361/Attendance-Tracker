@@ -19,10 +19,40 @@ function parseServerDate(dateStr) {
     return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
 }
 
-function AttendanceCalendar({ schedule, onDaySaved }) {
-    const [visibleMonth, setVisibleMonth] = useState(new Date());
+const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
+
+function AttendanceCalendar({ schedule, onDaySaved, selectedMonth, selectedYear, onMonthChange }) {
+    const [visibleMonth, setVisibleMonth] = useState(() => {
+        if (selectedMonth && selectedYear) {
+            const mIdx = monthNames.indexOf(selectedMonth);
+            if (mIdx >= 0) return new Date(selectedYear, mIdx, 1);
+        }
+        return new Date();
+    });
     const [records, setRecords] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
+
+    useEffect(() => {
+        if (selectedMonth && selectedYear) {
+            const mIdx = monthNames.indexOf(selectedMonth);
+            if (mIdx >= 0) {
+                setVisibleMonth((prev) => {
+                    if (prev.getMonth() === mIdx && prev.getFullYear() === selectedYear) return prev;
+                    return new Date(selectedYear, mIdx, 1);
+                });
+            }
+        }
+    }, [selectedMonth, selectedYear]);
+
+    function handleCalendarMonthChange(newMonth) {
+        setVisibleMonth(newMonth);
+        if (onMonthChange && newMonth) {
+            onMonthChange(monthNames[newMonth.getMonth()], newMonth.getFullYear());
+        }
+    }
 
     const [subjectsList, setSubjectsList] = useState([]);
     const [coveredSubjects, setCoveredSubjects] = useState([]);
@@ -203,6 +233,9 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
     function handleLogToday() {
         const today = new Date();
         setVisibleMonth(today);
+        if (onMonthChange) {
+            onMonthChange(monthNames[today.getMonth()], today.getFullYear());
+        }
         handleDayClick(today);
     }
 
@@ -235,7 +268,7 @@ function AttendanceCalendar({ schedule, onDaySaved }) {
                     selected={selectedDate}
                     onSelect={handleDayClick}
                     month={visibleMonth}
-                    onMonthChange={setVisibleMonth}
+                    onMonthChange={handleCalendarMonthChange}
                     modifiers={{ fullyAttended, partiallyMissed, noneAttended }}
                     modifiersClassNames={{
                         fullyAttended: "day-logged-good",

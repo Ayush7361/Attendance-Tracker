@@ -8,10 +8,15 @@
         gap: 8px;
         overflow-x: auto;
         padding: 10px 12px;
-        background: rgba(15, 23, 42, 0.96);
+        background: rgba(15, 23, 42, 0.92);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         scrollbar-width: none;
         -webkit-overflow-scrolling: touch;
+        position: sticky;
+        top: 0;
+        z-index: 150;
     }
 
     .student-route-nav::-webkit-scrollbar {

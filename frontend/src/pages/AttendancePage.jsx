@@ -39,10 +39,16 @@ function AttendancePage({ user, onLogout }) {
     const [overallData, setOverallData] = useState({ total: 0, attended: 0 });
     const [showOverall, setShowOverall] = useState(false);
     const [showTimetable, setShowTimetable] = useState(false);
+    const [breakdownRefreshKey, setBreakdownRefreshKey] = useState(0);
     const [targetThreshold, setTargetThreshold] = useState(() => {
         const stored = localStorage.getItem("targetAttendanceThreshold");
         return stored ? Number(stored) : 75;
     });
+
+    function handleCalendarMonthChange(newMonth, newYear) {
+        setMonth(newMonth);
+        if (newYear) setYear(newYear);
+    }
 
     useEffect(() => {
         loadSchedule();
@@ -112,6 +118,7 @@ function AttendancePage({ user, onLogout }) {
         if (showOverall) {
             loadOverallSummary();
         }
+        setBreakdownRefreshKey((k) => k + 1);
     }
 
     async function handleResetMonth(start, end) {
@@ -119,6 +126,7 @@ function AttendancePage({ user, onLogout }) {
             await deleteDayRange(start, end);
             loadMonthSummary();
             if (showOverall) loadOverallSummary();
+            setBreakdownRefreshKey((k) => k + 1);
             if (showToast) showToast("Month data reset", "info");
         } catch (err) {
             console.error("Failed to reset month", err);
@@ -130,6 +138,7 @@ function AttendancePage({ user, onLogout }) {
             await resetAll();
             loadMonthSummary();
             if (showOverall) loadOverallSummary();
+            setBreakdownRefreshKey((k) => k + 1);
             if (showToast) showToast("All attendance data cleared", "info");
         } catch (err) {
             console.error("Failed to reset all", err);
@@ -200,9 +209,15 @@ function AttendancePage({ user, onLogout }) {
                 <SummaryCards total={monthSummary.total} attended={monthSummary.attended} percentage={percentage} targetThreshold={targetThreshold} />
                 <ProgressBar percentage={percentage} />
 
-                <SubjectBreakdownCard targetThreshold={targetThreshold} />
+                <SubjectBreakdownCard targetThreshold={targetThreshold} refreshTrigger={breakdownRefreshKey} />
 
-                <AttendanceCalendar schedule={schedule} onDaySaved={handleDaySaved} />
+                <AttendanceCalendar
+                    schedule={schedule}
+                    onDaySaved={handleDaySaved}
+                    selectedMonth={month}
+                    selectedYear={year}
+                    onMonthChange={handleCalendarMonthChange}
+                />
 
                 <div className="timetable-collapsible card-panel">
                     <button

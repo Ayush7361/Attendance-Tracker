@@ -32,8 +32,10 @@ function monthRangeUtc(year, month) {
 function isFutureDateKey(input) {
     const parsed = parseDateKey(input);
     if (!parsed) return false;
-    const today = parseDateKey(localDateKey());
-    return parsed > today;
+    // Give a 1-day grace window for clients operating ahead of server UTC (e.g. IST +05:30)
+    const now = new Date();
+    const tomorrowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
+    return parsed > tomorrowUtc;
 }
 
 module.exports = {

@@ -2,20 +2,20 @@ import { useState, useEffect } from "react";
 import { getSubjectBreakdown } from "../api/attendanceApi";
 import { getCoveredSubjects } from "../api/teacherApi";
 
-function SubjectBreakdownCard({ targetThreshold = 75 }) {
+function SubjectBreakdownCard({ targetThreshold = 75, refreshTrigger }) {
     const [breakdown, setBreakdown] = useState([]);
     const [coveredSubjects, setCoveredSubjects] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [refreshTrigger, targetThreshold]);
 
     async function loadData() {
         setLoading(true);
         try {
             const [bRes, cData] = await Promise.all([
-                getSubjectBreakdown(),
+                getSubjectBreakdown(targetThreshold),
                 getCoveredSubjects().catch(() => [])
             ]);
             setBreakdown(bRes.data || []);
@@ -34,8 +34,20 @@ function SubjectBreakdownCard({ targetThreshold = 75 }) {
     }
 
     if (breakdown.length === 0) {
-        return null; // Hide card if no subject data logged yet
+        return (
+            <div className="card-panel subject-breakdown-card" style={{ marginTop: "20px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                    <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "700" }}>Subject-Wise Attendance Breakdown</h3>
+                </div>
+                <p style={{ margin: 0, fontSize: "0.85rem", color: "#94a3b8" }}>
+                    No subject attendance logged yet. Mark today’s classes on the calendar above to track safe bunks and recovery viability per subject.
+                </p>
+            </div>
+        );
     }
+
+    const target = Number(targetThreshold) || 75;
+    const targetDec = target / 100;
 
     return (
         <div className="card-panel subject-breakdown-card" style={{ marginTop: "20px" }}>
@@ -43,7 +55,7 @@ function SubjectBreakdownCard({ targetThreshold = 75 }) {
                 <div>
                     <h3 style={{ margin: 0, fontSize: "1.2rem", fontWeight: "700" }}>Subject-Wise Attendance Breakdown</h3>
                     <p style={{ margin: "4px 0 0", fontSize: "0.85rem", color: "#94a3b8" }}>
-                        Per-subject percentage, teacher verification status, and safe bunk indicators.
+                        Per-subject percentage, teacher verification status, and safe bunk indicators ({target}% Target).
                     </p>
                 </div>
             </div>
@@ -51,8 +63,20 @@ function SubjectBreakdownCard({ targetThreshold = 75 }) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
                 {breakdown.map((item, idx) => {
                     const isTeacherCovered = coveredSubjects.includes((item.subjectName || "").trim().toLowerCase());
-                    const pct = item.percentage;
-                    const isSafe = pct >= targetThreshold;
+                    const pct = item.total > 0 ? Number(((item.attended / item.total) * 100).toFixed(1)) : 0;
+                    const isSafe = pct >= target;
+
+                    let safeBunks = 0;
+                    let recoveryNeeded = 0;
+                    if (item.total > 0) {
+                        if (isSafe) {
+                            safeBunks = Math.max(0, Math.floor((item.attended - targetDec * item.total) / targetDec));
+                        } else {
+                            const num = targetDec * item.total - item.attended;
+                            const den = 1 - targetDec;
+                            recoveryNeeded = den > 0 ? Math.ceil(num / den) : 0;
+                        }
+                    }
 
                     return (
                         <div
@@ -102,13 +126,17 @@ function SubjectBreakdownCard({ targetThreshold = 75 }) {
                             </div>
 
                             <div style={{ marginTop: "12px", paddingTop: "10px", borderTop: "1px dashed rgba(255, 255, 255, 0.1)", fontSize: "0.82rem" }}>
-                                {isSafe ? (
+                                {item.total === 0 ? (
+                                    <span style={{ color: "#94a3b8" }}>
+                                        No held classes recorded yet
+                                    </span>
+                                ) : isSafe ? (
                                     <span style={{ color: "#34d399", fontWeight: "600" }}>
-                                        ✓ Safe to bunk next {item.safeBunks} {item.safeBunks === 1 ? "class" : "classes"}
+                                        ✓ Safe to bunk next {safeBunks} {safeBunks === 1 ? "class" : "classes"} ({target}% target)
                                     </span>
                                 ) : (
                                     <span style={{ color: "#f87171", fontWeight: "600" }}>
-                                        ⚠️ Must attend next {item.recoveryNeeded} {item.recoveryNeeded === 1 ? "class" : "classes"} consecutively
+                                        ⚠️ Must attend next {recoveryNeeded} {recoveryNeeded === 1 ? "class" : "classes"} consecutively ({target}% target)
                                     </span>
                                 )}
                             </div>

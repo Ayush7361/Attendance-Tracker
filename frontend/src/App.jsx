@@ -80,11 +80,18 @@ function App() {
                     <Route path="/deadlines/new" element={<DeadlineFormPage user={user} onLogout={handleLogout} />} />
                     <Route path="/deadlines/:id/edit" element={<DeadlineFormPage user={user} onLogout={handleLogout} />} />
                     <Route path="/deadlines/:id" element={<DeadlineDetailPage user={user} onLogout={handleLogout} />} />
+                    <Route path="/tasks" element={<Navigate to="/deadlines" replace />} />
+                    <Route path="/tasks/*" element={<Navigate to="/deadlines" replace />} />
                     <Route path="/timeline" element={<AcademicTimelinePage user={user} onLogout={handleLogout} />} />
+                    <Route path="/calendar" element={<Navigate to="/timeline" replace />} />
+                    <Route path="/calendar/*" element={<Navigate to="/timeline" replace />} />
                     <Route path="/study" element={<StudyPage user={user} onLogout={handleLogout} />} />
                     <Route path="/gpa" element={<GpaPage user={user} onLogout={handleLogout} />} />
                     <Route path="/schedule" element={<RoutinePage user={user} onLogout={handleLogout} />} />
+                    <Route path="/routine" element={<Navigate to="/schedule" replace />} />
+                    <Route path="/routine/*" element={<Navigate to="/schedule" replace />} />
                     <Route path="/archive" element={<ArchivePage user={user} onLogout={handleLogout} />} />
+                    <Route path="/teacher" element={<Navigate to="/" replace />} />
                     <Route path="/teacher/*" element={<Navigate to="/" replace />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

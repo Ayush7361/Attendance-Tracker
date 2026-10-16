@@ -169,13 +169,25 @@ async function getSubjectBreakdown(req, res) {
             }
         }
 
+        const targetThreshold = Number(req.query.targetThreshold) || 75;
+        const targetDec = targetThreshold / 100;
+
         const result = Object.keys(subjectMap).map((name) => {
             const stats = subjectMap[name];
             const pct = stats.total > 0 ? (stats.attended / stats.total) * 100 : 0;
+            const isSafe = pct >= targetThreshold;
 
-            // Safe bunk & recovery formula for 75% target
-            const maxBunks = Math.max(0, Math.floor((stats.attended - 0.75 * stats.total) / 0.75));
-            const recoveryNeeded = stats.total > 0 && pct < 75 ? Math.max(0, Math.ceil((0.75 * stats.total - stats.attended) / 0.25)) : 0;
+            let maxBunks = 0;
+            let recoveryNeeded = 0;
+            if (stats.total > 0) {
+                if (isSafe) {
+                    maxBunks = Math.max(0, Math.floor((stats.attended - targetDec * stats.total) / targetDec));
+                } else {
+                    const num = targetDec * stats.total - stats.attended;
+                    const den = 1 - targetDec;
+                    recoveryNeeded = den > 0 ? Math.ceil(num / den) : 0;
+                }
+            }
 
             return {
                 subjectName: name,

@@ -24,11 +24,11 @@ function MobileNav() {
 
     const currentPath = location.pathname;
     const isHubActive = currentPath === "/";
-    const isAttendanceActive = currentPath === "/attendance";
-    const isRoutineActive = currentPath === "/schedule";
-    const isDeadlinesActive = currentPath.startsWith("/deadlines");
-    const isStudyActive = currentPath === "/study";
-    const isMoreActive = ["/gpa", "/timeline", "/archive"].includes(currentPath);
+    const isAttendanceActive = currentPath === "/attendance" || currentPath.startsWith("/attendance/");
+    const isRoutineActive = currentPath === "/schedule" || currentPath.startsWith("/schedule/") || currentPath === "/routine" || currentPath.startsWith("/routine/");
+    const isDeadlinesActive = currentPath.startsWith("/deadlines") || currentPath.startsWith("/tasks");
+    const isStudyActive = currentPath === "/study" || currentPath.startsWith("/study/");
+    const isMoreActive = ["/gpa", "/timeline", "/calendar", "/archive"].some((p) => currentPath === p || currentPath.startsWith(p + "/"));
 
     return (
         <>
