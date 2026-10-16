@@ -179,7 +179,7 @@ function GpaPage({ user, onLogout }) {
 
                 <div className="page-header-box">
                     <h2 className="page-title">GPA & Marks Predictor</h2>
-                    <p className="page-subtitle">Configure subjects, set internal scores, and dynamically calculate target final exam marks.</p>
+                    <p className="page-subtitle">Enter internals and see what you need on the final.</p>
                 </div>
 
                 <div className="gpa-summary-card card-panel">

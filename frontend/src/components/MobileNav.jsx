@@ -44,8 +44,8 @@ function MobileNav() {
                     >
                         <div className="more-sheet-header">
                             <div>
-                                <h3 className="more-sheet-title">Academic Suite & Tools</h3>
-                                <p className="more-sheet-sub">1-Click Access to All Modules</p>
+                                <h3 className="more-sheet-title">More</h3>
+                                <p className="more-sheet-sub">GPA, calendar, and archive</p>
                             </div>
                             <button
                                 type="button"
@@ -66,8 +66,8 @@ function MobileNav() {
                                     🏠
                                 </div>
                                 <div className="more-item-info">
-                                    <span className="more-item-title">Dashboard Hub</span>
-                                    <span className="more-item-desc">Command center overview</span>
+                                    <span className="more-item-title">Today</span>
+                                    <span className="more-item-desc">What to do now</span>
                                 </div>
                             </button>
 
@@ -80,8 +80,8 @@ function MobileNav() {
                                     🕒
                                 </div>
                                 <div className="more-item-info">
-                                    <span className="more-item-title">Weekly Routine</span>
-                                    <span className="more-item-desc">7-day timetable grid</span>
+                                    <span className="more-item-title">Routine</span>
+                                    <span className="more-item-desc">Weekly timetable</span>
                                 </div>
                             </button>
 
@@ -94,8 +94,8 @@ function MobileNav() {
                                     🎓
                                 </div>
                                 <div className="more-item-info">
-                                    <span className="more-item-title">GPA Predictor</span>
-                                    <span className="more-item-desc">Target SGPA & exam scores</span>
+                                    <span className="more-item-title">GPA</span>
+                                    <span className="more-item-desc">Marks and target scores</span>
                                 </div>
                             </button>
 
@@ -108,8 +108,8 @@ function MobileNav() {
                                     🗓️
                                 </div>
                                 <div className="more-item-info">
-                                    <span className="more-item-title">Academic Timeline</span>
-                                    <span className="more-item-desc">Exam dates & milestones</span>
+                                    <span className="more-item-title">Calendar</span>
+                                    <span className="more-item-desc">Exams and key dates</span>
                                 </div>
                             </button>
 
@@ -122,8 +122,8 @@ function MobileNav() {
                                     📦
                                 </div>
                                 <div className="more-item-info">
-                                    <span className="more-item-title">Semester Archive</span>
-                                    <span className="more-item-desc">Term history & CGPA</span>
+                                    <span className="more-item-title">Archive</span>
+                                    <span className="more-item-desc">Past terms</span>
                                 </div>
                             </button>
 
@@ -136,8 +136,8 @@ function MobileNav() {
                                     ➕
                                 </div>
                                 <div className="more-item-info">
-                                    <span className="more-item-title">Add Deadline</span>
-                                    <span className="more-item-desc">Log new task or exam</span>
+                                    <span className="more-item-title">Add task</span>
+                                    <span className="more-item-desc">Deadline, assignment, exam</span>
                                 </div>
                             </button>
                         </div>
@@ -158,7 +158,7 @@ function MobileNav() {
                         <rect x="14" y="14" width="7" height="7" rx="1" />
                         <rect x="3" y="14" width="7" height="7" rx="1" />
                     </svg>
-                    <span className="mobile-nav-label">Hub</span>
+                    <span className="mobile-nav-label">Today</span>
                 </button>
 
                 <button
@@ -197,7 +197,7 @@ function MobileNav() {
                         <path d="M12 20h9" />
                         <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
                     </svg>
-                    <span className="mobile-nav-label">Deadlines</span>
+                    <span className="mobile-nav-label">Tasks</span>
                 </button>
 
                 <button

@@ -33,6 +33,30 @@ body {
     line-height: 1.5;
 }
 
+.student-shell {
+    min-height: 100vh;
+}
+
+.student-shell-main {
+    min-width: 0;
+}
+
+@media (min-width: 900px) {
+    .student-shell {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .student-shell-main {
+        flex: 1;
+    }
+
+    .back-link,
+    .student-shell .logout-btn {
+        display: none;
+    }
+}
+
 /* Internal Pages Layout with background gradients */
 .app-layout {
     min-height: 100vh;
@@ -40,13 +64,20 @@ body {
     flex-direction: column;
     background: linear-gradient(180deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.94) 100%),
                 url('/bg-teal-mesh.jpg') center/cover no-repeat fixed;
-    /* Leaves room for the persistent module switcher on every screen size. */
     padding-bottom: 96px;
 }
 
 @media (max-width: 768px) {
     .app-layout {
-        padding-bottom: 76px; /* Room for floating bottom nav */
+        padding-bottom: 76px;
+    }
+}
+
+@media (min-width: 900px) {
+    .app-layout,
+    .hub-wrapper {
+        padding-bottom: 32px;
+        min-height: 100vh;
     }
 }
 

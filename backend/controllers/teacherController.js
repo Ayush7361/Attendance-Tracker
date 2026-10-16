@@ -86,6 +86,60 @@ async function getTodaySchedule(req, res) {
     }
 }
 
+async function getTeacherUnifiedSchedule(req, res) {
+    try {
+        const teacher = await User.findById(req.userId);
+        if (!teacher || teacher.role !== "teacher") {
+            return res.status(403).json({ message: "Forbidden: Teacher account required" });
+        }
+
+        const assignedClassIds = (teacher.teacherAssignments || []).map((a) => a.classId);
+        const classes = await Class.find({ _id: { $in: assignedClassIds } });
+
+        const scheduleByDay = {
+            mon: [],
+            tue: [],
+            wed: [],
+            thu: [],
+            fri: [],
+            sat: [],
+            sun: []
+        };
+
+        for (let c of classes) {
+            for (let r of c.routine || []) {
+                const isTeacherForSlot =
+                    (r.teacherId && r.teacherId.toString() === teacher._id.toString()) ||
+                    (teacher.teacherAssignments || []).some(
+                        (a) =>
+                            a.classId.toString() === c._id.toString() &&
+                            a.subjectName.trim().toLowerCase() === r.subjectName.trim().toLowerCase()
+                    );
+
+                if (isTeacherForSlot && scheduleByDay[r.day]) {
+                    scheduleByDay[r.day].push({
+                        classId: c._id,
+                        className: c.name,
+                        subjectName: r.subjectName,
+                        timeSlot: r.timeSlot || "",
+                        periodNumber: r.periodNumber || 1
+                    });
+                }
+            }
+        }
+
+        // Sort period slots
+        Object.keys(scheduleByDay).forEach((day) => {
+            scheduleByDay[day].sort((a, b) => a.periodNumber - b.periodNumber);
+        });
+
+        res.status(200).json(scheduleByDay);
+    } catch (err) {
+        console.error("Error fetching teacher unified schedule:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
 async function getClassRoster(req, res) {
     try {
         const { classId } = req.params;
@@ -154,6 +208,121 @@ async function getClassRoster(req, res) {
     }
 }
 
+async function getAllStudents(req, res) {
+    try {
+        const teacher = await User.findById(req.userId);
+        if (!teacher || teacher.role !== "teacher") {
+            return res.status(403).json({ message: "Forbidden: Teacher account required" });
+        }
+
+        const students = await User.find({ role: "student" }).select("username _id createdAt");
+        const studentIds = students.map((s) => s._id);
+
+        const classes = await Class.find({ students: { $in: studentIds } });
+        const dayRecords = await DayRecord.find({ userId: { $in: studentIds } });
+
+        const studentMap = {};
+        students.forEach((s) => {
+            studentMap[s._id.toString()] = {
+                _id: s._id,
+                username: s.username,
+                classes: [],
+                totalClasses: 0,
+                attendedClasses: 0
+            };
+        });
+
+        classes.forEach((c) => {
+            c.students.forEach((sid) => {
+                const sKey = sid.toString();
+                if (studentMap[sKey]) {
+                    studentMap[sKey].classes.push({ _id: c._id, name: c.name, joinCode: c.joinCode });
+                }
+            });
+        });
+
+        dayRecords.forEach((r) => {
+            const sKey = r.userId.toString();
+            if (studentMap[sKey]) {
+                studentMap[sKey].totalClasses += r.totalClasses || 0;
+                studentMap[sKey].attendedClasses += r.attendedClasses || 0;
+            }
+        });
+
+        const result = Object.values(studentMap).map((st) => {
+            const pct = st.totalClasses > 0 ? (st.attendedClasses / st.totalClasses) * 100 : 0;
+            return {
+                ...st,
+                overallAttendancePct: Number(pct.toFixed(1))
+            };
+        });
+
+        res.status(200).json(result);
+    } catch (err) {
+        console.error("Error fetching all students:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+async function addStudentToClass(req, res) {
+    try {
+        const { classId } = req.params;
+        const { username } = req.body;
+
+        if (!username || !username.trim()) {
+            return res.status(400).json({ message: "Username is required" });
+        }
+
+        const student = await User.findOne({
+            username: username.trim(),
+            role: "student"
+        });
+
+        if (!student) {
+            return res.status(404).json({ message: `Student username '${username}' not found.` });
+        }
+
+        const classDoc = await Class.findById(classId);
+        if (!classDoc) {
+            return res.status(404).json({ message: "Class not found" });
+        }
+
+        const isAlreadyInClass = classDoc.students.some((s) => s.toString() === student._id.toString());
+        if (isAlreadyInClass) {
+            return res.status(400).json({ message: `'${student.username}' is already in ${classDoc.name}` });
+        }
+
+        classDoc.students.push(student._id);
+        await classDoc.save();
+
+        res.status(200).json({
+            message: `Added '${student.username}' to ${classDoc.name}!`,
+            student: { _id: student._id, username: student.username }
+        });
+    } catch (err) {
+        console.error("Error adding student to class:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+async function removeStudentFromClass(req, res) {
+    try {
+        const { classId, studentId } = req.params;
+        const classDoc = await Class.findById(classId);
+        if (!classDoc) {
+            return res.status(404).json({ message: "Class not found" });
+        }
+
+        classDoc.students = classDoc.students.filter((s) => s.toString() !== studentId);
+        await classDoc.save();
+
+        res.status(200).json({ message: "Student removed from class roster" });
+    } catch (err) {
+        console.error("Error removing student from class:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
 async function submitAttendance(req, res) {
     try {
         const { classId, subjectName, date, absentStudentIds } = req.body;
@@ -188,7 +357,6 @@ async function submitAttendance(req, res) {
         const parsedDate = new Date(date);
         const absentSet = new Set((absentStudentIds || []).map((id) => id.toString()));
 
-        // Check if an existing audit record exists to identify CORRECTION action type
         const previousAudit = await AttendanceAudit.findOne({
             classId,
             subjectName: subjectName.trim(),
@@ -240,7 +408,6 @@ async function submitAttendance(req, res) {
 
             await dayRecord.save();
 
-            // Create notification for student
             const dateFormatted = parsedDate.toLocaleDateString("en-US", { month: "short", day: "numeric" });
             const notifMsg = isAbsent
                 ? `Prof. ${teacher.username} marked you ABSENT for ${subjectName} on ${dateFormatted}.`
@@ -254,7 +421,6 @@ async function submitAttendance(req, res) {
             });
         }
 
-        // Create Attendance Audit log
         const absentList = Array.from(absentSet);
         const presentCount = classDoc.students.length - absentList.length;
 
@@ -469,7 +635,11 @@ async function getTeacherCoveredSubjectsForStudent(req, res) {
 module.exports = {
     getAssignments,
     getTodaySchedule,
+    getTeacherUnifiedSchedule,
     getClassRoster,
+    getAllStudents,
+    addStudentToClass,
+    removeStudentFromClass,
     submitAttendance,
     getClassAnalytics,
     getAuditHistory,

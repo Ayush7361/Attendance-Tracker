@@ -109,7 +109,7 @@ function AcademicTimelinePage({ user, onLogout }) {
 
                 <div className="page-header-box">
                     <h2 className="page-title">Academic Timeline</h2>
-                    <p className="page-subtitle">Manage semester events, exam schedules, and important dates.</p>
+                    <p className="page-subtitle">Exams, fees, and other dates that matter this term.</p>
                 </div>
 
                 {/* Section Overview Cards */}

@@ -15,9 +15,11 @@ import GpaPage from "./pages/GpaPage";
 import RoutinePage from "./pages/RoutinePage";
 import ArchivePage from "./pages/ArchivePage";
 import MobileNav from "./components/MobileNav";
+import AppSidebar from "./components/AppSidebar";
 import GlobalMiniTimer from "./components/GlobalMiniTimer";
 import { logoutUser } from "./api/authApi";
 import "./App.css";
+import "./styles/AppSidebar.css";
 
 function ScrollToTop() {
     const { pathname } = useLocation();
@@ -64,26 +66,29 @@ function App() {
 
     // Role Guard: Student account
     return (
-        <>
+        <div className="student-shell">
             <ScrollToTop />
-            <GlobalMiniTimer />
-            <Routes>
-                <Route path="/" element={<Hub user={user} onLogout={handleLogout} />} />
-                <Route path="/attendance" element={<AttendancePage user={user} onLogout={handleLogout} />} />
-                <Route path="/deadlines" element={<DeadlinesPage user={user} onLogout={handleLogout} />} />
-                <Route path="/deadlines/new" element={<DeadlineFormPage user={user} onLogout={handleLogout} />} />
-                <Route path="/deadlines/:id/edit" element={<DeadlineFormPage user={user} onLogout={handleLogout} />} />
-                <Route path="/deadlines/:id" element={<DeadlineDetailPage user={user} onLogout={handleLogout} />} />
-                <Route path="/timeline" element={<AcademicTimelinePage user={user} onLogout={handleLogout} />} />
-                <Route path="/study" element={<StudyPage user={user} onLogout={handleLogout} />} />
-                <Route path="/gpa" element={<GpaPage user={user} onLogout={handleLogout} />} />
-                <Route path="/schedule" element={<RoutinePage user={user} onLogout={handleLogout} />} />
-                <Route path="/archive" element={<ArchivePage user={user} onLogout={handleLogout} />} />
-                <Route path="/teacher/*" element={<Navigate to="/" replace />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-            <MobileNav />
-        </>
+            <AppSidebar user={user} onLogout={handleLogout} />
+            <div className="student-shell-main">
+                <GlobalMiniTimer />
+                <Routes>
+                    <Route path="/" element={<Hub user={user} onLogout={handleLogout} />} />
+                    <Route path="/attendance" element={<AttendancePage user={user} onLogout={handleLogout} />} />
+                    <Route path="/deadlines" element={<DeadlinesPage user={user} onLogout={handleLogout} />} />
+                    <Route path="/deadlines/new" element={<DeadlineFormPage user={user} onLogout={handleLogout} />} />
+                    <Route path="/deadlines/:id/edit" element={<DeadlineFormPage user={user} onLogout={handleLogout} />} />
+                    <Route path="/deadlines/:id" element={<DeadlineDetailPage user={user} onLogout={handleLogout} />} />
+                    <Route path="/timeline" element={<AcademicTimelinePage user={user} onLogout={handleLogout} />} />
+                    <Route path="/study" element={<StudyPage user={user} onLogout={handleLogout} />} />
+                    <Route path="/gpa" element={<GpaPage user={user} onLogout={handleLogout} />} />
+                    <Route path="/schedule" element={<RoutinePage user={user} onLogout={handleLogout} />} />
+                    <Route path="/archive" element={<ArchivePage user={user} onLogout={handleLogout} />} />
+                    <Route path="/teacher/*" element={<Navigate to="/" replace />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+                <MobileNav />
+            </div>
+        </div>
     );
 }
 

@@ -93,7 +93,7 @@ function ArchivePage({ user, onLogout }) {
 
                 <div className="page-header-box">
                     <h2 className="page-title">Academic History & Growth</h2>
-                    <p className="page-subtitle">Track past terms, compare GPA trends, and archive completed semesters.</p>
+                    <p className="page-subtitle">Past semesters and how your GPA moved.</p>
                 </div>
 
                 <div className="archive-stats-card card-panel">

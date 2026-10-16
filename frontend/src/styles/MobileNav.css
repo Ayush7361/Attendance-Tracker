@@ -7,75 +7,14 @@
     display: none;
 }
 
-/* Keep module switching available after the user leaves the Hub. */
-@media (min-width: 769px) {
-    .mobile-nav {
-        display: flex;
-        position: fixed;
-        bottom: 18px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: min(760px, calc(100% - 40px));
-        height: 64px;
-        background: rgba(15, 23, 42, 0.94);
-        backdrop-filter: blur(18px);
-        -webkit-backdrop-filter: blur(18px);
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        border-radius: 18px;
-        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.42);
-        z-index: 1000;
-        justify-content: space-around;
-        align-items: center;
-        padding: 0 8px;
-    }
-
-    .mobile-nav-item {
-        display: flex;
-        flex: 1;
-        height: 48px;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        border: 0;
-        border-radius: 12px;
-        background: transparent;
-        color: #94a3b8;
-        cursor: pointer;
-        font: inherit;
-        font-size: 0.8rem;
-        font-weight: 700;
-        transition: background 0.15s ease, color 0.15s ease;
-    }
-
-    .mobile-nav-item:hover,
-    .mobile-nav-item:focus-visible {
-        background: rgba(255, 255, 255, 0.08);
-        color: #e2e8f0;
-        outline: none;
-    }
-
-    .mobile-nav-item.active {
-        background: rgba(16, 185, 129, 0.15);
-        color: #34d399;
-    }
-
-    .mobile-nav-icon {
-        width: 18px;
-        height: 18px;
-        pointer-events: none;
-    }
-
-    .mobile-nav-label {
-        pointer-events: none;
-    }
-
-    .mobile-nav-item.active::after {
-        content: none;
+@media (min-width: 900px) {
+    .mobile-nav,
+    .mobile-more-overlay {
+        display: none !important;
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 899px) {
     .mobile-nav {
         display: flex;
         position: fixed;

@@ -1,0 +1,115 @@
+.app-sidebar {
+    display: none;
+}
+
+@media (min-width: 900px) {
+    .app-sidebar {
+        display: flex;
+        flex-direction: column;
+        width: 228px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        padding: 20px 14px 16px;
+        background: rgba(15, 23, 42, 0.96);
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        z-index: 200;
+    }
+
+    .sidebar-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 8px 18px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        margin-bottom: 16px;
+    }
+
+    .sidebar-mark {
+        background: var(--primary);
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.78rem;
+        padding: 6px 8px;
+        border-radius: 8px;
+        letter-spacing: 0.04em;
+    }
+
+    .sidebar-title {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1.2;
+    }
+
+    .sidebar-user {
+        font-size: 0.74rem;
+        color: #94a3b8;
+        margin-top: 2px;
+        max-width: 140px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .sidebar-group-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #64748b;
+        padding: 12px 10px 6px;
+    }
+
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        min-height: 40px;
+        padding: 0 12px;
+        border-radius: 10px;
+        color: #cbd5e1;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .sidebar-link:hover {
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+    }
+
+    .sidebar-link.active {
+        background: rgba(16, 185, 129, 0.16);
+        color: #34d399;
+    }
+
+    .sidebar-logout {
+        margin-top: 12px;
+        width: 100%;
+        min-height: 40px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: transparent;
+        color: #94a3b8;
+        font: inherit;
+        font-size: 0.82rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .sidebar-logout:hover {
+        background: rgba(239, 68, 68, 0.16);
+        color: #fecaca;
+        border-color: rgba(239, 68, 68, 0.3);
+    }
+}

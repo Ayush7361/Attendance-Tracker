@@ -53,6 +53,47 @@ function daysUntil(dateStr) {
     return Math.round((target - today) / (1000 * 60 * 60 * 24));
 }
 
+function pickFocus({ todaysClasses, todayLogged, overdueCount, dueTodayCount, todayStudyMins }) {
+    if (todaysClasses.length > 0 && !todayLogged) {
+        return {
+            title: "Log today's attendance",
+            detail: `${todaysClasses.length} class${todaysClasses.length === 1 ? "" : "es"} on the timetable`,
+            to: "/attendance",
+            cta: "Log now"
+        };
+    }
+    if (overdueCount > 0) {
+        return {
+            title: `${overdueCount} overdue task${overdueCount === 1 ? "" : "s"}`,
+            detail: "Clear these first so they don't pile up.",
+            to: "/deadlines",
+            cta: "Open tasks"
+        };
+    }
+    if (dueTodayCount > 0) {
+        return {
+            title: `${dueTodayCount} due today`,
+            detail: "Finish what's on today's list.",
+            to: "/deadlines",
+            cta: "See tasks"
+        };
+    }
+    if (todayStudyMins === 0) {
+        return {
+            title: "Start a study session",
+            detail: "Nothing logged yet today.",
+            to: "/study",
+            cta: "Start timer"
+        };
+    }
+    return {
+        title: "You're caught up for now",
+        detail: "Add a task or keep studying if you have more to do.",
+        to: "/deadlines/new",
+        cta: "Add a task"
+    };
+}
+
 let hubCache = null;
 
 function Hub({ user, onLogout }) {
@@ -66,7 +107,6 @@ function Hub({ user, onLogout }) {
     const [events, setEvents] = useState(() => hubCache?.events || []);
     const [loading, setLoading] = useState(() => !hubCache);
     const [showAnalytics, setShowAnalytics] = useState(false);
-    const [moduleLevelFilter, setModuleLevelFilter] = useState("all");
     const [showJoinModal, setShowJoinModal] = useState(false);
 
     useEffect(() => {
@@ -131,12 +171,14 @@ function Hub({ user, onLogout }) {
             : 0;
 
     const pendingDeadlines = deadlines.filter((d) => !d.completed);
-    const overdueCount = pendingDeadlines.filter(
+    const overdueItems = pendingDeadlines.filter(
         (d) => getUrgencyStatus(d.dueDate, false) === "overdue"
-    ).length;
-    const dueTodayCount = pendingDeadlines.filter(
+    );
+    const dueTodayItems = pendingDeadlines.filter(
         (d) => getUrgencyStatus(d.dueDate, false) === "dueToday"
-    ).length;
+    );
+    const overdueCount = overdueItems.length;
+    const dueTodayCount = dueTodayItems.length;
 
     const todayStudyMins = sessions
         .filter((s) => isToday(s.date))
@@ -176,7 +218,7 @@ function Hub({ user, onLogout }) {
 
     const upcomingDeadlines = pendingDeadlines
         .filter((d) => getUrgencyStatus(d.dueDate, false) !== "overdue")
-        .slice(0, 4);
+        .slice(0, 5);
 
     const todayFormatted = new Date().toLocaleDateString("en-IN", {
         weekday: "long",
@@ -184,19 +226,57 @@ function Hub({ user, onLogout }) {
         month: "long"
     });
 
+    const focus = pickFocus({
+        todaysClasses,
+        todayLogged,
+        overdueCount,
+        dueTodayCount,
+        todayStudyMins
+    });
+
+    const attentionItems = [
+        ...overdueItems.slice(0, 3).map((d) => ({
+            id: d._id,
+            title: d.title,
+            meta: "Overdue",
+            tone: "danger",
+            to: `/deadlines/${d._id}`
+        })),
+        ...dueTodayItems.slice(0, 3).map((d) => ({
+            id: d._id,
+            title: d.title,
+            meta: "Due today",
+            tone: "warn",
+            to: `/deadlines/${d._id}`
+        }))
+    ].slice(0, 4);
+
+    const tools = [
+        { to: "/attendance", label: "Attendance", hint: attendance.total > 0 ? `${attendancePct.toFixed(0)}%` : "Set up" },
+        { to: "/schedule", label: "Routine", hint: "Timetable" },
+        { to: "/deadlines", label: "Tasks", hint: pendingDeadlines.length ? `${pendingDeadlines.length} open` : "None" },
+        { to: "/study", label: "Study", hint: todayStudyMins ? formatStudyMinutes(todayStudyMins) : "Timer" },
+        { to: "/gpa", label: "GPA", hint: "Marks" },
+        { to: "/timeline", label: "Calendar", hint: nextExam ? `${daysUntil(nextExam.date)}d` : "Dates" },
+        { to: "/archive", label: "Archive", hint: "Past terms" }
+    ];
+
     return (
         <div className="hub-wrapper">
             <header className="hub-header">
-                <Link to="/" className="header-brand-link" title="Return to Dashboard">
+                <Link to="/" className="header-brand-link" title="Today">
                     <div className="header-brand">
                         <div className="brand-badge">SD</div>
                         <div>
-                            <h1 className="app-title">Study Dashboard</h1>
-                            <p className="app-subtitle">Command Center</p>
+                            <h1 className="app-title">Today</h1>
+                            <p className="app-subtitle">{todayFormatted}</p>
                         </div>
                     </div>
                 </Link>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <div className="hub-header-actions">
+                    <button type="button" className="hub-join-btn" onClick={() => setShowJoinModal(true)}>
+                        Join class
+                    </button>
                     <MobileNotificationDrawer
                         schedule={schedule}
                         todayLogged={todayLogged}
@@ -214,14 +294,24 @@ function Hub({ user, onLogout }) {
                     <h2 className="hub-greeting">
                         {getTimeGreeting()}, {user.username}
                     </h2>
-                    <p className="hub-tagline">{todayFormatted}</p>
+                    <p className="hub-tagline">Here’s what needs your time today.</p>
                 </div>
 
                 {loading ? (
-                    <div className="hub-loading">Loading your dashboard...</div>
+                    <div className="hub-loading">Loading today…</div>
                 ) : (
                     <>
-                        {/* Live stat pills */}
+                        <section className="hub-focus">
+                            <div>
+                                <p className="hub-focus-kicker">Do this next</p>
+                                <h3 className="hub-focus-title">{focus.title}</h3>
+                                <p className="hub-focus-detail">{focus.detail}</p>
+                            </div>
+                            <Link to={focus.to} className="hub-focus-cta">
+                                {focus.cta}
+                            </Link>
+                        </section>
+
                         <div className="hub-stat-pills">
                             <Link to="/attendance" className="hub-stat-pill pill-attendance">
                                 <span className="pill-label">Attendance</span>
@@ -239,18 +329,18 @@ function Hub({ user, onLogout }) {
                             </Link>
 
                             <Link to="/deadlines" className="hub-stat-pill pill-today">
-                                <span className="pill-label">Due Today</span>
+                                <span className="pill-label">Due today</span>
                                 <span className="pill-value">{dueTodayCount}</span>
                             </Link>
 
                             <Link to="/study" className="hub-stat-pill pill-study">
-                                <span className="pill-label">Studied Today</span>
+                                <span className="pill-label">Studied today</span>
                                 <span className="pill-value">{formatStudyMinutes(todayStudyMins)}</span>
                             </Link>
 
                             {nextExam && (
                                 <Link to="/timeline" className="hub-stat-pill pill-exam">
-                                    <span className="pill-label">Next Exam</span>
+                                    <span className="pill-label">Next exam</span>
                                     <span className="pill-value">
                                         {daysUntil(nextExam.date) === 0
                                             ? "Today"
@@ -261,27 +351,6 @@ function Hub({ user, onLogout }) {
                             )}
                         </div>
 
-                        {/* Quick actions */}
-                        <div className="hub-quick-actions">
-                            <button
-                                type="button"
-                                className="hub-action-btn"
-                                onClick={() => setShowJoinModal(true)}
-                                style={{ background: "rgba(129, 140, 248, 0.2)", color: "#818cf8", borderColor: "rgba(129, 140, 248, 0.4)" }}
-                            >
-                                🔑 Join Class
-                            </button>
-                            <Link to="/attendance" className="hub-action-btn">
-                                {todayLogged ? "View Today's Log" : "Log Attendance"}
-                            </Link>
-                            <Link to="/study" className="hub-action-btn hub-action-primary">
-                                Start Study Session
-                            </Link>
-                            <Link to="/deadlines/new" className="hub-action-btn">
-                                Add Deadline
-                            </Link>
-                        </div>
-
                         {showJoinModal && (
                             <ClassJoinModal
                                 onClose={() => setShowJoinModal(false)}
@@ -289,11 +358,10 @@ function Hub({ user, onLogout }) {
                             />
                         )}
 
-                        {/* Action Center: Classes Today & Coming Up */}
                         <div className="hub-command-grid hub-action-center-grid">
                             <div className="hub-panel hub-classes-panel">
                                 <div className="hub-panel-header-row">
-                                    <h3 className="hub-panel-title">Classes Today</h3>
+                                    <h3 className="hub-panel-title">Classes today</h3>
                                     {todaysClasses.length > 0 && (
                                         <span className="hub-class-count-badge">
                                             {todaysClasses.length} {todaysClasses.length === 1 ? "class" : "classes"}
@@ -304,17 +372,17 @@ function Hub({ user, onLogout }) {
                                 {todaysClasses.length === 0 ? (
                                     <div className="hub-classes-empty-box">
                                         <p className="hub-panel-empty">
-                                            No classes scheduled for today on your weekly timetable.
+                                            No classes on today’s timetable.
                                         </p>
-                                        <Link to="/attendance" className="hub-classes-empty-link">
-                                            Manage Timetable →
+                                        <Link to="/schedule" className="hub-classes-empty-link">
+                                            Edit routine
                                         </Link>
                                     </div>
                                 ) : (
                                     <>
                                         <ul className="hub-class-list">
                                             {todaysClasses.map((subject, i) => (
-                                                <li key={i} className="hub-class-item">
+                                                <li key={`${subject}-${i}`} className="hub-class-item">
                                                     <div className="hub-class-left">
                                                         <span className="hub-class-dot" />
                                                         <span className="hub-class-name">{subject}</span>
@@ -322,9 +390,8 @@ function Hub({ user, onLogout }) {
                                                     <Link
                                                         to={`/study?subject=${encodeURIComponent(subject)}`}
                                                         className="hub-class-study-link"
-                                                        title={`Start study session for ${subject}`}
                                                     >
-                                                        Focus
+                                                        Study
                                                     </Link>
                                                 </li>
                                             ))}
@@ -333,15 +400,15 @@ function Hub({ user, onLogout }) {
                                         <div className="hub-attendance-crosslink-footer">
                                             {todayLogged ? (
                                                 <p className="hub-attendance-logged">
-                                                    ✓ Logged today: {todayLogged.attendedClasses}/{todayLogged.totalClasses} attended
+                                                    Logged: {todayLogged.attendedClasses}/{todayLogged.totalClasses} attended
                                                 </p>
                                             ) : (
                                                 <p className="hub-attendance-unlogged">
-                                                    ⚠️ Today's attendance pending
+                                                    Attendance not logged yet
                                                 </p>
                                             )}
                                             <Link to="/attendance" className="hub-smart-attendance-btn">
-                                                {todayLogged ? "Update Attendance Log" : "Log Today's Attendance →"}
+                                                {todayLogged ? "Update log" : "Log attendance"}
                                             </Link>
                                         </div>
                                     </>
@@ -349,9 +416,24 @@ function Hub({ user, onLogout }) {
                             </div>
 
                             <div className="hub-panel">
-                                <h3 className="hub-panel-title">Coming Up</h3>
-                                {upcomingDeadlines.length === 0 && !nextExam ? (
-                                    <p className="hub-panel-empty">No upcoming deadlines. You're clear!</p>
+                                <h3 className="hub-panel-title">
+                                    {attentionItems.length ? "Needs attention" : "Coming up"}
+                                </h3>
+                                {attentionItems.length > 0 ? (
+                                    <ul className="hub-upcoming-list">
+                                        {attentionItems.map((item) => (
+                                            <li key={item.id}>
+                                                <Link to={item.to} className="hub-upcoming-item">
+                                                    <span className="hub-upcoming-title">{item.title}</span>
+                                                    <span className={`hub-upcoming-badge ${item.tone === "danger" ? "overdue" : "dueToday"}`}>
+                                                        {item.meta}
+                                                    </span>
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : upcomingDeadlines.length === 0 && !nextExam ? (
+                                    <p className="hub-panel-empty">Nothing due. You’re clear.</p>
                                 ) : (
                                     <ul className="hub-upcoming-list">
                                         {upcomingDeadlines.map((d) => (
@@ -366,132 +448,43 @@ function Hub({ user, onLogout }) {
                                         ))}
                                     </ul>
                                 )}
+                                {attentionItems.length > 0 && upcomingDeadlines.length > 0 && (
+                                    <Link to="/deadlines" className="hub-panel-more">
+                                        All upcoming tasks
+                                    </Link>
+                                )}
                             </div>
                         </div>
 
-                        {/* Academic Modules Navigation */}
-                        <div className="hub-module-header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginTop: "12px" }}>
-                            <div className="hub-section-label" style={{ margin: 0 }}>Academic Modules</div>
-                            <div className="hub-level-pills" style={{ display: "flex", gap: "6px" }}>
-                                <button
-                                    type="button"
-                                    className={`level-pill-btn ${moduleLevelFilter === "all" ? "active" : ""}`}
-                                    onClick={() => setModuleLevelFilter("all")}
-                                >
-                                    All Modules
-                                </button>
-                                <button
-                                    type="button"
-                                    className={`level-pill-btn ${moduleLevelFilter === "essentials" ? "active" : ""}`}
-                                    onClick={() => setModuleLevelFilter("essentials")}
-                                >
-                                    ⚡ Daily Essentials
-                                </button>
-                                <button
-                                    type="button"
-                                    className={`level-pill-btn ${moduleLevelFilter === "advanced" ? "active" : ""}`}
-                                    onClick={() => setModuleLevelFilter("advanced")}
-                                >
-                                    🎓 Academic Planning
-                                </button>
+                        <div className="hub-tools">
+                            <p className="hub-section-label">Jump to</p>
+                            <div className="hub-tools-row">
+                                {tools.map((tool) => (
+                                    <Link key={tool.to} to={tool.to} className="hub-tool-chip">
+                                        <span className="hub-tool-label">{tool.label}</span>
+                                        <span className="hub-tool-hint">{tool.hint}</span>
+                                    </Link>
+                                ))}
                             </div>
                         </div>
 
-                        {/* Daily Essentials */}
-                        {(moduleLevelFilter === "all" || moduleLevelFilter === "essentials") && (
-                            <div className="hub-level-group" style={{ marginTop: "10px" }}>
-                                <div className="hub-level-title">⚡ Daily Essentials</div>
-                                <div className="hub-grid hub-grid-compact">
-                                    <Link to="/attendance" className="hub-card">
-                                        <div className="hub-card-header">
-                                            <span className="hub-card-tag tag-attendance">Attendance</span>
-                                            <h2>Attendance Tracker</h2>
-                                        </div>
-                                        <p>Daily class logs, subject schedules, and safe bunk calculator.</p>
-                                        <span className="hub-card-link">Open →</span>
-                                    </Link>
-
-                                    <Link to="/schedule" className="hub-card">
-                                        <div className="hub-card-header">
-                                            <span className="hub-card-tag" style={{ background: "rgba(52, 211, 153, 0.2)", color: "#34d399" }}>Routine</span>
-                                            <h2>Weekly Class Routine</h2>
-                                        </div>
-                                        <p>Interactive 7-day visual timetable grid for classes and labs.</p>
-                                        <span className="hub-card-link">Open →</span>
-                                    </Link>
-
-                                    <Link to="/deadlines" className="hub-card">
-                                        <div className="hub-card-header">
-                                            <span className="hub-card-tag tag-deadlines">Tasks</span>
-                                            <h2>Deadlines & Tasks</h2>
-                                        </div>
-                                        <p>Subtask checklists, urgency filters, and calendar export.</p>
-                                        <span className="hub-card-link">Open →</span>
-                                    </Link>
-
-                                    <Link to="/study" className="hub-card">
-                                        <div className="hub-card-header">
-                                            <span className="hub-card-tag tag-study">Study</span>
-                                            <h2>Study Sessions</h2>
-                                        </div>
-                                        <p>Subject focus timer, Pomodoro cycles, and session logs.</p>
-                                        <span className="hub-card-link">Open →</span>
-                                    </Link>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Academic Planning & Records */}
-                        {(moduleLevelFilter === "all" || moduleLevelFilter === "advanced") && (
-                            <div className="hub-level-group" style={{ marginTop: "16px" }}>
-                                <div className="hub-level-title">🎓 Academic Planning & Records</div>
-                                <div className="hub-grid hub-grid-compact">
-                                    <Link to="/gpa" className="hub-card">
-                                        <div className="hub-card-header">
-                                            <span className="hub-card-tag" style={{ background: "rgba(129, 140, 248, 0.2)", color: "#818cf8" }}>GPA</span>
-                                            <h2>GPA & Marks Predictor</h2>
-                                        </div>
-                                        <p>Dynamic credits, internal scores, and final exam target calculator.</p>
-                                        <span className="hub-card-link">Open →</span>
-                                    </Link>
-
-                                    <Link to="/archive" className="hub-card">
-                                        <div className="hub-card-header">
-                                            <span className="hub-card-tag tag-timeline">Archive</span>
-                                            <h2>Semester Archive</h2>
-                                        </div>
-                                        <p>Historical term records, CGPA trends, and academic growth.</p>
-                                        <span className="hub-card-link">Open →</span>
-                                    </Link>
-
-                                    <Link to="/timeline" className="hub-card">
-                                        <div className="hub-card-header">
-                                            <span className="hub-card-tag tag-timeline">Timeline</span>
-                                            <h2>Academic Timeline</h2>
-                                        </div>
-                                        <p>Semester exam schedules, fee dates, and key milestones.</p>
-                                        <span className="hub-card-link">Open →</span>
-                                    </Link>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Collapsible Performance Insights & Workload Analytics */}
-                        <div className="hub-analytics-collapsible card-panel" style={{ marginTop: "12px" }}>
+                        <div className="hub-analytics-collapsible card-panel">
                             <button
                                 type="button"
                                 className="analytics-toggle-btn"
                                 onClick={() => setShowAnalytics(!showAnalytics)}
                             >
                                 <div className="toggle-left">
-                                    <span>📊 Performance Insights & Workload Analytics</span>
-                                    <span className="toggle-sub">Health Score & Workload Pace Forecast</span>
+                                    <span>This week</span>
+                                    <span className="toggle-sub">
+                                        Score {healthScore.overall}/100 · {formatStudyMinutes(weekStudyMins)} studied
+                                    </span>
                                 </div>
                                 <span className={`toggle-arrow ${showAnalytics ? "open" : ""}`}>▾</span>
                             </button>
 
                             {showAnalytics && (
-                                <div className="analytics-expand-body" style={{ marginTop: "18px", display: "flex", flexDirection: "column", gap: "20px" }}>
+                                <div className="analytics-expand-body">
                                     <AcademicHealthScore
                                         score={healthScore}
                                         components={healthScore.components}

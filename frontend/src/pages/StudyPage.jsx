@@ -120,7 +120,7 @@ function StudyPage({ user, onLogout }) {
                 <div className="page-header-box">
                     <h2 className="page-title">Study Sessions</h2>
                     <p className="page-subtitle">
-                        Flexible subject-tagged focus tracking, stopwatch & custom duration modes, and study analytics.
+                        Start a timer, pick a subject, and keep a log of what you studied.
                     </p>
                 </div>
 

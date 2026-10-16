@@ -8,7 +8,7 @@ function AcademicHealthScore({ score, components, belowAttendanceThreshold, atte
     return (
         <div className="health-score-card">
             <div className="health-score-header">
-                <h3>Academic Health Score</h3>
+                <h3>This week’s snapshot</h3>
                 <span className="health-grade-pill" style={{ background: `${grade.color}22`, color: grade.color }}>
                     {grade.label}
                 </span>

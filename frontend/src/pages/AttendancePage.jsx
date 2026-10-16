@@ -165,7 +165,7 @@ function AttendancePage({ user, onLogout }) {
 
                 <div className="page-header-box">
                     <h2 className="page-title">Attendance Tracker</h2>
-                    <p className="page-subtitle">Daily class logs, subject schedules, and safe bunk calculator.</p>
+                    <p className="page-subtitle">Mark today’s classes and keep your percentage above 75%.</p>
                 </div>
 
                 <div className="month-picker-bar card-panel" style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>

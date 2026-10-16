@@ -259,7 +259,7 @@ function DeadlinesPage({ user, onLogout }) {
 
                 <div className="page-header-box">
                     <h2 className="page-title">Deadlines & Academic Hub</h2>
-                    <p className="page-subtitle">Tasks, subtask checklists, calendar export, and semester timeline.</p>
+                    <p className="page-subtitle">What’s due, what’s overdue, and what you can tick off.</p>
                 </div>
 
                 <div className="dl-toolbar" style={{ justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>

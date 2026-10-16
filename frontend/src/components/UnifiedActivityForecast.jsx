@@ -133,8 +133,8 @@ function UnifiedActivityForecast({ forecastData, sessions = [] }) {
             {/* Top Streaks & Focus Header */}
             <div className="unified-card-header">
                 <div>
-                    <h3 className="unified-card-title">Activity & Workload Pace</h3>
-                    <p className="unified-card-subtitle">Streaks, 7-day focus history & workload forecast</p>
+                    <h3 className="unified-card-title">Study time & upcoming load</h3>
+                    <p className="unified-card-subtitle">Streak, last 7 days, and what’s due next week</p>
                 </div>
 
                 {/* Compact Streak Pills */}

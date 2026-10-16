@@ -216,7 +216,7 @@ function RoutinePage({ user, onLogout }) {
 
                 <div className="page-header-box">
                     <h2 className="page-title">Weekly Class Routine & Timetable</h2>
-                    <p className="page-subtitle">Interactive 7-day timetable command center with focus mode, room tags, and calendar sync.</p>
+                    <p className="page-subtitle">Your weekly class timetable.</p>
                 </div>
 
                 {/* Today's Hero Live Class Banner */}
